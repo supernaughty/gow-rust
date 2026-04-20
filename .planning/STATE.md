@@ -3,19 +3,19 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-04-20T13:56:00Z"
+last_updated: "2026-04-20T14:15:00Z"
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 4
-  completed_plans: 1
-  percent: 4
+  completed_plans: 3
+  percent: 13
 ---
 
 # Project State: gow-rust
 
 **Last updated:** 2026-04-20
-**Session:** Executing Phase 1 Plan 01 (workspace scaffold + gow-core skeleton)
+**Session:** Executing Phase 1 Wave 2 (plans 01-02 and 01-03 in parallel worktrees)
 
 ---
 
@@ -30,13 +30,13 @@ progress:
 ## Current Position
 
 **Phase:** 1 (Foundation)
-**Plan:** 01-01 complete; next plan is 01-02
+**Plan:** 01-01, 01-02, 01-03 complete; next plan is 01-04 (checkpoint — autonomous: false)
 **Status:** Executing
 
 **Progress:**
 
 ```
-Phase 1 [##        ] 25%  Foundation (1/4 plans complete)
+Phase 1 [#######   ] 75%  Foundation (3/4 plans complete)
 Phase 2 [          ] 0%   Stateless Utilities
 Phase 3 [          ] 0%   Filesystem Utilities
 Phase 4 [          ] 0%   Text Processing
@@ -44,7 +44,7 @@ Phase 5 [          ] 0%   Search and Navigation
 Phase 6 [          ] 0%   Archive, Compression, and Network
 ```
 
-**Overall:** 0/6 phases complete (1/4 Phase 1 plans complete)
+**Overall:** 0/6 phases complete (3/4 Phase 1 plans complete)
 
 ---
 
@@ -55,15 +55,17 @@ Phase 6 [          ] 0%   Archive, Compression, and Network
 | Phases total | 6 |
 | Phases complete | 0 |
 | Requirements total | 59 |
-| Requirements complete | 5 (FOUND-01, FOUND-02, WIN-01, WIN-02, WIN-03) |
+| Requirements complete | 9 (FOUND-01, FOUND-02, FOUND-03, FOUND-04, FOUND-05, FOUND-06, FOUND-07, WIN-01, WIN-03) |
 | Plans created | 4 (Phase 1) |
-| Plans complete | 1 (01-01) |
+| Plans complete | 3 (01-01, 01-02, 01-03) |
 
 ### Per-plan execution
 
 | Phase-Plan | Duration | Tasks | Files | Completed |
 |------------|----------|-------|-------|-----------|
 | 01-01 | 6 min | 2 | 13 | 2026-04-20 |
+| 01-02 | 4 min | 3 | 6 | 2026-04-20 |
+| 01-03 | 5 min | 3 | 4 | 2026-04-20 |
 
 ---
 
@@ -118,18 +120,18 @@ None currently.
 - Executed Phase 1 Plan 01 (workspace scaffold + gow-core skeleton)
   - Task 1 (`974a7fe`): workspace Cargo.toml, .cargo/config.toml, resolver 3, edition 2024, +crt-static
   - Task 2 (`c15706b`): gow-core crate manifest, bin-gated build.rs, six module stubs, init() smoke test
-- 5 auto-fixed deviations documented in SUMMARY:
-  - Rule 1 (bug) × 2: assert_cmd feature flag, embed-manifest Setting enum
-  - Rule 3 (blocking) × 1: bin-target-aware embed_manifest() gating
-  - Rule 2 (missing critical) × 2: init smoke test, .gitignore
-- `cargo build --workspace` and `cargo test -p gow-core` both green; clippy -D warnings clean
-- 66-package Cargo.lock committed; 13 files created; 1 file modified (initial Cargo.toml fix)
+- Executed Phase 1 Wave 2 (plans 01-02 and 01-03 in parallel worktrees, merged via `cdca327` and `105a50b`)
+  - Plan 01-02: encoding (SetConsoleOutputCP/InputCP), args (clap wrapper with exit-code 1 + allow_negative_numbers), color (VT100 + ColorChoice) — 3 tasks, 4 commits
+  - Plan 01-03: error (GowError with exit_code), path (MSYS conversion solving GOW #244), fs (LinkType + symlink/junction detection) — 3 tasks, 7 commits (TDD RED/GREEN per task)
+- Post-merge gate: `cargo test -p gow-core` → 34 passed, 0 failed, + 3 doctests; `cargo clippy -p gow-core -- -D warnings` clean
+- 2 auto-fixed deviations in 01-02; 0 deviations in 01-03
 
 ### What To Do Next
 
-Run the executor on Plan 01-02 (encoding, args, color modules with unit tests). Dependencies (clap, thiserror, termcolor, windows-sys) are already in scope via workspace inheritance; module files exist at `crates/gow-core/src/{encoding,args,color}.rs` with no-op stubs ready to be filled in.
+Run the executor on Plan 01-04 (gow-probe integration binary + tests) — autonomous: false, which means a checkpoint will require user decisions. This plan validates the whole stack end-to-end (UTF-8 console output, args exit-code parity, path conversion, color) and includes the Phase 1 human verification step.
 
 ---
 
 *State initialized: 2026-04-20*
 *Plan 01-01 completed: 2026-04-20*
+*Plans 01-02, 01-03 completed: 2026-04-20*

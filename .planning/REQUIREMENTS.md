@@ -10,12 +10,12 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Foundation
 
 - [x] **FOUND-01**: Cargo workspace 구조로 다중 크레이트 프로젝트 구성 — completed Plan 01-01 (2026-04-20)
-- [ ] **FOUND-02**: gow-core 공유 라이브러리 — UTF-8 콘솔 초기화 (SetConsoleOutputCP 65001)
-- [ ] **FOUND-03**: gow-core 공유 라이브러리 — GNU 호환 인자 파싱 (옵션 퍼뮤테이션, exit code 1, -- 종료)
-- [ ] **FOUND-04**: gow-core 공유 라이브러리 — 컬러/TTY 감지 및 ANSI VT100 활성화
-- [ ] **FOUND-05**: gow-core 공유 라이브러리 — 통합 에러 처리 타입
-- [ ] **FOUND-06**: Unix↔Windows 경로 자동 변환 (컨텍스트 인식, GOW #244 해결)
-- [ ] **FOUND-07**: Windows 심볼릭 링크/정션 추상화 레이어
+- [x] **FOUND-02**: gow-core 공유 라이브러리 — UTF-8 콘솔 초기화 (SetConsoleOutputCP 65001) — completed Plan 01-02 (2026-04-20)
+- [x] **FOUND-03**: gow-core 공유 라이브러리 — GNU 호환 인자 파싱 (옵션 퍼뮤테이션, exit code 1, -- 종료) — completed Plan 01-02 (2026-04-20)
+- [x] **FOUND-04**: gow-core 공유 라이브러리 — 컬러/TTY 감지 및 ANSI VT100 활성화 — completed Plan 01-02 (2026-04-20)
+- [x] **FOUND-05**: gow-core 공유 라이브러리 — 통합 에러 처리 타입 — completed Plan 01-03 (2026-04-20)
+- [x] **FOUND-06**: Unix↔Windows 경로 자동 변환 (컨텍스트 인식, GOW #244 해결) — completed Plan 01-03 (2026-04-20)
+- [x] **FOUND-07**: Windows 심볼릭 링크/정션 추상화 레이어 — completed Plan 01-03 (2026-04-20)
 
 ### Coreutils — File Operations
 
@@ -93,9 +93,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Windows Integration
 
-- [ ] **WIN-01**: UTF-8이 모든 유틸리티의 기본 인코딩 (GOW #280, #77 해결)
-- [ ] **WIN-02**: Windows 긴 경로 지원 (MAX_PATH 260자 제한 해제)
-- [ ] **WIN-03**: PowerShell에서 모든 유틸리티 정상 동작
+- [x] **WIN-01**: UTF-8이 모든 유틸리티의 기본 인코딩 (GOW #280, #77 해결) — completed Plan 01-02 (2026-04-20), end-to-end validation pending Plan 01-04
+- [ ] **WIN-02**: Windows 긴 경로 지원 (MAX_PATH 260자 제한 해제) — scaffolded Plan 01-01, validated in Plan 01-04
+- [x] **WIN-03**: PowerShell에서 모든 유틸리티 정상 동작 — completed Plan 01-02 (2026-04-20), end-to-end validation pending Plan 01-04
 
 ## v2 Requirements
 
@@ -146,16 +146,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 1 | Pending |
-| FOUND-02 | Phase 1 | Pending |
-| FOUND-03 | Phase 1 | Pending |
-| FOUND-04 | Phase 1 | Pending |
-| FOUND-05 | Phase 1 | Pending |
-| FOUND-06 | Phase 1 | Pending |
-| FOUND-07 | Phase 1 | Pending |
-| WIN-01 | Phase 1 | Pending |
-| WIN-02 | Phase 1 | Pending |
-| WIN-03 | Phase 1 | Pending |
+| FOUND-01 | Phase 1 | Done (Plan 01-01) |
+| FOUND-02 | Phase 1 | Done (Plan 01-02) |
+| FOUND-03 | Phase 1 | Done (Plan 01-02) |
+| FOUND-04 | Phase 1 | Done (Plan 01-02) |
+| FOUND-05 | Phase 1 | Done (Plan 01-03) |
+| FOUND-06 | Phase 1 | Done (Plan 01-03) |
+| FOUND-07 | Phase 1 | Done (Plan 01-03) |
+| WIN-01 | Phase 1 | Done (Plan 01-02) — E2E in Plan 01-04 |
+| WIN-02 | Phase 1 | Scaffolded (Plan 01-01) — validated in Plan 01-04 |
+| WIN-03 | Phase 1 | Done (Plan 01-02) — E2E in Plan 01-04 |
 | UTIL-01 | Phase 2 | Pending |
 | UTIL-02 | Phase 2 | Pending |
 | UTIL-03 | Phase 2 | Pending |
