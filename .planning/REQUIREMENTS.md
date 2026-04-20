@@ -94,7 +94,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Windows Integration
 
 - [x] **WIN-01**: UTF-8이 모든 유틸리티의 기본 인코딩 (GOW #280, #77 해결) — completed Plan 01-02 (2026-04-20), end-to-end validation pending Plan 01-04
-- [ ] **WIN-02**: Windows 긴 경로 지원 (MAX_PATH 260자 제한 해제) — scaffolded Plan 01-01, validated in Plan 01-04
+- [x] **WIN-02**: Windows 긴 경로 지원 (MAX_PATH 260자 제한 해제) — completed Plan 01-04 (2026-04-21), longPathAware=true verified in PE manifest
 - [x] **WIN-03**: PowerShell에서 모든 유틸리티 정상 동작 — completed Plan 01-02 (2026-04-20), end-to-end validation pending Plan 01-04
 
 ## v2 Requirements
@@ -153,9 +153,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FOUND-05 | Phase 1 | Done (Plan 01-03) |
 | FOUND-06 | Phase 1 | Done (Plan 01-03) |
 | FOUND-07 | Phase 1 | Done (Plan 01-03) |
-| WIN-01 | Phase 1 | Done (Plan 01-02) — E2E in Plan 01-04 |
-| WIN-02 | Phase 1 | Scaffolded (Plan 01-01) — validated in Plan 01-04 |
-| WIN-03 | Phase 1 | Done (Plan 01-02) — E2E in Plan 01-04 |
+| WIN-01 | Phase 1 | Done (Plan 01-04 — E2E verified) |
+| WIN-02 | Phase 1 | Done (Plan 01-04 — manifest longPathAware=true verified at PE binary level) |
+| WIN-03 | Phase 1 | Done (Plan 01-04 — PowerShell verification approved) |
 | UTIL-01 | Phase 2 | Pending |
 | UTIL-02 | Phase 2 | Pending |
 | UTIL-03 | Phase 2 | Pending |

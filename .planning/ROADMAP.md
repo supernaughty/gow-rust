@@ -9,7 +9,7 @@
 
 ## Phases
 
-- [ ] **Phase 1: Foundation** — gow-core shared library and Cargo workspace infrastructure
+- [x] **Phase 1: Foundation** — gow-core shared library and Cargo workspace infrastructure — completed 2026-04-21
 - [ ] **Phase 2: Stateless Utilities** — Simple utilities that validate workspace and gow-core integration
 - [ ] **Phase 3: Filesystem Utilities** — File and directory operations including tail -f
 - [ ] **Phase 4: Text Processing** — Search, stream editing, AWK, diff, and patch
@@ -36,7 +36,7 @@ Plans:
 - [x] 01-01-PLAN.md — Cargo workspace scaffold + gow-core crate structure (build.rs, lib.rs stubs) — completed 2026-04-20
 - [x] 01-02-PLAN.md — gow-core: encoding, args, color modules with unit tests — completed 2026-04-20
 - [x] 01-03-PLAN.md — gow-core: error, path, fs modules with unit tests — completed 2026-04-20
-- [ ] 01-04-PLAN.md — gow-probe test binary + integration tests + human verification checkpoint
+- [x] 01-04-PLAN.md — gow-probe test binary + integration tests + human verification checkpoint — completed 2026-04-21
 
 ### Phase 2: Stateless Utilities
 **Goal**: Users can run the complete set of simple, stateless GNU utilities and observe correct GNU-compatible behavior on Windows
@@ -105,7 +105,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/4 | In progress | - |
+| 1. Foundation | 4/4 | Complete | 2026-04-21 |
 | 2. Stateless Utilities | 0/? | Not started | - |
 | 3. Filesystem Utilities | 0/? | Not started | - |
 | 4. Text Processing | 0/? | Not started | - |
@@ -126,7 +126,7 @@ Plans:
 | FOUND-06 | Phase 1 | Done (Plan 01-03) |
 | FOUND-07 | Phase 1 | Done (Plan 01-03) |
 | WIN-01 | Phase 1 | Done (Plan 01-02) — validated in Plan 01-04 |
-| WIN-02 | Phase 1 | Scaffolded (Plan 01-01) — validated in Plan 01-04 |
+| WIN-02 | Phase 1 | Done (Plan 01-04 — manifest longPathAware=true verified at PE binary level) |
 | WIN-03 | Phase 1 | Done (Plan 01-02) — validated in Plan 01-04 |
 | UTIL-01 | Phase 2 | Pending |
 | UTIL-02 | Phase 2 | Pending |
