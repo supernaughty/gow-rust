@@ -30,7 +30,13 @@
   3. A path like `/c/Users/foo` passed to a gow-core utility converts correctly to `C:\Users\foo` without corrupting flag arguments like `-c`
   4. ANSI color escape codes display in both Windows Terminal and legacy ConHost without raw escape characters appearing in output
   5. GNU argument parsing rejects bad args with exit code 1 (not 2) and respects `--` end-of-options
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Cargo workspace scaffold + gow-core crate structure (build.rs, lib.rs stubs)
+- [ ] 01-02-PLAN.md — gow-core: encoding, args, color modules with unit tests
+- [ ] 01-03-PLAN.md — gow-core: error, path, fs modules with unit tests
+- [ ] 01-04-PLAN.md — gow-probe test binary + integration tests + human verification checkpoint
 
 ### Phase 2: Stateless Utilities
 **Goal**: Users can run the complete set of simple, stateless GNU utilities and observe correct GNU-compatible behavior on Windows
@@ -99,7 +105,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/? | Not started | - |
+| 1. Foundation | 0/4 | Not started | - |
 | 2. Stateless Utilities | 0/? | Not started | - |
 | 3. Filesystem Utilities | 0/? | Not started | - |
 | 4. Text Processing | 0/? | Not started | - |
@@ -178,4 +184,4 @@
 ---
 
 *Roadmap created: 2026-04-20*
-*Last updated: 2026-04-20 after initial creation*
+*Last updated: 2026-04-20 after Phase 1 planning*
