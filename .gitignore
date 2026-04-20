@@ -1,0 +1,15 @@
+# Cargo build artifacts
+/target/
+**/target/
+
+# Cargo-generated backup files
+**/*.rs.bk
+
+# MSVC debugger databases
+*.pdb
+
+# OS / editor artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

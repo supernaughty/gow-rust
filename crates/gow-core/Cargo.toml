@@ -1,0 +1,22 @@
+[package]
+name = "gow-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Shared Windows platform primitives for gow-rust utilities"
+
+[dependencies]
+thiserror = { workspace = true }
+termcolor = { workspace = true }
+windows-sys = { workspace = true }
+encoding_rs = { workspace = true }
+path-slash = { workspace = true }
+
+[build-dependencies]
+embed-manifest = "1.5"
+
+[dev-dependencies]
+assert_cmd = { workspace = true }
+tempfile = { workspace = true }
