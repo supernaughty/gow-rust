@@ -8,6 +8,7 @@ authors.workspace = true
 description = "Shared Windows platform primitives for gow-rust utilities"
 
 [dependencies]
+clap = { workspace = true }
 thiserror = { workspace = true }
 termcolor = { workspace = true }
 windows-sys = { workspace = true }
