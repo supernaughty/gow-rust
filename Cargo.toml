@@ -1,0 +1,46 @@
+[workspace]
+members = ["crates/gow-core"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT"
+authors = ["gow-rust contributors"]
+
+[workspace.dependencies]
+# Argument parsing
+clap = { version = "4.6", features = ["derive"] }
+
+# Error handling
+thiserror = "2"
+anyhow = "1"
+
+# Terminal output
+termcolor = "1"
+
+# Windows platform APIs
+windows-sys = { version = "0.61", features = [
+    "Win32_System_Console",
+    "Win32_Foundation",
+    "Win32_Storage_FileSystem",
+] }
+
+# Encoding
+encoding_rs = "0.8"
+
+# Path utilities
+path-slash = "0.2"
+
+# Testing
+assert_cmd = { version = "2", features = ["cargo"] }
+predicates = "3"
+tempfile = "3"
+
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
