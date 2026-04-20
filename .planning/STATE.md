@@ -1,3 +1,16 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: Not started
+last_updated: "2026-04-20T13:10:32.571Z"
+progress:
+  total_phases: 6
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+---
+
 # Project State: gow-rust
 
 **Last updated:** 2026-04-20
@@ -20,6 +33,7 @@
 **Status:** Not started
 
 **Progress:**
+
 ```
 Phase 1 [          ] 0%   Foundation
 Phase 2 [          ] 0%   Stateless Utilities
