@@ -9,7 +9,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Foundation
 
-- [ ] **FOUND-01**: Cargo workspace 구조로 다중 크레이트 프로젝트 구성
+- [x] **FOUND-01**: Cargo workspace 구조로 다중 크레이트 프로젝트 구성 — completed Plan 01-01 (2026-04-20)
 - [ ] **FOUND-02**: gow-core 공유 라이브러리 — UTF-8 콘솔 초기화 (SetConsoleOutputCP 65001)
 - [ ] **FOUND-03**: gow-core 공유 라이브러리 — GNU 호환 인자 파싱 (옵션 퍼뮤테이션, exit code 1, -- 종료)
 - [ ] **FOUND-04**: gow-core 공유 라이브러리 — 컬러/TTY 감지 및 ANSI VT100 활성화

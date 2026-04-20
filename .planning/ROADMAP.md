@@ -33,7 +33,7 @@
 **Plans**: 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Cargo workspace scaffold + gow-core crate structure (build.rs, lib.rs stubs)
+- [x] 01-01-PLAN.md — Cargo workspace scaffold + gow-core crate structure (build.rs, lib.rs stubs) — completed 2026-04-20
 - [ ] 01-02-PLAN.md — gow-core: encoding, args, color modules with unit tests
 - [ ] 01-03-PLAN.md — gow-core: error, path, fs modules with unit tests
 - [ ] 01-04-PLAN.md — gow-probe test binary + integration tests + human verification checkpoint
@@ -105,7 +105,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/4 | Not started | - |
+| 1. Foundation | 1/4 | In progress | - |
 | 2. Stateless Utilities | 0/? | Not started | - |
 | 3. Filesystem Utilities | 0/? | Not started | - |
 | 4. Text Processing | 0/? | Not started | - |
@@ -118,16 +118,16 @@ Plans:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 1 | Pending |
-| FOUND-02 | Phase 1 | Pending |
-| FOUND-03 | Phase 1 | Pending |
-| FOUND-04 | Phase 1 | Pending |
-| FOUND-05 | Phase 1 | Pending |
-| FOUND-06 | Phase 1 | Pending |
-| FOUND-07 | Phase 1 | Pending |
-| WIN-01 | Phase 1 | Pending |
-| WIN-02 | Phase 1 | Pending |
-| WIN-03 | Phase 1 | Pending |
+| FOUND-01 | Phase 1 | Done (Plan 01-01) |
+| FOUND-02 | Phase 1 | Scaffolded (Plan 01-01) — full impl in Plan 01-02 |
+| FOUND-03 | Phase 1 | Pending (Plan 01-02) |
+| FOUND-04 | Phase 1 | Pending (Plan 01-02) |
+| FOUND-05 | Phase 1 | Pending (Plan 01-03) |
+| FOUND-06 | Phase 1 | Pending (Plan 01-03) |
+| FOUND-07 | Phase 1 | Pending (Plan 01-03) |
+| WIN-01 | Phase 1 | Scaffolded (Plan 01-01) — runtime setup in Plan 01-02, validated in Plan 01-04 |
+| WIN-02 | Phase 1 | Scaffolded (Plan 01-01) — validated in Plan 01-04 |
+| WIN-03 | Phase 1 | Scaffolded (Plan 01-01) — validated in Plan 01-04 |
 | UTIL-01 | Phase 2 | Pending |
 | UTIL-02 | Phase 2 | Pending |
 | UTIL-03 | Phase 2 | Pending |

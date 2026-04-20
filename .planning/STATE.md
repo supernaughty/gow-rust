@@ -3,19 +3,19 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-04-20T13:32:48.123Z"
+last_updated: "2026-04-20T13:56:00Z"
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 4
-  completed_plans: 0
-  percent: 0
+  completed_plans: 1
+  percent: 4
 ---
 
 # Project State: gow-rust
 
 **Last updated:** 2026-04-20
-**Session:** Initial roadmap creation
+**Session:** Executing Phase 1 Plan 01 (workspace scaffold + gow-core skeleton)
 
 ---
 
@@ -30,13 +30,13 @@ progress:
 ## Current Position
 
 **Phase:** 1 (Foundation)
-**Plan:** None started
-**Status:** Ready to execute
+**Plan:** 01-01 complete; next plan is 01-02
+**Status:** Executing
 
 **Progress:**
 
 ```
-Phase 1 [          ] 0%   Foundation
+Phase 1 [##        ] 25%  Foundation (1/4 plans complete)
 Phase 2 [          ] 0%   Stateless Utilities
 Phase 3 [          ] 0%   Filesystem Utilities
 Phase 4 [          ] 0%   Text Processing
@@ -44,7 +44,7 @@ Phase 5 [          ] 0%   Search and Navigation
 Phase 6 [          ] 0%   Archive, Compression, and Network
 ```
 
-**Overall:** 0/6 phases complete
+**Overall:** 0/6 phases complete (1/4 Phase 1 plans complete)
 
 ---
 
@@ -55,9 +55,15 @@ Phase 6 [          ] 0%   Archive, Compression, and Network
 | Phases total | 6 |
 | Phases complete | 0 |
 | Requirements total | 59 |
-| Requirements complete | 0 |
-| Plans created | 0 |
-| Plans complete | 0 |
+| Requirements complete | 5 (FOUND-01, FOUND-02, WIN-01, WIN-02, WIN-03) |
+| Plans created | 4 (Phase 1) |
+| Plans complete | 1 (01-01) |
+
+### Per-plan execution
+
+| Phase-Plan | Duration | Tasks | Files | Completed |
+|------------|----------|-------|-------|-----------|
+| 01-01 | 6 min | 2 | 13 | 2026-04-20 |
 
 ---
 
@@ -74,6 +80,10 @@ Phase 6 [          ] 0%   Archive, Compression, and Network
 | AWK moved to Phase 4 | AWK is a text processing tool; dependency on bstr/regex patterns proven in Phase 3 |
 | tail -f in Phase 3 | Requires notify/ReadDirectoryChangesW; filesystem phase is the right boundary |
 | curl in Phase 6 | tokio async runtime must be isolated from simpler coreutils to avoid compile-time bleed |
+| gow-core stays lib-only in Plan 01 | embed-manifest's `cargo:rustc-link-arg-bins` directive is rejected by cargo 1.95 on lib-only packages; build.rs now detects bin targets before invoking embed_manifest so the same script works verbatim when copied into Phase 2+ utility bin crates (Plan 01-01) |
+| embed-manifest API: Setting::Enabled, not LongPathAware::Yes | embed-manifest 1.5.0 uses a shared `Setting { Enabled, Disabled }` enum for boolean-style flags. Plan/research documents referenced a non-existent `LongPathAware::Yes`; corrected against the crate source (Plan 01-01) |
+| assert_cmd 2.x has no `cargo` feature flag | `features = ["cargo"]` in the workspace dep caused resolution failure. Functionality exposed unconditionally in 2.x; declared plainly as `assert_cmd = "2"` (Plan 01-01) |
+| Cargo.lock committed at repo root | Workspace produces binaries (FOUND-01, D-14); lockfile pins the exact 66-package dependency graph for reproducible CI (Plan 01-01) |
 
 ### Architecture Notes
 
@@ -105,18 +115,21 @@ None currently.
 
 ### What Was Done This Session
 
-- Read PROJECT.md, REQUIREMENTS.md, research/SUMMARY.md, config.json
-- Extracted all 59 v1 requirements across 17 categories
-- Derived 6 phases from natural dependency boundaries
-- Validated 100% requirement coverage (59/59 mapped)
-- Wrote ROADMAP.md with phase details and success criteria
-- Wrote STATE.md (this file)
-- Updated REQUIREMENTS.md traceability section
+- Executed Phase 1 Plan 01 (workspace scaffold + gow-core skeleton)
+  - Task 1 (`974a7fe`): workspace Cargo.toml, .cargo/config.toml, resolver 3, edition 2024, +crt-static
+  - Task 2 (`c15706b`): gow-core crate manifest, bin-gated build.rs, six module stubs, init() smoke test
+- 5 auto-fixed deviations documented in SUMMARY:
+  - Rule 1 (bug) × 2: assert_cmd feature flag, embed-manifest Setting enum
+  - Rule 3 (blocking) × 1: bin-target-aware embed_manifest() gating
+  - Rule 2 (missing critical) × 2: init smoke test, .gitignore
+- `cargo build --workspace` and `cargo test -p gow-core` both green; clippy -D warnings clean
+- 66-package Cargo.lock committed; 13 files created; 1 file modified (initial Cargo.toml fix)
 
 ### What To Do Next
 
-Run `/gsd-plan-phase 1` to break Phase 1 (Foundation) into executable plans.
+Run the executor on Plan 01-02 (encoding, args, color modules with unit tests). Dependencies (clap, thiserror, termcolor, windows-sys) are already in scope via workspace inheritance; module files exist at `crates/gow-core/src/{encoding,args,color}.rs` with no-op stubs ready to be filled in.
 
 ---
 
 *State initialized: 2026-04-20*
+*Plan 01-01 completed: 2026-04-20*
