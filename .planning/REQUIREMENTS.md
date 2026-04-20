@@ -146,13 +146,72 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (Updated during roadmap creation) | | |
+| FOUND-01 | Phase 1 | Pending |
+| FOUND-02 | Phase 1 | Pending |
+| FOUND-03 | Phase 1 | Pending |
+| FOUND-04 | Phase 1 | Pending |
+| FOUND-05 | Phase 1 | Pending |
+| FOUND-06 | Phase 1 | Pending |
+| FOUND-07 | Phase 1 | Pending |
+| WIN-01 | Phase 1 | Pending |
+| WIN-02 | Phase 1 | Pending |
+| WIN-03 | Phase 1 | Pending |
+| UTIL-01 | Phase 2 | Pending |
+| UTIL-02 | Phase 2 | Pending |
+| UTIL-03 | Phase 2 | Pending |
+| UTIL-04 | Phase 2 | Pending |
+| UTIL-05 | Phase 2 | Pending |
+| UTIL-06 | Phase 2 | Pending |
+| UTIL-07 | Phase 2 | Pending |
+| UTIL-08 | Phase 2 | Pending |
+| UTIL-09 | Phase 2 | Pending |
+| TEXT-03 | Phase 2 | Pending |
+| FILE-06 | Phase 2 | Pending |
+| FILE-07 | Phase 2 | Pending |
+| FILE-08 | Phase 2 | Pending |
+| WHICH-01 | Phase 2 | Pending |
+| FILE-01 | Phase 3 | Pending |
+| FILE-02 | Phase 3 | Pending |
+| FILE-03 | Phase 3 | Pending |
+| FILE-04 | Phase 3 | Pending |
+| FILE-05 | Phase 3 | Pending |
+| FILE-09 | Phase 3 | Pending |
+| FILE-10 | Phase 3 | Pending |
+| TEXT-01 | Phase 3 | Pending |
+| TEXT-02 | Phase 3 | Pending |
+| CONV-01 | Phase 3 | Pending |
+| CONV-02 | Phase 3 | Pending |
+| TEXT-04 | Phase 4 | Pending |
+| TEXT-05 | Phase 4 | Pending |
+| TEXT-06 | Phase 4 | Pending |
+| GREP-01 | Phase 4 | Pending |
+| GREP-02 | Phase 4 | Pending |
+| GREP-03 | Phase 4 | Pending |
+| SED-01 | Phase 4 | Pending |
+| SED-02 | Phase 4 | Pending |
+| AWK-01 | Phase 4 | Pending |
+| AWK-02 | Phase 4 | Pending |
+| DIFF-01 | Phase 4 | Pending |
+| DIFF-02 | Phase 4 | Pending |
+| FIND-01 | Phase 5 | Pending |
+| FIND-02 | Phase 5 | Pending |
+| FIND-03 | Phase 5 | Pending |
+| XARGS-01 | Phase 5 | Pending |
+| LESS-01 | Phase 5 | Pending |
+| BIN-01 | Phase 5 | Pending |
+| ARCH-01 | Phase 6 | Pending |
+| ARCH-02 | Phase 6 | Pending |
+| ARCH-03 | Phase 6 | Pending |
+| ARCH-04 | Phase 6 | Pending |
+| ARCH-05 | Phase 6 | Pending |
+| NET-01 | Phase 6 | Pending |
+| NET-02 | Phase 6 | Pending |
 
 **Coverage:**
-- v1 requirements: 52 total
-- Mapped to phases: 0
-- Unmapped: 52
+- v1 requirements: 59 total (note: initial count of 52 was pre-final; actual count in document is 59)
+- Mapped to phases: 59
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-04-20*
-*Last updated: 2026-04-20 after initial definition*
+*Last updated: 2026-04-20 after roadmap creation*
