@@ -78,9 +78,9 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md — Wave 0: workspace prep (walkdir/notify/terminal_size/junction deps) + gow-core::fs 7 new helpers + 11 stub crates
-- [ ] 03-02-PLAN.md — Wave 1: gow-cat (FILE-01) — byte-stream concat with -n/-b/-s/-v/-E/-T/-A
-- [ ] 03-03-PLAN.md — Wave 1: gow-head (TEXT-01) — first N lines/bytes with multi-file headers + numeric shorthand
-- [ ] 03-04-PLAN.md — Wave 1: gow-chmod (FILE-10) — D-32 owner-write bit model + walkdir -R
+- [x] 03-02-PLAN.md — Wave 1: gow-cat (FILE-01) — byte-stream concat with -n/-b/-s/-v/-E/-T/-A
+- [x] 03-03-PLAN.md — Wave 1: gow-head (TEXT-01) — first N lines/bytes with multi-file headers + numeric shorthand
+- [x] 03-04-PLAN.md — Wave 1: gow-chmod (FILE-10) — D-32 owner-write bit model + walkdir -R
 - [ ] 03-05-PLAN.md — Wave 2: gow-dos2unix (CONV-01) — atomic rewrite (D-47) + shared transform module
 - [ ] 03-06-PLAN.md — Wave 3: gow-unix2dos (CONV-02) — depends on 03-05 transform; round-trip test
 - [ ] 03-07-PLAN.md — Wave 3: gow-cp (FILE-03) — walkdir recursion + filetime -p preserve + symlink clone
