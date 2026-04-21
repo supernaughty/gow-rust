@@ -202,10 +202,76 @@ fn uu_app() -> Command {
         )
 }
 
+/// Returns true if the argument syntactically looks like a chmod mode string
+/// that happens to start with `-` / `+` / `=` (e.g. `-w`, `+x`, `=r`, `-rw`).
+/// These tokens must be preserved as mode values, not consumed by clap as flags.
+/// GNU chmod accepts them even though they begin with a dash.
+fn looks_like_dash_mode(s: &str) -> bool {
+    let mut iter = s.chars();
+    match iter.next() {
+        Some('-') | Some('+') | Some('=') => {}
+        _ => return false,
+    }
+    let rest = &s[1..];
+    if rest.is_empty() {
+        return false;
+    }
+    // All remaining chars must be standard symbolic perm characters.
+    rest.chars().all(|c| matches!(c, 'r' | 'w' | 'x' | 'X' | 's' | 't'))
+}
+
+/// Pre-process argv to rescue `chmod -w FILE`-style invocations from clap.
+///
+/// GNU chmod lets the mode string be the first positional arg even when it
+/// begins with a dash. clap cannot distinguish `-w` (mode) from `-w` (unknown
+/// flag) and would error. Solution: find the first arg that matches the dash-
+/// mode pattern and isn't a known chmod flag, then insert a `--` separator
+/// before it so clap treats every subsequent token as a positional operand.
+fn preprocess_dash_modes(args: Vec<OsString>) -> Vec<OsString> {
+    // Known short-flag bundles and long flags that must NOT be rewritten.
+    let known_flags: &[&str] = &[
+        "-R", "-v", "-c", "-f",
+        "--recursive", "--verbose", "--changes", "--silent", "--quiet",
+        "--help", "--version",
+    ];
+    let mut out: Vec<OsString> = Vec::with_capacity(args.len() + 1);
+    let mut inserted = false;
+    let mut seen_dashdash = false;
+    for (i, a) in args.into_iter().enumerate() {
+        if i == 0 || inserted || seen_dashdash {
+            out.push(a);
+            continue;
+        }
+        if a.as_os_str() == std::ffi::OsStr::new("--") {
+            seen_dashdash = true;
+            out.push(a);
+            continue;
+        }
+        if let Some(s) = a.to_str() {
+            if known_flags.contains(&s) {
+                out.push(a);
+                continue;
+            }
+            if looks_like_dash_mode(s) {
+                // Insert a -- before the mode so clap stops flag-parsing.
+                out.push(OsString::from("--"));
+                out.push(a);
+                inserted = true;
+                continue;
+            }
+        }
+        out.push(a);
+    }
+    out
+}
+
 pub fn uumain<I: IntoIterator<Item = OsString>>(args: I) -> i32 {
     gow_core::init();
 
-    let matches = gow_core::args::parse_gnu(uu_app(), args);
+    let args_vec: Vec<OsString> = args.into_iter().collect();
+    let args_vec = preprocess_dash_modes(args_vec);
+
+    let matches = gow_core::args::parse_gnu(uu_app(), args_vec);
     let recursive = matches.get_flag("recursive");
     let verbose = matches.get_flag("verbose") || matches.get_flag("changes");
     let silent = matches.get_flag("quiet");
