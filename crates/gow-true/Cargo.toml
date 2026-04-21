@@ -1,0 +1,19 @@
+[package]
+name = "gow-true"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "GNU true — returns exit code 0."
+
+[[bin]]
+name = "true"
+path = "src/main.rs"
+
+[lib]
+name = "uu_true"
+path = "src/lib.rs"
+
+[dependencies]
+gow-core = { path = "../gow-core" }

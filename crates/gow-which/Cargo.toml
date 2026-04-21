@@ -1,0 +1,22 @@
+[package]
+name = "gow-which"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "GNU which — UTF-8 safe Windows port."
+
+[[bin]]
+name = "which"
+path = "src/main.rs"
+
+[lib]
+name = "uu_which"
+path = "src/lib.rs"
+
+[dependencies]
+gow-core = { path = "../gow-core" }
+clap = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }

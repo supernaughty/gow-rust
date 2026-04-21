@@ -229,6 +229,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-basename"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "gow-core",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-core"
 version = "0.1.0"
 dependencies = [
@@ -244,6 +254,53 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-dirname"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "gow-core",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-echo"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "gow-core",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-env"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "gow-core",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-false"
+version = "0.1.0"
+dependencies = [
+ "gow-core",
+]
+
+[[package]]
+name = "gow-mkdir"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "gow-core",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-probe"
 version = "0.1.0"
 dependencies = [
@@ -254,6 +311,83 @@ dependencies = [
  "gow-core",
  "predicates",
  "tempfile",
+]
+
+[[package]]
+name = "gow-pwd"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "gow-core",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-rmdir"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "gow-core",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-tee"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "gow-core",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-touch"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "gow-core",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-true"
+version = "0.1.0"
+dependencies = [
+ "gow-core",
+]
+
+[[package]]
+name = "gow-wc"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "gow-core",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-which"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "gow-core",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-yes"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "gow-core",
+ "thiserror",
 ]
 
 [[package]]

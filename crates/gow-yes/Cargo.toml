@@ -1,0 +1,22 @@
+[package]
+name = "gow-yes"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "GNU yes — UTF-8 safe Windows port."
+
+[[bin]]
+name = "yes"
+path = "src/main.rs"
+
+[lib]
+name = "uu_yes"
+path = "src/lib.rs"
+
+[dependencies]
+gow-core = { path = "../gow-core" }
+clap = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }

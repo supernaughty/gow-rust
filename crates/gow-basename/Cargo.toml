@@ -1,0 +1,22 @@
+[package]
+name = "gow-basename"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "GNU basename — UTF-8 safe Windows port."
+
+[[bin]]
+name = "basename"
+path = "src/main.rs"
+
+[lib]
+name = "uu_basename"
+path = "src/lib.rs"
+
+[dependencies]
+gow-core = { path = "../gow-core" }
+clap = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
