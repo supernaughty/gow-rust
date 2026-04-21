@@ -1,5 +1,7 @@
 //! `uu_which`: GNU `which` ported to Windows with UTF-8 + VT.
-//! Stub — real implementation lands in a later Wave 2/3/4 plan.
+//! Real implementation landing in Task 2 — Task 1 only introduces the `pathext` module.
+
+mod pathext;
 
 use std::ffi::OsString;
 
