@@ -73,8 +73,22 @@ Plans:
   3. `tail -f logfile` detects new lines appended by another process within 200ms and streams them to stdout without polling (uses ReadDirectoryChangesW)
   4. `cat -n` on a file with non-ASCII UTF-8 content outputs correct numbered lines without mojibake
   5. `dos2unix` converts CRLF to LF in-place on a Windows-native text file; `unix2dos` reverses the conversion
-**Plans**: TBD
+**Plans**: 12 plans
 **UI hint**: yes
+
+Plans:
+- [ ] 03-01-PLAN.md — Wave 0: workspace prep (walkdir/notify/terminal_size/junction deps) + gow-core::fs 7 new helpers + 11 stub crates
+- [ ] 03-02-PLAN.md — Wave 1: gow-cat (FILE-01) — byte-stream concat with -n/-b/-s/-v/-E/-T/-A
+- [ ] 03-03-PLAN.md — Wave 1: gow-head (TEXT-01) — first N lines/bytes with multi-file headers + numeric shorthand
+- [ ] 03-04-PLAN.md — Wave 1: gow-chmod (FILE-10) — D-32 owner-write bit model + walkdir -R
+- [ ] 03-05-PLAN.md — Wave 2: gow-dos2unix (CONV-01) — atomic rewrite (D-47) + shared transform module
+- [ ] 03-06-PLAN.md — Wave 3: gow-unix2dos (CONV-02) — depends on 03-05 transform; round-trip test
+- [ ] 03-07-PLAN.md — Wave 3: gow-cp (FILE-03) — walkdir recursion + filetime -p preserve + symlink clone
+- [ ] 03-08-PLAN.md — Wave 3: gow-rm (FILE-05) — contents_first walk + D-42 drive-root safety + D-45 RO handling
+- [ ] 03-09-PLAN.md — Wave 3: gow-ls (FILE-02) — walkdir -R + terminal_size layout + D-31/D-34/D-35/D-37 display
+- [ ] 03-10-PLAN.md — Wave 4: gow-ln (FILE-09) — create_link dispatch with D-36 junction fallback
+- [ ] 03-11-PLAN.md — Wave 4: gow-mv (FILE-04) — rename + cross-volume fallback with mtime preserve
+- [ ] 03-12-PLAN.md — Wave 5: gow-tail (TEXT-02) — notify watcher for -f/-F, ROADMAP criterion 3
 
 ### Phase 4: Text Processing
 **Goal**: Users can search, filter, transform, and edit text streams with full GNU-compatible regex and in-place editing that works correctly under Windows file locking
