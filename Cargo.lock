@@ -233,8 +233,12 @@ name = "gow-basename"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "assert_cmd",
  "clap",
+ "embed-manifest",
  "gow-core",
+ "predicates",
+ "tempfile",
  "thiserror",
 ]
 
@@ -258,8 +262,12 @@ name = "gow-dirname"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "assert_cmd",
  "clap",
+ "embed-manifest",
  "gow-core",
+ "predicates",
+ "tempfile",
  "thiserror",
 ]
 
