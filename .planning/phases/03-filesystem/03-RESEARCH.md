@@ -1497,7 +1497,10 @@ uutils cat uses `splice`/`sendfile` on Linux for zero-copy; on Windows it falls 
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+> All 8 questions have concrete Recommendations resolved into downstream PLAN.md files.
+> Plan traces: Q1→03-11, Q2→03-02, Q3→03-12, Q4→03-05, Q5→03-09, Q6→03-04, Q7→03-07, Q8→03-12.
 
 1. **Should `mv` cross-volume fallback preserve *all* attributes (timestamps, RO bit) or only timestamps?**
    - What we know: GNU `mv` across filesystems effectively copies with mode preservation.
