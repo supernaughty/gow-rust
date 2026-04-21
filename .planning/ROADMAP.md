@@ -77,7 +77,7 @@ Plans:
 **UI hint**: yes
 
 Plans:
-- [ ] 03-01-PLAN.md — Wave 0: workspace prep (walkdir/notify/terminal_size/junction deps) + gow-core::fs 7 new helpers + 11 stub crates
+- [x] 03-01-PLAN.md — Wave 0: workspace prep (walkdir/notify/terminal_size/junction deps) + gow-core::fs 7 new helpers + 11 stub crates
 - [ ] 03-02-PLAN.md — Wave 1: gow-cat (FILE-01) — byte-stream concat with -n/-b/-s/-v/-E/-T/-A
 - [ ] 03-03-PLAN.md — Wave 1: gow-head (TEXT-01) — first N lines/bytes with multi-file headers + numeric shorthand
 - [ ] 03-04-PLAN.md — Wave 1: gow-chmod (FILE-10) — D-32 owner-write bit model + walkdir -R
