@@ -1,5 +1,9 @@
 //! `uu_tee`: GNU `tee` ported to Windows with UTF-8 + VT.
-//! Stub — real implementation lands in a later Wave 2/3/4 plan.
+//! Stub — real uumain body lands in Task 2 of this plan; the `mod signals;`
+//! declaration here makes the platform-gated Ctrl+C helper compilable and
+//! unit-testable independently of the split-writer loop.
+
+mod signals;
 
 use std::ffi::OsString;
 
