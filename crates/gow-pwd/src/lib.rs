@@ -1,5 +1,7 @@
 //! `uu_pwd`: GNU `pwd` ported to Windows with UTF-8 + VT.
-//! Stub — real implementation lands in a later Wave 2/3/4 plan.
+//! Stub — canonical module wired for Task 1 unit tests; full uumain lands in Task 2.
+
+mod canonical;
 
 use std::ffi::OsString;
 
