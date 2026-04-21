@@ -9,6 +9,7 @@
 
 use filetime::FileTime;
 use jiff::Zoned;
+use parse_datetime::parse_datetime_at_date;
 use thiserror::Error;
 
 /// Errors raised by `touch` parsers and timestamp I/O.
@@ -29,13 +30,61 @@ pub enum TouchError {
 
 /// Parse a `-d STRING` date via `parse_datetime`. `reference` is the "now" anchor
 /// for relative expressions like "yesterday" or "1 hour ago".
-pub fn parse_touch_date(_date_str: &str, _reference: Zoned) -> Result<FileTime, TouchError> {
-    todo!("RED — GREEN lands next commit")
+pub fn parse_touch_date(date_str: &str, reference: Zoned) -> Result<FileTime, TouchError> {
+    let zoned = parse_datetime_at_date(reference, date_str)
+        .map_err(|e| TouchError::InvalidDate(date_str.to_string(), e.to_string()))?;
+    let ts = zoned.timestamp();
+    Ok(FileTime::from_unix_time(
+        ts.as_second(),
+        ts.subsec_nanosecond() as u32,
+    ))
 }
 
 /// Parse a `-t STAMP` strict timestamp: `YYYYMMDDhhmm[.ss]`.
-pub fn parse_touch_stamp(_stamp: &str) -> Result<FileTime, TouchError> {
-    todo!("RED — GREEN lands next commit")
+///
+/// The GNU form also accepts `[[CC]YY]MMDDhhmm[.ss]` (8, 10, 12 digit-prefix
+/// variants), but we accept only the unambiguous 12-digit form for v1. Extend
+/// later if needed.
+pub fn parse_touch_stamp(stamp: &str) -> Result<FileTime, TouchError> {
+    let (main, secs) = match stamp.split_once('.') {
+        Some((m, s)) => (m, s),
+        None => (stamp, "00"),
+    };
+    if main.len() != 12 || !main.chars().all(|c| c.is_ascii_digit()) {
+        return Err(TouchError::InvalidStamp(
+            stamp.to_string(),
+            "expected YYYYMMDDhhmm".to_string(),
+        ));
+    }
+    if secs.len() != 2 || !secs.chars().all(|c| c.is_ascii_digit()) {
+        return Err(TouchError::InvalidStamp(
+            stamp.to_string(),
+            "bad seconds field".to_string(),
+        ));
+    }
+    // Unwraps below are safe because `all(is_ascii_digit)` + known length validated above.
+    let year: i16 = main[..4].parse().unwrap();
+    let month: i8 = main[4..6].parse().unwrap();
+    let day: i8 = main[6..8].parse().unwrap();
+    let hour: i8 = main[8..10].parse().unwrap();
+    let minute: i8 = main[10..12].parse().unwrap();
+    let second: i8 = secs.parse().unwrap();
+
+    // Build a civil datetime and interpret it in the system's local time zone,
+    // matching GNU touch's behavior for `-t`.
+    use jiff::civil;
+    use jiff::tz::TimeZone;
+
+    let dt = civil::datetime(year, month, day, hour, minute, second, 0);
+    let tz = TimeZone::system();
+    let zoned = dt
+        .to_zoned(tz)
+        .map_err(|e| TouchError::InvalidStamp(stamp.to_string(), e.to_string()))?;
+    let ts = zoned.timestamp();
+    Ok(FileTime::from_unix_time(
+        ts.as_second(),
+        ts.subsec_nanosecond() as u32,
+    ))
 }
 
 #[cfg(test)]
