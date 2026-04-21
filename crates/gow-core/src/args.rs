@@ -91,9 +91,7 @@ mod tests {
         let cmd = make_test_cmd();
         let matches = parse_gnu(
             cmd,
-            ["testutil", "--", "--verbose"]
-                .map(std::ffi::OsString::from)
-                .into_iter(),
+            ["testutil", "--", "--verbose"].map(std::ffi::OsString::from),
         );
         // --verbose after -- should be treated as a file argument, not a flag
         let files: Vec<&str> = matches
@@ -118,9 +116,7 @@ mod tests {
         let cmd = make_test_cmd();
         let matches = parse_gnu(
             cmd,
-            ["testutil", "file.txt", "--verbose"]
-                .map(std::ffi::OsString::from)
-                .into_iter(),
+            ["testutil", "file.txt", "--verbose"].map(std::ffi::OsString::from),
         );
         assert!(
             matches.get_flag("verbose"),
