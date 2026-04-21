@@ -52,10 +52,10 @@ Plans:
 
 Plans:
 - [x] 02-01-PLAN.md — Workspace prep: add 14 Phase 2 members + snapbox/bstr/filetime workspace deps + stub crate scaffolds — completed 2026-04-21
-- [ ] 02-02-PLAN.md — gow-true + gow-false + gow-yes (trivial trio; BrokenPipe-safe yes loop)
-- [ ] 02-03-PLAN.md — gow-echo with -n/-e/-E + escape state machine (RESEARCH.md Q9)
-- [ ] 02-04-PLAN.md — gow-pwd with -L/-P and UNC-safe simplify_canonical (RESEARCH.md Q8)
-- [ ] 02-05-PLAN.md — gow-basename + gow-dirname (MSYS pre-convert + suffix strip)
+- [x] 02-02-PLAN.md — gow-true + gow-false + gow-yes (trivial trio; BrokenPipe-safe yes loop) — completed 2026-04-21
+- [x] 02-03-PLAN.md — gow-echo with -n/-e/-E + escape state machine (RESEARCH.md Q9) — completed 2026-04-21
+- [x] 02-04-PLAN.md — gow-pwd with -L/-P and UNC-safe simplify_canonical (RESEARCH.md Q8) — completed 2026-04-21
+- [x] 02-05-PLAN.md — gow-basename + gow-dirname (MSYS pre-convert + suffix strip) — completed 2026-04-21
 - [ ] 02-06-PLAN.md — gow-mkdir + gow-rmdir (create_dir_all + parent walk loop)
 - [ ] 02-07-PLAN.md — gow-tee with split-writer + -i SetConsoleCtrlHandler (RESEARCH.md Q10)
 - [ ] 02-08-PLAN.md — gow-wc Unicode-aware via bstr (TEXT-03, ROADMAP criterion 2)
