@@ -32,12 +32,12 @@ pub fn write_escaped<W: Write>(bytes: &[u8], out: &mut W) -> io::Result<Control>
         // Starts escape.
         if i + 1 >= bytes.len() {
             // Trailing bare `\` — preserve literal.
-            out.write_all(&[b'\\'])?;
+            out.write_all(b"\\")?;
             return Ok(Control::Continue);
         }
         match bytes[i + 1] {
             b'\\' => {
-                out.write_all(&[b'\\'])?;
+                out.write_all(b"\\")?;
                 i += 2;
             }
             b'a' => {
@@ -83,7 +83,7 @@ pub fn write_escaped<W: Write>(bytes: &[u8], out: &mut W) -> io::Result<Control>
                 if consumed == 0 {
                     // No hex digit after \x — preserve literal "\x" and continue
                     // at the char after 'x'.
-                    out.write_all(&[b'\\', b'x'])?;
+                    out.write_all(b"\\x")?;
                     i += 2;
                 } else {
                     out.write_all(&[byte])?;
