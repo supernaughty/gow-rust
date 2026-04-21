@@ -5,7 +5,7 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 authors.workspace = true
-description = "GNU tee — UTF-8 safe Windows port."
+description = "GNU tee — UTF-8 safe Windows port with console Ctrl+C handling."
 
 [[bin]]
 name = "tee"
@@ -20,3 +20,14 @@ gow-core = { path = "../gow-core" }
 clap = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { workspace = true }
+
+[build-dependencies]
+embed-manifest = "1.5"
+
+[dev-dependencies]
+assert_cmd = { workspace = true }
+predicates = { workspace = true }
+tempfile = { workspace = true }
