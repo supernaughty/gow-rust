@@ -1,5 +1,8 @@
 //! `uu_touch`: GNU `touch` ported to Windows with UTF-8 + VT.
-//! Stub — real implementation lands in a later Wave 2/3/4 plan.
+//! Stub — real implementation lands in Task 2. Task 1 introduces the `date`
+//! module and its parsers (RED tests).
+
+mod date;
 
 use std::ffi::OsString;
 
