@@ -9,14 +9,10 @@
 
 use std::ffi::OsString;
 
-// Task 1 (this plan) introduces these helpers; Task 2 wires the consumers in lib.rs.
-// The `allow(dead_code)` bracket is lifted as soon as `uumain`/`find` reference them.
-#[allow(dead_code)]
 const DEFAULT_PATHEXT: &str = ".COM;.EXE;.BAT;.CMD";
 
 /// Parse a semicolon-separated PATHEXT string into a vector of non-empty extensions.
 /// Empty entries are filtered out so `.EXE;;.BAT` becomes `[".EXE", ".BAT"]`.
-#[allow(dead_code)]
 pub fn parse_pathext_string(s: &str) -> Vec<OsString> {
     s.split(';')
         .filter(|e| !e.is_empty())
@@ -25,7 +21,6 @@ pub fn parse_pathext_string(s: &str) -> Vec<OsString> {
 }
 
 /// Load the active PATHEXT list.
-#[allow(dead_code)]
 pub fn load_pathext() -> Vec<OsString> {
     let raw = std::env::var_os("GOW_PATHEXT")
         .or_else(|| std::env::var_os("PATHEXT"))
