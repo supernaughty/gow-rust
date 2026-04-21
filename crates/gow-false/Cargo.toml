@@ -17,3 +17,10 @@ path = "src/lib.rs"
 
 [dependencies]
 gow-core = { path = "../gow-core" }
+
+[build-dependencies]
+embed-manifest = "1.5"
+
+[dev-dependencies]
+assert_cmd = { workspace = true }
+predicates = { workspace = true }

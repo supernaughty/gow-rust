@@ -287,7 +287,10 @@ dependencies = [
 name = "gow-false"
 version = "0.1.0"
 dependencies = [
+ "assert_cmd",
+ "embed-manifest",
  "gow-core",
+ "predicates",
 ]
 
 [[package]]
@@ -357,7 +360,10 @@ dependencies = [
 name = "gow-true"
 version = "0.1.0"
 dependencies = [
+ "assert_cmd",
+ "embed-manifest",
  "gow-core",
+ "predicates",
 ]
 
 [[package]]
