@@ -11,6 +11,7 @@
 //!
 //! Covers: FOUND-03, D-01, D-02, D-03, D-04
 
+use clap::error::ErrorKind;
 use clap::{ArgMatches, Command};
 
 /// Parse arguments GNU-style.
@@ -61,11 +62,26 @@ pub fn parse_gnu(
     let cmd = cmd.allow_negative_numbers(true);
 
     cmd.try_get_matches_from(args).unwrap_or_else(|e| {
-        // Print to stderr in GNU format: "{binary}: {error}" (D-11)
-        // clap's Display impl already formats the error message body.
-        eprintln!("{bin}: {e}");
-        // GNU convention: bad arguments = exit code 1 (not clap default 2) (D-02)
-        std::process::exit(1);
+        match e.kind() {
+            // --help and --version are clap-routed as errors but should exit 0
+            // and print to stdout per GNU convention.
+            ErrorKind::DisplayHelp | ErrorKind::DisplayVersion => {
+                // clap formats the help/version text into the error itself;
+                // printing it out reproduces `--help`/`--version` output.
+                print!("{e}");
+                std::process::exit(0);
+            }
+            // Help-on-missing-required-arg is emitted by clap when a required
+            // argument is missing and help would be useful. Treat as usage error
+            // (exit 1 per D-02).
+            _ => {
+                // Print to stderr in GNU format: "{binary}: {error}" (D-11)
+                // clap's Display impl already formats the error message body.
+                eprintln!("{bin}: {e}");
+                // GNU convention: bad arguments = exit code 1 (not clap default 2) (D-02)
+                std::process::exit(1);
+            }
+        }
     })
 }
 
