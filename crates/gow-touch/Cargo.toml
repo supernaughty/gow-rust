@@ -5,7 +5,7 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 authors.workspace = true
-description = "GNU touch — UTF-8 safe Windows port."
+description = "GNU touch — update file timestamps with Windows symlink-self support."
 
 [[bin]]
 name = "touch"
@@ -20,3 +20,15 @@ gow-core = { path = "../gow-core" }
 clap = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
+filetime = { workspace = true }
+# Per-crate deps (D-20b — not in workspace.dependencies):
+jiff = "0.2"
+parse_datetime = "0.14"
+
+[build-dependencies]
+embed-manifest = "1.5"
+
+[dev-dependencies]
+assert_cmd = { workspace = true }
+predicates = { workspace = true }
+tempfile = { workspace = true }
