@@ -10,7 +10,7 @@
 ## Phases
 
 - [x] **Phase 1: Foundation** — gow-core shared library and Cargo workspace infrastructure — completed 2026-04-21
-- [ ] **Phase 2: Stateless Utilities** — Simple utilities that validate workspace and gow-core integration
+- [x] **Phase 2: Stateless Utilities** — Simple utilities that validate workspace and gow-core integration — completed 2026-04-21
 - [ ] **Phase 3: Filesystem Utilities** — File and directory operations including tail -f
 - [ ] **Phase 4: Text Processing** — Search, stream editing, AWK, diff, and patch
 - [ ] **Phase 5: Search and Navigation** — find, xargs, less pager, and binary search
@@ -119,7 +119,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | 2026-04-21 |
-| 2. Stateless Utilities | 1/11 | In progress | - |
+| 2. Stateless Utilities | 11/11 | Complete | 2026-04-21 |
 | 3. Filesystem Utilities | 0/? | Not started | - |
 | 4. Text Processing | 0/? | Not started | - |
 | 5. Search and Navigation | 0/? | Not started | - |
@@ -141,20 +141,20 @@ Plans:
 | WIN-01 | Phase 1 | Done (Plan 01-02) — validated in Plan 01-04 |
 | WIN-02 | Phase 1 | Done (Plan 01-04 — manifest longPathAware=true verified at PE binary level) |
 | WIN-03 | Phase 1 | Done (Plan 01-02) — validated in Plan 01-04 |
-| UTIL-01 | Phase 2 | Pending |
-| UTIL-02 | Phase 2 | Pending |
-| UTIL-03 | Phase 2 | Pending |
-| UTIL-04 | Phase 2 | Pending |
-| UTIL-05 | Phase 2 | Pending |
-| UTIL-06 | Phase 2 | Pending |
-| UTIL-07 | Phase 2 | Pending |
-| UTIL-08 | Phase 2 | Pending |
-| UTIL-09 | Phase 2 | Pending |
-| TEXT-03 | Phase 2 | Pending |
-| FILE-06 | Phase 2 | Pending |
-| FILE-07 | Phase 2 | Pending |
-| FILE-08 | Phase 2 | Pending |
-| WHICH-01 | Phase 2 | Pending |
+| UTIL-01 | Phase 2 | Done (Plan 02-03) |
+| UTIL-02 | Phase 2 | Done (Plan 02-04) |
+| UTIL-03 | Phase 2 | Done (Plan 02-09) |
+| UTIL-04 | Phase 2 | Done (Plan 02-07) |
+| UTIL-05 | Phase 2 | Done (Plan 02-05) |
+| UTIL-06 | Phase 2 | Done (Plan 02-05) |
+| UTIL-07 | Phase 2 | Done (Plan 02-02) |
+| UTIL-08 | Phase 2 | Done (Plan 02-02) |
+| UTIL-09 | Phase 2 | Done (Plan 02-02) |
+| TEXT-03 | Phase 2 | Done (Plan 02-08) |
+| FILE-06 | Phase 2 | Done (Plan 02-06) |
+| FILE-07 | Phase 2 | Done (Plan 02-06) |
+| FILE-08 | Phase 2 | Done (Plan 02-10) |
+| WHICH-01 | Phase 2 | Done (Plan 02-11 — GOW #276 resolved) |
 | FILE-01 | Phase 3 | Pending |
 | FILE-02 | Phase 3 | Pending |
 | FILE-03 | Phase 3 | Pending |

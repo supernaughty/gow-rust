@@ -24,9 +24,9 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **FILE-03**: cp — 파일 복사 (-r 재귀, -f 강제, -p 권한 보존)
 - [ ] **FILE-04**: mv — 파일 이동/이름변경 (-f 강제, -i 대화형)
 - [ ] **FILE-05**: rm — 파일 삭제 (-r 재귀, -f 강제, -i 대화형)
-- [ ] **FILE-06**: mkdir — 디렉토리 생성 (-p 부모 포함, GOW #133 해결)
-- [ ] **FILE-07**: rmdir — 빈 디렉토리 삭제 (-p 부모 포함)
-- [ ] **FILE-08**: touch — 파일 타임스탬프 변경/생성
+- [x] **FILE-06**: mkdir — 디렉토리 생성 (-p 부모 포함, GOW #133 해결) — completed Plan 02-06 (2026-04-21)
+- [x] **FILE-07**: rmdir — 빈 디렉토리 삭제 (-p 부모 포함) — completed Plan 02-06 (2026-04-21)
+- [x] **FILE-08**: touch — 파일 타임스탬프 변경/생성 — completed Plan 02-10 (2026-04-21) — full GNU parity incl. -d/-t/-h
 - [ ] **FILE-09**: ln — 링크 생성 (-s 심볼릭, Windows 심링크/정션 지원)
 - [ ] **FILE-10**: chmod — 파일 권한 변경 (Windows ACL 매핑)
 
@@ -34,22 +34,22 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **TEXT-01**: head — 파일 앞부분 출력 (-n 줄수, -c 바이트수, 숫자 축약 -5)
 - [ ] **TEXT-02**: tail — 파일 뒷부분 출력 (-n 줄수, -f 실시간 추적, GOW #169/#75/#89 해결)
-- [ ] **TEXT-03**: wc — 단어/줄/바이트 수 카운트
+- [x] **TEXT-03**: wc — 단어/줄/바이트 수 카운트 — completed Plan 02-08 (2026-04-21) — Unicode-aware via bstr
 - [ ] **TEXT-04**: sort — 줄 정렬 (-n 숫자, -r 역순, -u 유니크, -k 키필드)
 - [ ] **TEXT-05**: uniq — 중복 줄 제거/카운트 (-c 카운트, -d 중복만)
 - [ ] **TEXT-06**: tr — 문자 변환/삭제 (-d 삭제, -s 압축, 문자 클래스)
 
 ### Coreutils — Utilities
 
-- [ ] **UTIL-01**: echo — 문자열 출력 (-n 개행 없이, -e 이스케이프 해석)
-- [ ] **UTIL-02**: pwd — 현재 디렉토리 출력 (-P 물리 경로)
-- [ ] **UTIL-03**: env — 환경변수 출력/설정 후 명령 실행
-- [ ] **UTIL-04**: tee — 표준 입력을 파일과 표준 출력에 동시 기록 (-a 추가)
-- [ ] **UTIL-05**: basename — 경로에서 파일명 추출
-- [ ] **UTIL-06**: dirname — 경로에서 디렉토리 추출
-- [ ] **UTIL-07**: yes — 무한 반복 문자열 출력
-- [ ] **UTIL-08**: true — 항상 성공 (exit 0)
-- [ ] **UTIL-09**: false — 항상 실패 (exit 1)
+- [x] **UTIL-01**: echo — 문자열 출력 (-n 개행 없이, -e 이스케이프 해석) — completed Plan 02-03 (2026-04-21)
+- [x] **UTIL-02**: pwd — 현재 디렉토리 출력 (-P 물리 경로) — completed Plan 02-04 (2026-04-21)
+- [x] **UTIL-03**: env — 환경변수 출력/설정 후 명령 실행 — completed Plan 02-09 (2026-04-21) — full GNU parity incl. -S state machine
+- [x] **UTIL-04**: tee — 표준 입력을 파일과 표준 출력에 동시 기록 (-a 추가) — completed Plan 02-07 (2026-04-21)
+- [x] **UTIL-05**: basename — 경로에서 파일명 추출 — completed Plan 02-05 (2026-04-21)
+- [x] **UTIL-06**: dirname — 경로에서 디렉토리 추출 — completed Plan 02-05 (2026-04-21)
+- [x] **UTIL-07**: yes — 무한 반복 문자열 출력 — completed Plan 02-02 (2026-04-21) — 16 KiB prefilled buffer
+- [x] **UTIL-08**: true — 항상 성공 (exit 0) — completed Plan 02-02 (2026-04-21)
+- [x] **UTIL-09**: false — 항상 실패 (exit 1) — completed Plan 02-02 (2026-04-21)
 
 ### Text Search and Processing
 
@@ -68,7 +68,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **FIND-01**: find — 파일 검색 (-name, -type, -size, -mtime 등)
 - [ ] **FIND-02**: find -exec가 올바르게 동작 (GOW #208 해결)
 - [ ] **FIND-03**: find에서 공백 포함 경로 올바르게 처리 (GOW #209 해결)
-- [ ] **WHICH-01**: which — 실행파일 위치 탐색 (Windows PATH 정확히 탐색, GOW #276 해결)
+- [x] **WHICH-01**: which — 실행파일 위치 탐색 (Windows PATH 정확히 탐색, GOW #276 해결) — completed Plan 02-11 (2026-04-21) — hybrid PATHEXT resolver
 - [ ] **XARGS-01**: xargs — 표준 입력에서 명령줄 구성 (-0 null 구분, -I 치환)
 - [ ] **LESS-01**: less — 파일 페이저 (스크롤, 검색, 큰 파일 지원)
 
@@ -156,20 +156,20 @@ Which phases cover which requirements. Updated during roadmap creation.
 | WIN-01 | Phase 1 | Done (Plan 01-04 — E2E verified) |
 | WIN-02 | Phase 1 | Done (Plan 01-04 — manifest longPathAware=true verified at PE binary level) |
 | WIN-03 | Phase 1 | Done (Plan 01-04 — PowerShell verification approved) |
-| UTIL-01 | Phase 2 | Pending |
-| UTIL-02 | Phase 2 | Pending |
-| UTIL-03 | Phase 2 | Pending |
-| UTIL-04 | Phase 2 | Pending |
-| UTIL-05 | Phase 2 | Pending |
-| UTIL-06 | Phase 2 | Pending |
-| UTIL-07 | Phase 2 | Pending |
-| UTIL-08 | Phase 2 | Pending |
-| UTIL-09 | Phase 2 | Pending |
-| TEXT-03 | Phase 2 | Pending |
-| FILE-06 | Phase 2 | Pending |
-| FILE-07 | Phase 2 | Pending |
-| FILE-08 | Phase 2 | Pending |
-| WHICH-01 | Phase 2 | Pending |
+| UTIL-01 | Phase 2 | Done (Plan 02-03) |
+| UTIL-02 | Phase 2 | Done (Plan 02-04) |
+| UTIL-03 | Phase 2 | Done (Plan 02-09) |
+| UTIL-04 | Phase 2 | Done (Plan 02-07) |
+| UTIL-05 | Phase 2 | Done (Plan 02-05) |
+| UTIL-06 | Phase 2 | Done (Plan 02-05) |
+| UTIL-07 | Phase 2 | Done (Plan 02-02) |
+| UTIL-08 | Phase 2 | Done (Plan 02-02) |
+| UTIL-09 | Phase 2 | Done (Plan 02-02) |
+| TEXT-03 | Phase 2 | Done (Plan 02-08) |
+| FILE-06 | Phase 2 | Done (Plan 02-06) |
+| FILE-07 | Phase 2 | Done (Plan 02-06) |
+| FILE-08 | Phase 2 | Done (Plan 02-10) |
+| WHICH-01 | Phase 2 | Done (Plan 02-11) |
 | FILE-01 | Phase 3 | Pending |
 | FILE-02 | Phase 3 | Pending |
 | FILE-03 | Phase 3 | Pending |

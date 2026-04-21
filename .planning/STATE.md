@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in_progress
-last_updated: "2026-04-21T00:21:07Z"
+status: phase_complete
+last_updated: "2026-04-21T01:45:00Z"
 progress:
   total_phases: 6
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 15
-  completed_plans: 5
-  percent: 20
+  completed_plans: 15
+  percent: 33
 ---
 
 # Project State: gow-rust
 
 **Last updated:** 2026-04-21
-**Session:** Phase 2 Plan 01 (workspace prep + 14 stub crates) complete — ready for Phase 2 Wave 2 plans
+**Session:** Phase 2 (Stateless Utilities) execution complete and verified — all 14 utilities pass GNU compatibility gates on Windows
 
 ---
 
@@ -23,28 +23,28 @@ progress:
 
 **Core Value:** Windows 사용자가 별도의 무거운 환경(WSL, Cygwin) 없이 GNU 명령어를 네이티브 성능으로 사용할 수 있어야 한다.
 
-**Current Focus:** Phase 2 (Stateless Utilities) — workspace + stubs scaffolded; Wave 2 utility plans (02-02..02-05) next
+**Current Focus:** Phases 1 and 2 verified complete. Next is Phase 3 (Filesystem Utilities — ls, cat, cp, mv, rm, ln, chmod, head, tail -f, dos2unix, unix2dos).
 
 ---
 
 ## Current Position
 
-**Phase:** 2 (Stateless Utilities) — IN PROGRESS
-**Plan:** 02-01 complete (workspace root + 14 stub crates). Next up: Wave 2 of Phase 2 (plans 02-02 through 02-05 per ROADMAP.md; all can be parallelized since 02-01 unblocked the workspace).
-**Status:** In progress
+**Phase:** 2 (Stateless Utilities) — COMPLETE
+**Plan:** All 11 Phase 2 plans complete; verifier passed (19/19 must-haves, 14/14 requirements, 5/5 ROADMAP success criteria). Next: Phase 3 (Filesystem Utilities) — start with `/gsd-discuss-phase 3`.
+**Status:** Phase complete
 
 **Progress:**
 
 ```
 Phase 1 [##########] 100% Foundation ✓ (4/4 plans, 10/10 requirements verified)
-Phase 2 [#         ] 9%   Stateless Utilities (1/11 plans)
+Phase 2 [##########] 100% Stateless Utilities ✓ (11/11 plans, 14/14 requirements verified)
 Phase 3 [          ] 0%   Filesystem Utilities
 Phase 4 [          ] 0%   Text Processing
 Phase 5 [          ] 0%   Search and Navigation
 Phase 6 [          ] 0%   Archive, Compression, and Network
 ```
 
-**Overall:** 1/6 phases complete (Phase 2: 1/11 plans complete)
+**Overall:** 2/6 phases complete (24/60 requirements verified, 15/15 plans complete so far)
 
 ---
 
@@ -53,11 +53,13 @@ Phase 6 [          ] 0%   Archive, Compression, and Network
 | Metric | Value |
 |--------|-------|
 | Phases total | 6 |
-| Phases complete | 1 |
+| Phases complete | 2 |
 | Requirements total | 59 |
-| Requirements complete | 10 (all Phase 1: FOUND-01..07, WIN-01..03) |
+| Requirements complete | 24 (Phase 1: FOUND-01..07, WIN-01..03; Phase 2: UTIL-01..09, TEXT-03, FILE-06..08, WHICH-01) |
 | Plans created | 15 (4 Phase 1 + 11 Phase 2) |
-| Plans complete | 5 (01-01, 01-02, 01-03, 01-04, 02-01) |
+| Plans complete | 15 (all Phase 1 + all Phase 2) |
+| Tests passing | 265 (34 gow-core unit + 9 gow-probe integration + 3 doctests + 219 Phase 2 utility tests) |
+| Utilities delivered | 14 (echo, pwd, env, tee, basename, dirname, yes, true, false, mkdir, rmdir, touch, wc, which) |
 
 ### Per-plan execution
 
@@ -68,6 +70,16 @@ Phase 6 [          ] 0%   Archive, Compression, and Network
 | 01-03 | 5 min | 3 | 4 | 2026-04-20 |
 | 01-04 | 5 min | 2 + human checkpoint (approved) | 6 | 2026-04-21 |
 | 02-01 | 4 min | 2 | 45 (42 new stubs + 3 modified) | 2026-04-21 |
+| 02-02 | 7 min | 2 (TDD split) | 10 | 2026-04-21 |
+| 02-03 | 6 min | 2 | 5 | 2026-04-21 |
+| 02-04 | 3 min | 2 | 5 | 2026-04-21 |
+| 02-05 | 3.5 min | 2 | 8 | 2026-04-21 |
+| 02-06 | 6 min | 2 | 8 | 2026-04-21 |
+| 02-07 | 15 min | 2 | 5 | 2026-04-21 |
+| 02-08 | 6 min | 2 (TDD split) | 4 | 2026-04-21 |
+| 02-09 | 35 min | 2 (TDD split) | 5 | 2026-04-21 |
+| 02-10 | 9 min | 2 (TDD split) | 6 | 2026-04-21 |
+| 02-11 | 6 min | 2 | 5 | 2026-04-21 |
 
 ---
 
@@ -122,15 +134,20 @@ None currently.
 
 ### What Was Done This Session
 
-- Executed Phase 2 Plan 01 (workspace prep + 14 stub utility crates)
-  - Task 1 (`6911942`): root Cargo.toml — expanded members 2→16, added snapbox 1.2 / bstr 1 / filetime 0.2 to [workspace.dependencies]
-  - Task 2 (`36053fd`): 14 × 3 = 42 stub files (Cargo.toml + src/lib.rs + src/main.rs per crate); gow-true/gow-false already final per D-22; 12 stubs print `{name}: not yet implemented` and exit 1
-- Build/test gate: `cargo build --workspace` clean (0 warnings); `cargo clippy --workspace -- -D warnings` clean; `cargo test --workspace` 34 + 9 + 3 doctests pass, no regressions
-- 1 auto-fixed deviation (Rule 2 hygiene: added `.claude/` to `.gitignore`)
+- Executed Phase 2 across 4 waves with wave-based parallel worktree execution:
+  - Wave 1 (02-01): workspace prep + 14 stub crates
+  - Wave 2 (02-02..05): gow-true/false/yes, gow-echo, gow-pwd, gow-basename/dirname — 4 parallel worktrees
+  - Wave 3 (02-06..08): gow-mkdir/rmdir, gow-tee, gow-wc — 3 parallel worktrees
+  - Wave 4 (02-09..11): gow-env, gow-touch, gow-which — 3 parallel worktrees (most complex utilities)
+- 14 utility binaries delivered: echo.exe, pwd.exe, env.exe, tee.exe, basename.exe, dirname.exe, yes.exe, true.exe, false.exe, mkdir.exe, rmdir.exe, touch.exe, wc.exe, which.exe (GNU names per D-14)
+- GOW #133 (mkdir -p) and GOW #276 (which PATHEXT) explicitly resolved
+- Pre-existing gow-core test clippy warnings fixed inline during phase verification
+- gsd-verifier returned status=passed: 19/19 must-haves, 14/14 requirements, 5/5 ROADMAP success criteria
+- `cargo test --workspace` 265 passed; `cargo clippy --workspace --all-targets -- -D warnings` clean
 
 ### What To Do Next
 
-Phase 2 Wave 2 begins. Plans 02-02 (true/false/yes), 02-03 (echo), 02-04 (pwd), 02-05 (basename/dirname) are all unblocked by this plan — they can execute in parallel because each touches only its own crate's `Cargo.toml`, `src/`, and `tests/` directories. Root Cargo.toml is now frozen for the rest of Phase 2 (no more member additions needed). Each wave 2 plan must replace its crate's stub uumain AND add a build.rs copying the gow-probe template verbatim.
+Phase 2 verified complete. Recommended next: `/gsd-discuss-phase 3` to gather context on Phase 3 (Filesystem Utilities) — ls, cat, cp, mv, rm, ln, chmod, head, tail -f, dos2unix, unix2dos. Phase 3 is larger in scope than Phase 2 because it includes stateful operations (tail -f via notify/ReadDirectoryChangesW, sed -i-style atomic writes, symlink/junction handling via gow_core::fs::LinkType already built in Phase 1).
 
 ---
 
@@ -139,3 +156,4 @@ Phase 2 Wave 2 begins. Plans 02-02 (true/false/yes), 02-03 (echo), 02-04 (pwd), 
 *Plans 01-02, 01-03 completed: 2026-04-20*
 *Plan 01-04 + Phase 1 verification completed: 2026-04-21*
 *Plan 02-01 completed: 2026-04-21*
+*Plans 02-02..02-11 + Phase 2 verification completed: 2026-04-21*
