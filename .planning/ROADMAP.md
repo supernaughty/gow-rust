@@ -48,7 +48,20 @@ Plans:
   3. `which` locates executables on the Windows PATH, including `.exe`/`.cmd` extensions, and returns the correct absolute path
   4. `mkdir -p a/b/c` creates nested directories in a single invocation without error if they already exist
   5. `tee file.txt` writes stdin to both the file and stdout simultaneously; `tee -a` appends to existing content
-**Plans**: TBD
+**Plans**: 11 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Workspace prep: add 14 Phase 2 members + snapbox/bstr/filetime workspace deps + stub crate scaffolds
+- [ ] 02-02-PLAN.md — gow-true + gow-false + gow-yes (trivial trio; BrokenPipe-safe yes loop)
+- [ ] 02-03-PLAN.md — gow-echo with -n/-e/-E + escape state machine (RESEARCH.md Q9)
+- [ ] 02-04-PLAN.md — gow-pwd with -L/-P and UNC-safe simplify_canonical (RESEARCH.md Q8)
+- [ ] 02-05-PLAN.md — gow-basename + gow-dirname (MSYS pre-convert + suffix strip)
+- [ ] 02-06-PLAN.md — gow-mkdir + gow-rmdir (create_dir_all + parent walk loop)
+- [ ] 02-07-PLAN.md — gow-tee with split-writer + -i SetConsoleCtrlHandler (RESEARCH.md Q10)
+- [ ] 02-08-PLAN.md — gow-wc Unicode-aware via bstr (TEXT-03, ROADMAP criterion 2)
+- [ ] 02-09-PLAN.md — gow-env with -i/-u/-C/-S/-0/-v + split-string state machine (RESEARCH.md Q7)
+- [ ] 02-10-PLAN.md — gow-touch with -a/-m/-c/-r/-d/-t/-h via jiff+parse_datetime+filetime (RESEARCH.md Q1/Q2)
+- [ ] 02-11-PLAN.md — gow-which hybrid PATHEXT resolver (WHICH-01, GOW #276)
 
 ### Phase 3: Filesystem Utilities
 **Goal**: Users can perform all core file and directory operations with correct behavior on Windows paths, symlinks, and file locking, including real-time file watching
@@ -106,7 +119,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | 2026-04-21 |
-| 2. Stateless Utilities | 0/? | Not started | - |
+| 2. Stateless Utilities | 0/11 | Planned | - |
 | 3. Filesystem Utilities | 0/? | Not started | - |
 | 4. Text Processing | 0/? | Not started | - |
 | 5. Search and Navigation | 0/? | Not started | - |
@@ -184,4 +197,4 @@ Plans:
 ---
 
 *Roadmap created: 2026-04-20*
-*Last updated: 2026-04-20 after Phase 1 planning*
+*Last updated: 2026-04-21 after Phase 2 planning (11 plans)*
