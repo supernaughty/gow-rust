@@ -16,7 +16,6 @@ use std::path::{Path, PathBuf};
 /// - Paths without the prefix
 ///
 /// Minimum drive-letter path length with prefix: 7 chars (`\\?\X:\` — 4 prefix + X + : + \).
-#[allow(dead_code)] // wired by lib.rs uumain in Task 2
 pub fn simplify_canonical(p: &Path) -> PathBuf {
     let s = match p.to_str() {
         Some(s) => s,
