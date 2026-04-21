@@ -1,5 +1,23 @@
 [workspace]
-members = ["crates/gow-core", "crates/gow-probe"]
+members = [
+    "crates/gow-core",
+    "crates/gow-probe",
+    # Phase 2 — stateless utilities (D-16)
+    "crates/gow-echo",
+    "crates/gow-pwd",
+    "crates/gow-env",
+    "crates/gow-tee",
+    "crates/gow-basename",
+    "crates/gow-dirname",
+    "crates/gow-yes",
+    "crates/gow-true",
+    "crates/gow-false",
+    "crates/gow-mkdir",
+    "crates/gow-rmdir",
+    "crates/gow-touch",
+    "crates/gow-wc",
+    "crates/gow-which",
+]
 resolver = "3"
 
 [workspace.package]
@@ -37,6 +55,11 @@ path-slash = "0.2"
 assert_cmd = "2"
 predicates = "3"
 tempfile = "3"
+
+# Phase 2 additions (D-20a)
+snapbox = "1.2"                      # snapshot testing (D-30a)
+bstr = "1"                           # byte-safe iteration for wc (D-17)
+filetime = "0.2"                     # file timestamps for touch (Q2)
 
 [profile.release]
 strip = true
