@@ -51,7 +51,7 @@ Plans:
 **Plans**: 11 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Workspace prep: add 14 Phase 2 members + snapbox/bstr/filetime workspace deps + stub crate scaffolds
+- [x] 02-01-PLAN.md — Workspace prep: add 14 Phase 2 members + snapbox/bstr/filetime workspace deps + stub crate scaffolds — completed 2026-04-21
 - [ ] 02-02-PLAN.md — gow-true + gow-false + gow-yes (trivial trio; BrokenPipe-safe yes loop)
 - [ ] 02-03-PLAN.md — gow-echo with -n/-e/-E + escape state machine (RESEARCH.md Q9)
 - [ ] 02-04-PLAN.md — gow-pwd with -L/-P and UNC-safe simplify_canonical (RESEARCH.md Q8)
@@ -119,7 +119,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | 2026-04-21 |
-| 2. Stateless Utilities | 0/11 | Planned | - |
+| 2. Stateless Utilities | 1/11 | In progress | - |
 | 3. Filesystem Utilities | 0/? | Not started | - |
 | 4. Text Processing | 0/? | Not started | - |
 | 5. Search and Navigation | 0/? | Not started | - |
