@@ -1,0 +1,3 @@
+fn main() {
+    std::process::exit(uu_rm::uumain(std::env::args_os()));
+}
