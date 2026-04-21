@@ -1,5 +1,7 @@
 //! `uu_env`: GNU `env` ported to Windows with UTF-8 + VT.
-//! Stub — real implementation lands in a later Wave 2/3/4 plan.
+//! Stub (RED phase) — real `uumain` lands in Task 2.
+
+mod split;
 
 use std::ffi::OsString;
 
