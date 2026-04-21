@@ -56,9 +56,9 @@ Plans:
 - [x] 02-03-PLAN.md — gow-echo with -n/-e/-E + escape state machine (RESEARCH.md Q9) — completed 2026-04-21
 - [x] 02-04-PLAN.md — gow-pwd with -L/-P and UNC-safe simplify_canonical (RESEARCH.md Q8) — completed 2026-04-21
 - [x] 02-05-PLAN.md — gow-basename + gow-dirname (MSYS pre-convert + suffix strip) — completed 2026-04-21
-- [ ] 02-06-PLAN.md — gow-mkdir + gow-rmdir (create_dir_all + parent walk loop)
-- [ ] 02-07-PLAN.md — gow-tee with split-writer + -i SetConsoleCtrlHandler (RESEARCH.md Q10)
-- [ ] 02-08-PLAN.md — gow-wc Unicode-aware via bstr (TEXT-03, ROADMAP criterion 2)
+- [x] 02-06-PLAN.md — gow-mkdir + gow-rmdir (create_dir_all + parent walk loop) — completed 2026-04-21
+- [x] 02-07-PLAN.md — gow-tee with split-writer + -i SetConsoleCtrlHandler (RESEARCH.md Q10) — completed 2026-04-21
+- [x] 02-08-PLAN.md — gow-wc Unicode-aware via bstr (TEXT-03, ROADMAP criterion 2) — completed 2026-04-21
 - [ ] 02-09-PLAN.md — gow-env with -i/-u/-C/-S/-0/-v + split-string state machine (RESEARCH.md Q7)
 - [ ] 02-10-PLAN.md — gow-touch with -a/-m/-c/-r/-d/-t/-h via jiff+parse_datetime+filetime (RESEARCH.md Q1/Q2)
 - [ ] 02-11-PLAN.md — gow-which hybrid PATHEXT resolver (WHICH-01, GOW #276)
