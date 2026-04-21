@@ -2,6 +2,8 @@
 //!
 //! Covers: CONV-01
 
+pub mod transform;
+
 use std::ffi::OsString;
 
 pub fn uumain<I: IntoIterator<Item = OsString>>(_args: I) -> i32 {
