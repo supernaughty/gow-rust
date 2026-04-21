@@ -14,9 +14,13 @@ termcolor = { workspace = true }
 windows-sys = { workspace = true }
 encoding_rs = { workspace = true }
 path-slash = { workspace = true }
+tempfile = { workspace = true }      # Phase 3 D-47 atomic_rewrite helper (promoted from dev-dep)
 
 [build-dependencies]
 embed-manifest = "1.5"
+
+[target.'cfg(windows)'.dependencies]
+junction = { workspace = true }      # Phase 3 D-36 directory symlink fallback
 
 [dev-dependencies]
 assert_cmd = { workspace = true }

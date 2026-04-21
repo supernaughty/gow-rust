@@ -17,6 +17,18 @@ members = [
     "crates/gow-touch",
     "crates/gow-wc",
     "crates/gow-which",
+    # Phase 3 — filesystem utilities (D-49)
+    "crates/gow-cat",
+    "crates/gow-ls",
+    "crates/gow-cp",
+    "crates/gow-mv",
+    "crates/gow-rm",
+    "crates/gow-ln",
+    "crates/gow-chmod",
+    "crates/gow-head",
+    "crates/gow-tail",
+    "crates/gow-dos2unix",
+    "crates/gow-unix2dos",
 ]
 resolver = "3"
 
@@ -60,6 +72,12 @@ tempfile = "3"
 snapbox = "1.2"                      # snapshot testing (D-30a)
 bstr = "1"                           # byte-safe iteration for wc (D-17)
 filetime = "0.2"                     # file timestamps for touch (Q2)
+
+# Phase 3 additions (D-50 + junction gap from research)
+walkdir = "2.5"                      # recursive traversal (cp, rm, ls, chmod -R)
+notify = "8.2"                       # tail -f watcher — gow-tail only
+terminal_size = "0.4"                # ls column layout — gow-ls only
+junction = "1.4"                     # D-36 directory-symlink fallback — gow-core + gow-ln
 
 [profile.release]
 strip = true
