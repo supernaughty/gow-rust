@@ -82,6 +82,7 @@ tempfile = "3"
 snapbox = "1.2"                      # snapshot testing (D-30a)
 bstr = "1"                           # byte-safe iteration for wc (D-17)
 filetime = "0.2"                     # file timestamps for touch (Q2)
+regex = "1"                          # pattern matching (grep, sed, awk)
 
 # Phase 3 additions (D-50 + junction gap from research)
 walkdir = "2.5"                      # recursive traversal (cp, rm, ls, chmod -R)

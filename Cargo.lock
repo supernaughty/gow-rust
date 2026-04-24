@@ -443,11 +443,17 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "assert_cmd",
+ "bstr",
  "clap",
  "embed-manifest",
  "gow-core",
  "predicates",
+ "regex",
+ "tempfile",
+ "termcolor",
  "thiserror",
+ "walkdir",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
