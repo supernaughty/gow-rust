@@ -28,6 +28,7 @@ embed-manifest = "1.5"
 assert_cmd = { workspace = true }
 predicates = { workspace = true }
 tempfile = { workspace = true }
+junction = { workspace = true }
 
 [target.'cfg(windows)'.dependencies]
 junction = { workspace = true }
