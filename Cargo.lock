@@ -436,6 +436,7 @@ dependencies = [
  "bstr",
  "clap",
  "embed-manifest",
+ "filetime",
  "gow-core",
  "predicates",
  "tempfile",

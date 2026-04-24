@@ -32,3 +32,4 @@ embed-manifest = "1.5"
 assert_cmd = { workspace = true }
 predicates = { workspace = true }
 tempfile = { workspace = true }
+filetime = { workspace = true }

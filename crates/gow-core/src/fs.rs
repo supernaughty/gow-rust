@@ -56,6 +56,16 @@ pub fn link_type(path: &Path) -> Option<LinkType> {
     let meta = std::fs::symlink_metadata(path).ok()?;
     let file_type = meta.file_type();
 
+    // Check for Windows junction (directory reparse point).
+    // MUST check before is_symlink() because Rust's is_symlink() returns true
+    // for junctions on Windows.
+    #[cfg(target_os = "windows")]
+    {
+        if junction::get_target(path).is_ok() {
+            return Some(LinkType::Junction);
+        }
+    }
+
     if file_type.is_symlink() {
         // Determine whether the symlink target is a directory or a file.
         // Follow the link to check the target type. If the target does not exist
@@ -64,17 +74,6 @@ pub fn link_type(path: &Path) -> Option<LinkType> {
             return Some(LinkType::SymlinkDir);
         } else {
             return Some(LinkType::SymlinkFile);
-        }
-    }
-
-    // Check for Windows junction (directory reparse point).
-    #[cfg(target_os = "windows")]
-    {
-        use std::os::windows::fs::MetadataExt;
-        // FILE_ATTRIBUTE_REPARSE_POINT = 0x400
-        const FILE_ATTRIBUTE_REPARSE_POINT: u32 = 0x0000_0400;
-        if meta.file_attributes() & FILE_ATTRIBUTE_REPARSE_POINT != 0 {
-            return Some(LinkType::Junction);
         }
     }
 

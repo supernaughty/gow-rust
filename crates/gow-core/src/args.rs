@@ -59,7 +59,7 @@ pub fn parse_gnu(
     // `allow_negative_numbers(true)` IS safe — it only affects numeric arguments
     // (e.g., `head -5`), allowing negative numbers to not be misread as flags.
     // Numeric shorthand (D-05) is handled per-utility via custom value_parser.
-    let cmd = cmd.allow_negative_numbers(true);
+    let cmd = cmd; // .allow_negative_numbers(true);
 
     cmd.try_get_matches_from(args).unwrap_or_else(|e| {
         match e.kind() {
