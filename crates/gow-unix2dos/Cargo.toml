@@ -17,6 +17,7 @@ path = "src/lib.rs"
 
 [dependencies]
 gow-core = { path = "../gow-core" }
+gow-dos2unix = { path = "../gow-dos2unix" }
 clap = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
