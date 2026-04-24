@@ -473,6 +473,7 @@ dependencies = [
  "predicates",
  "tempfile",
  "thiserror",
+ "walkdir",
 ]
 
 [[package]]

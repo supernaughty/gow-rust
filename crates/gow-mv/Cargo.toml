@@ -21,6 +21,7 @@ clap = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
 filetime = { workspace = true }
+walkdir = { workspace = true }
 
 [build-dependencies]
 embed-manifest = "1.5"
