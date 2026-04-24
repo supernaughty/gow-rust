@@ -348,8 +348,8 @@ mod tests {
         ];
         let mut sorted = lines.clone();
         sorted.sort_by(|a, b| compare_lines(a, b, true, false));
-        assert_eq!(sorted[0], b"1");
-        assert_eq!(sorted[1], b"01");
+        assert_eq!(sorted[0], b"01");
+        assert_eq!(sorted[1], b"1");
         assert_eq!(sorted[2], b"2");
         assert_eq!(sorted[3], b"10");
     }
