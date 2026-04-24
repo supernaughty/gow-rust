@@ -273,13 +273,11 @@ fn copy_dir(src: &Path, dest: &Path, args: &Args, _recursive: bool, preserve: bo
             }
         } else if metadata.file_type().is_symlink() {
             let target = fs::read_link(entry.path())?;
-            if target_path.exists() {
-                if args.force {
-                    if target_path.is_dir() {
-                        fs::remove_dir_all(&target_path)?;
-                    } else {
-                        fs::remove_file(&target_path)?;
-                    }
+            if target_path.exists() && args.force {
+                if target_path.is_dir() {
+                    fs::remove_dir_all(&target_path)?;
+                } else {
+                    fs::remove_file(&target_path)?;
                 }
             }
             match create_link(&target, &target_path, LinkKind::Symbolic) {
@@ -296,10 +294,8 @@ fn copy_dir(src: &Path, dest: &Path, args: &Args, _recursive: bool, preserve: bo
             }
         } else {
             // File
-            if target_path.exists() && args.force {
-                 if fs::OpenOptions::new().write(true).open(&target_path).is_err() {
-                    fs::remove_file(&target_path)?;
-                }
+            if target_path.exists() && args.force && fs::OpenOptions::new().write(true).open(&target_path).is_err() {
+                fs::remove_file(&target_path)?;
             }
             fs::copy(entry.path(), &target_path)?;
             if preserve {

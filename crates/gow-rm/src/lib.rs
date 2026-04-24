@@ -138,13 +138,11 @@ fn remove_file(path: &Path, args: &Args) -> Result<()> {
         if !prompt(&msg)? {
             return Ok(());
         }
-    } else if !args.force && is_readonly {
-        if !prompt(&format!(
-            "remove write-protected regular file '{}'?",
-            path.display()
-        ))? {
-            return Ok(());
-        }
+    } else if !args.force && is_readonly && !prompt(&format!(
+        "remove write-protected regular file '{}'?",
+        path.display()
+    ))? {
+        return Ok(());
     }
 
     if args.force || is_readonly {

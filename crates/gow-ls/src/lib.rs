@@ -335,9 +335,7 @@ fn colorize_name(name: &str, md: &Metadata, path: &Path, opts: &ListOpts) -> Str
     //   dir=01;34 (bold blue), ln=01;36 (bold cyan), ex=01;32 (bold green)
     let code = if md.is_dir() {
         "\x1b[1;34m"
-    } else if md.file_type().is_symlink() {
-        "\x1b[1;36m"
-    } else if link_type(path) == Some(LinkType::Junction) {
+    } else if md.file_type().is_symlink() || link_type(path) == Some(LinkType::Junction) {
         "\x1b[1;36m"
     } else if has_executable_extension(path) {
         "\x1b[1;32m"

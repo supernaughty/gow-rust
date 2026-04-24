@@ -255,6 +255,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-awk"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-basename"
 version = "0.1.0"
 dependencies = [
@@ -331,6 +344,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-cut"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-diff"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-dirname"
 version = "0.1.0"
 dependencies = [
@@ -395,6 +434,19 @@ dependencies = [
  "embed-manifest",
  "gow-core",
  "predicates",
+]
+
+[[package]]
+name = "gow-grep"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "thiserror",
 ]
 
 [[package]]
@@ -477,6 +529,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-patch"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-probe"
 version = "0.1.0"
 dependencies = [
@@ -533,6 +598,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-sed"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-sort"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-tail"
 version = "0.1.0"
 dependencies = [
@@ -582,6 +673,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-tr"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-true"
 version = "0.1.0"
 dependencies = [
@@ -589,6 +693,19 @@ dependencies = [
  "embed-manifest",
  "gow-core",
  "predicates",
+]
+
+[[package]]
+name = "gow-uniq"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "thiserror",
 ]
 
 [[package]]

@@ -148,7 +148,7 @@ fn parse_options(matches: &clap::ArgMatches) -> Options {
             plus = true;
             count = rest.parse().unwrap_or(DEFAULT_LINES);
         } else {
-            count = val.parse::<i64>().map(|n| n.abs() as u64).unwrap_or(DEFAULT_LINES);
+            count = val.parse::<i64>().map(|n| n.unsigned_abs()).unwrap_or(DEFAULT_LINES);
         }
     } else if let Some(val) = matches.get_one::<String>("lines") {
         mode = Mode::Lines;
@@ -156,7 +156,7 @@ fn parse_options(matches: &clap::ArgMatches) -> Options {
             plus = true;
             count = rest.parse().unwrap_or(DEFAULT_LINES);
         } else {
-            count = val.parse::<i64>().map(|n| n.abs() as u64).unwrap_or(DEFAULT_LINES);
+            count = val.parse::<i64>().map(|n| n.unsigned_abs()).unwrap_or(DEFAULT_LINES);
         }
     }
 
@@ -487,7 +487,7 @@ fn is_process_alive(pid: u32) -> bool {
 
     unsafe {
         let handle = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, 0, pid);
-        if handle == std::ptr::null_mut() || handle == INVALID_HANDLE_VALUE {
+        if handle.is_null() || handle == INVALID_HANDLE_VALUE {
             return false;
         }
         let mut exit_code = 0u32;

@@ -98,20 +98,14 @@ fn run(args: Args) -> Result<i32> {
         (&args.paths[0..1], None)
     } else if args.paths.len() == 2 {
         let last = Path::new(&args.paths[1]);
-        if last.is_dir() {
-            (&args.paths[0..1], Some(last))
-        } else {
-            (&args.paths[0..1], Some(last))
-        }
+        (&args.paths[0..1], Some(last))
     } else {
         let (targets, dest_slice) = args.paths.split_at(args.paths.len() - 1);
         (targets, Some(Path::new(&dest_slice[0])))
     };
 
     let dest_is_dir = dest.map(|d| {
-        if args.no_target_directory {
-            false
-        } else if args.no_dereference && d.is_symlink() {
+        if args.no_target_directory || (args.no_dereference && d.is_symlink()) {
             false
         } else {
             d.is_dir()

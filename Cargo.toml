@@ -29,6 +29,16 @@ members = [
     "crates/gow-tail",
     "crates/gow-dos2unix",
     "crates/gow-unix2dos",
+    # Phase 4 — text processing (S04)
+    "crates/gow-grep",
+    "crates/gow-sed",
+    "crates/gow-sort",
+    "crates/gow-uniq",
+    "crates/gow-tr",
+    "crates/gow-cut",
+    "crates/gow-diff",
+    "crates/gow-patch",
+    "crates/gow-awk",
 ]
 resolver = "3"
 
