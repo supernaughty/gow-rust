@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-04-21T03:37:50.975Z"
+last_updated: "2026-04-24T14:50:00.090Z"
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 27
-  completed_plans: 15
-  percent: 56
+  completed_plans: 20
+  percent: 74
 ---
 
 # Project State: gow-rust
@@ -23,17 +23,17 @@ progress:
 
 **Core Value:** Windows 사용자가 별도의 무거운 환경(WSL, Cygwin) 없이 GNU 명령어를 네이티브 성능으로 사용할 수 있어야 한다.
 
-**Current Focus:** Phase 03 — filesystem
+**Current Focus:** Phase --phase — 03
 
 ---
 
 ## Current Position
 
-Phase: 03 (filesystem) — EXECUTING
-Plan: 1 of 12
+Phase: --phase (03) — EXECUTING
+Plan: 1 of --name
 **Phase:** 2 (Stateless Utilities) — COMPLETE
 **Plan:** All 11 Phase 2 plans complete; verifier passed (19/19 must-haves, 14/14 requirements, 5/5 ROADMAP success criteria). Next: Phase 3 (Filesystem Utilities) — start with `/gsd-discuss-phase 3`.
-**Status:** Executing Phase 03
+**Status:** Executing Phase --phase
 
 **Progress:**
 
