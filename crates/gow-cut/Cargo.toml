@@ -20,6 +20,7 @@ gow-core = { path = "../gow-core" }
 clap = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
+bstr = { workspace = true }
 
 [build-dependencies]
 embed-manifest = "1.5"
