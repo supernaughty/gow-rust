@@ -14,13 +14,27 @@ use clap::{Arg, ArgAction, Command};
 use itertools::Itertools;
 use tempfile::NamedTempFile;
 
-#[derive(Debug, Clone, Copy)]
+/// Parsed key specification from -k KEYDEF.
+/// GNU sort KEYDEF format: N[,M][bdfginrR]
+/// N and M are 1-based field indices. M defaults to end-of-line.
+#[derive(Debug, Clone)]
+struct KeySpec {
+    start_field: usize,  // 1-based, required
+    end_field: Option<usize>,  // 1-based, None = end of line
+    numeric: bool,       // 'n' modifier
+    reverse: bool,       // 'r' modifier
+    ignore_case: bool,   // 'f' modifier
+}
+
+#[derive(Debug, Clone)]
 struct SortConfig {
     numeric: bool,
     reverse: bool,
     unique: bool,
     ignore_case: bool,
     buffer_size: usize,
+    keys: Vec<KeySpec>,           // from -k args, empty = whole-line sort
+    field_separator: Option<u8>,  // from -t SEP, None = whitespace
 }
 
 pub fn uumain<I: IntoIterator<Item = OsString>>(args: I) -> i32 {
@@ -34,6 +48,9 @@ pub fn uumain<I: IntoIterator<Item = OsString>>(args: I) -> i32 {
         unique: matches.get_flag("unique"),
         ignore_case: matches.get_flag("ignore-case"),
         buffer_size: parse_buffer_size(matches.get_one::<String>("buffer-size")),
+        keys: parse_key_specs(matches.get_many::<String>("key")),
+        field_separator: matches.get_one::<String>("field-separator")
+            .and_then(|s| s.bytes().next()),
     };
 
     let output_file = matches.get_one::<String>("output").map(|s| s.to_string());
@@ -75,6 +92,81 @@ fn parse_buffer_size(s: Option<&String>) -> usize {
     }
 }
 
+fn parse_key_specs(keys: Option<clap::parser::ValuesRef<'_, String>>) -> Vec<KeySpec> {
+    let Some(keys) = keys else { return Vec::new() };
+    keys.map(|k| parse_single_key(k)).collect()
+}
+
+fn parse_single_key(keydef: &str) -> KeySpec {
+    // KEYDEF format: N[,M][bdfginrR]
+    // Strip trailing modifier letters to find numeric part
+    let modifier_start = keydef
+        .find(|c: char| c.is_alphabetic())
+        .unwrap_or(keydef.len());
+    let modifiers = &keydef[modifier_start..];
+    let numeric_part = &keydef[..modifier_start];
+
+    let (start_str, end_str) = if let Some(comma) = numeric_part.find(',') {
+        (&numeric_part[..comma], Some(&numeric_part[comma + 1..]))
+    } else {
+        (numeric_part, None)
+    };
+
+    let start_field = start_str.parse::<usize>().unwrap_or(1).max(1);
+    let end_field = end_str.and_then(|s| s.parse::<usize>().ok());
+
+    KeySpec {
+        start_field,
+        end_field,
+        numeric: modifiers.contains('n'),
+        reverse: modifiers.contains('r'),
+        ignore_case: modifiers.contains('f'),
+    }
+}
+
+/// Extract the comparison key bytes for a line given a KeySpec.
+/// Fields are 1-based. Separator None means split on whitespace runs.
+fn extract_key_field(line: &[u8], key: &KeySpec, separator: Option<u8>) -> Vec<u8> {
+    let fields: Vec<&[u8]> = if let Some(sep) = separator {
+        line.split(|&b| b == sep).collect()
+    } else {
+        // Whitespace split: skip leading whitespace, split on runs
+        line.split(|&b| b == b' ' || b == b'\t')
+            .filter(|f| !f.is_empty())
+            .collect()
+    };
+
+    let n = fields.len();
+    if n == 0 || key.start_field == 0 {
+        return line.to_vec();
+    }
+
+    // Convert 1-based to 0-based index
+    let start_idx = (key.start_field - 1).min(n - 1);
+    let end_idx = match key.end_field {
+        Some(m) => (m - 1).min(n - 1),
+        None => n - 1,
+    };
+
+    if start_idx > end_idx {
+        return Vec::new();
+    }
+
+    // Join extracted fields with a space as separator for compound keys
+    let mut result = Vec::new();
+    for i in start_idx..=end_idx {
+        if i > start_idx {
+            if let Some(sep) = separator {
+                result.push(sep);
+            } else {
+                result.push(b' ');
+            }
+        }
+        result.extend_from_slice(fields[i]);
+    }
+    result
+}
+
 fn run_sort(operands: Vec<String>, config: SortConfig, output_file: Option<String>) -> anyhow::Result<()> {
     let mut temp_files = Vec::new();
     let mut current_lines = Vec::new();
@@ -111,20 +203,49 @@ fn run_sort(operands: Vec<String>, config: SortConfig, output_file: Option<Strin
 
     if temp_files.is_empty() {
         // All fit in memory
-        write_sorted(current_lines, config, out)?;
+        write_sorted(current_lines, &config, out)?;
     } else {
         // Spilled to disk, need to merge
         if !current_lines.is_empty() {
             let temp = sort_and_write_chunk(current_lines, &config)?;
             temp_files.push(temp);
         }
-        merge_temp_files(temp_files, config, out)?;
+        merge_temp_files(temp_files, &config, out)?;
     }
 
     Ok(())
 }
 
-fn compare_lines(a: &[u8], b: &[u8], numeric: bool, ignore_case: bool) -> Ordering {
+fn compare_lines(
+    a: &[u8],
+    b: &[u8],
+    numeric: bool,
+    ignore_case: bool,
+    keys: &[KeySpec],
+    separator: Option<u8>,
+) -> Ordering {
+    // If keys are specified, compare by each key in order
+    if !keys.is_empty() {
+        for key in keys {
+            let ka = extract_key_field(a, key, separator);
+            let kb = extract_key_field(b, key, separator);
+            let key_numeric = key.numeric || numeric;
+            let key_ignore_case = key.ignore_case || ignore_case;
+            let ord = compare_bytes(&ka, &kb, key_numeric, key_ignore_case);
+            if ord != Ordering::Equal {
+                let ord = if key.reverse { ord.reverse() } else { ord };
+                return ord;
+            }
+        }
+        // All keys equal — fall back to whole-line comparison
+        return compare_bytes(a, b, false, ignore_case);
+    }
+
+    compare_bytes(a, b, numeric, ignore_case)
+}
+
+/// Low-level byte comparison (numeric or lexicographic).
+fn compare_bytes(a: &[u8], b: &[u8], numeric: bool, ignore_case: bool) -> Ordering {
     if numeric {
         let na = parse_numeric(a);
         let nb = parse_numeric(b);
@@ -150,14 +271,14 @@ fn parse_numeric(s: &[u8]) -> f64 {
     let s_str = String::from_utf8_lossy(s);
     // Find numeric prefix
     let end = s_str
-        .find(|c: char| !c.is_digit(10) && c != '.' && c != '-' && c != '+')
+        .find(|c: char| !c.is_ascii_digit() && c != '.' && c != '-' && c != '+')
         .unwrap_or(s_str.len());
     s_str[..end].parse::<f64>().unwrap_or(0.0)
 }
 
 fn sort_and_write_chunk(mut lines: Vec<Vec<u8>>, config: &SortConfig) -> io::Result<NamedTempFile> {
     lines.sort_by(|a, b| {
-        let mut ord = compare_lines(a, b, config.numeric, config.ignore_case);
+        let mut ord = compare_lines(a, b, config.numeric, config.ignore_case, &config.keys, config.field_separator);
         if config.reverse {
             ord = ord.reverse();
         }
@@ -176,9 +297,9 @@ fn sort_and_write_chunk(mut lines: Vec<Vec<u8>>, config: &SortConfig) -> io::Res
         .map_err(|e| io::Error::new(io::ErrorKind::Other, e))
 }
 
-fn write_sorted(mut lines: Vec<Vec<u8>>, config: SortConfig, mut out: Box<dyn Write>) -> io::Result<()> {
+fn write_sorted(mut lines: Vec<Vec<u8>>, config: &SortConfig, mut out: Box<dyn Write>) -> io::Result<()> {
     lines.sort_by(|a, b| {
-        let mut ord = compare_lines(a, b, config.numeric, config.ignore_case);
+        let mut ord = compare_lines(a, b, config.numeric, config.ignore_case, &config.keys, config.field_separator);
         if config.reverse {
             ord = ord.reverse();
         }
@@ -189,7 +310,7 @@ fn write_sorted(mut lines: Vec<Vec<u8>>, config: SortConfig, mut out: Box<dyn Wr
     for line in lines {
         if config.unique {
             if let Some(ref last) = last_line {
-                if compare_lines(&line, last, config.numeric, config.ignore_case) == Ordering::Equal {
+                if compare_lines(&line, last, config.numeric, config.ignore_case, &config.keys, config.field_separator) == Ordering::Equal {
                     continue;
                 }
             }
@@ -202,7 +323,7 @@ fn write_sorted(mut lines: Vec<Vec<u8>>, config: SortConfig, mut out: Box<dyn Wr
     Ok(())
 }
 
-fn merge_temp_files(temp_files: Vec<NamedTempFile>, config: SortConfig, mut out: Box<dyn Write>) -> io::Result<()> {
+fn merge_temp_files(temp_files: Vec<NamedTempFile>, config: &SortConfig, mut out: Box<dyn Write>) -> io::Result<()> {
     // Open all temp files for reading
     let mut readers = Vec::new();
     for temp in &temp_files {
@@ -221,12 +342,17 @@ fn merge_temp_files(temp_files: Vec<NamedTempFile>, config: SortConfig, mut out:
     // Wrap the result in a way that kmerge can use.
     // Each element in line_iters is an iterator yielding io::Result<Vec<u8>>.
     // kmerge_by expects items of the same type.
-    
+    let keys = config.keys.clone();
+    let field_separator = config.field_separator;
+    let numeric = config.numeric;
+    let ignore_case = config.ignore_case;
+    let reverse = config.reverse;
+
     let merged_iter = line_iters.into_iter().kmerge_by(move |a, b| {
         let a_val = a.as_ref().map(|v| v.as_slice()).unwrap_or(&[]);
         let b_val = b.as_ref().map(|v| v.as_slice()).unwrap_or(&[]);
-        let mut ord = compare_lines(a_val, b_val, config.numeric, config.ignore_case);
-        if config.reverse {
+        let mut ord = compare_lines(a_val, b_val, numeric, ignore_case, &keys, field_separator);
+        if reverse {
             ord = ord.reverse();
         }
         ord == Ordering::Less
@@ -237,7 +363,7 @@ fn merge_temp_files(temp_files: Vec<NamedTempFile>, config: SortConfig, mut out:
         let line = line_res?;
         if config.unique {
             if let Some(ref last) = last_line {
-                if compare_lines(&line, last, config.numeric, config.ignore_case) == Ordering::Equal {
+                if compare_lines(&line, last, config.numeric, config.ignore_case, &config.keys, config.field_separator) == Ordering::Equal {
                     continue;
                 }
             }
@@ -297,6 +423,21 @@ fn uu_app() -> Command {
                 .help("use SIZE for main memory buffer"),
         )
         .arg(
+            Arg::new("key")
+                .short('k')
+                .long("key")
+                .value_name("KEYDEF")
+                .action(ArgAction::Append)
+                .help("sort via a key; KEYDEF gives location and type"),
+        )
+        .arg(
+            Arg::new("field-separator")
+                .short('t')
+                .long("field-separator")
+                .value_name("SEP")
+                .help("use SEP instead of non-blank to blank transition"),
+        )
+        .arg(
             Arg::new("files")
                 .num_args(0..)
                 .action(ArgAction::Append)
@@ -310,23 +451,23 @@ mod tests {
 
     #[test]
     fn test_compare_lines_basic() {
-        assert_eq!(compare_lines(b"apple", b"banana", false, false), Ordering::Less);
-        assert_eq!(compare_lines(b"banana", b"apple", false, false), Ordering::Greater);
-        assert_eq!(compare_lines(b"apple", b"apple", false, false), Ordering::Equal);
+        assert_eq!(compare_lines(b"apple", b"banana", false, false, &[], None), Ordering::Less);
+        assert_eq!(compare_lines(b"banana", b"apple", false, false, &[], None), Ordering::Greater);
+        assert_eq!(compare_lines(b"apple", b"apple", false, false, &[], None), Ordering::Equal);
     }
 
     #[test]
     fn test_compare_lines_numeric() {
-        assert_eq!(compare_lines(b"10", b"2", true, false), Ordering::Greater);
-        assert_eq!(compare_lines(b"2", b"10", true, false), Ordering::Less);
+        assert_eq!(compare_lines(b"10", b"2", true, false, &[], None), Ordering::Greater);
+        assert_eq!(compare_lines(b"2", b"10", true, false, &[], None), Ordering::Less);
         // Numerically equal, fall back to lexicographical: "010" < "10"
-        assert_eq!(compare_lines(b"010", b"10", true, false), Ordering::Less);
+        assert_eq!(compare_lines(b"010", b"10", true, false, &[], None), Ordering::Less);
     }
 
     #[test]
     fn test_compare_lines_ignore_case() {
-        assert_eq!(compare_lines(b"Apple", b"apple", false, true), Ordering::Equal);
-        assert_eq!(compare_lines(b"Apple", b"banana", false, true), Ordering::Less);
+        assert_eq!(compare_lines(b"Apple", b"apple", false, true, &[], None), Ordering::Equal);
+        assert_eq!(compare_lines(b"Apple", b"banana", false, true, &[], None), Ordering::Less);
     }
 
     #[test]
@@ -347,7 +488,7 @@ mod tests {
             b"01".to_vec(),
         ];
         let mut sorted = lines.clone();
-        sorted.sort_by(|a, b| compare_lines(a, b, true, false));
+        sorted.sort_by(|a, b| compare_lines(a, b, true, false, &[], None));
         assert_eq!(sorted[0], b"01");
         assert_eq!(sorted[1], b"1");
         assert_eq!(sorted[2], b"2");
