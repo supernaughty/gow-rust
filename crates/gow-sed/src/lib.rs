@@ -30,11 +30,39 @@ struct Args {
     files: Vec<PathBuf>,
 }
 
+/// The command to execute on a matched line.
+#[derive(Debug)]
+enum Cmd {
+    Substitute {
+        regex: Regex,
+        replacement: String,
+        global: bool,
+        print_if_matched: bool,
+    },
+    Delete,
+    Print,
+    Quit,
+}
+
+/// A single sed address (line number, last line, or regex).
+#[derive(Debug)]
+enum Address {
+    Line(usize),    // 1-based line number
+    Last,           // '$' — last line
+    Pattern(Regex), // /regex/ address
+}
+
+/// Address specification on a command: none, single, or range.
+#[derive(Debug)]
+enum AddrSpec {
+    None,
+    Single(Address),
+    Range(Address, Address),
+}
+
 struct SedCommand {
-    regex: Regex,
-    replacement: String,
-    global: bool,
-    print_if_matched: bool,
+    addr: AddrSpec,
+    cmd: Cmd,
 }
 
 pub fn uumain<I: IntoIterator<Item = OsString>>(args: I) -> i32 {
@@ -74,7 +102,7 @@ fn run<I: IntoIterator<Item = OsString>>(args: I) -> Result<()> {
         for part in expr.split(|c| c == ';' || c == '\n') {
             let part = part.trim();
             if !part.is_empty() {
-                commands.push(parse_s_command(part)?);
+                commands.push(parse_command(part)?);
             }
         }
     }
@@ -140,18 +168,136 @@ fn translate_bre_to_ere(pattern: &str) -> String {
     translated
 }
 
-fn parse_s_command(s: &str) -> Result<SedCommand> {
-    if !s.starts_with('s') || s.len() < 4 {
-        return Err(anyhow::anyhow!("unsupported or invalid sed command: '{}'. Only 's' command is supported.", s));
+/// Parse an address prefix from the beginning of a sed command string.
+/// Returns (AddrSpec, remaining_command_str).
+fn parse_address(s: &str) -> Result<(AddrSpec, &str)> {
+    let s = s.trim_start();
+
+    // No address: starts with a command letter
+    if s.starts_with(|c: char| c.is_alphabetic()) {
+        return Ok((AddrSpec::None, s));
     }
-    
+
+    // Dollar sign = last line
+    if s.starts_with('$') {
+        let after_dollar = s[1..].trim_start();
+        if after_dollar.starts_with(',') {
+            // Range: $,addr2 — unusual but handle it
+            let after_comma = after_dollar[1..].trim_start();
+            let (addr2, rest2) = parse_single_address(after_comma)?;
+            return Ok((AddrSpec::Range(Address::Last, addr2), rest2));
+        }
+        return Ok((AddrSpec::Single(Address::Last), after_dollar));
+    }
+
+    // Regex address: /pattern/
+    if s.starts_with('/') {
+        let (addr1, rest) = parse_regex_address(s)?;
+        let rest = rest.trim_start();
+        if rest.starts_with(',') {
+            let rest2 = rest[1..].trim_start();
+            let (addr2, rest3) = parse_single_address(rest2)?;
+            return Ok((AddrSpec::Range(addr1, addr2), rest3));
+        }
+        return Ok((AddrSpec::Single(addr1), rest));
+    }
+
+    // Line number address
+    let end = s.find(|c: char| !c.is_ascii_digit()).unwrap_or(s.len());
+    if end == 0 {
+        return Ok((AddrSpec::None, s));
+    }
+    let line_num: usize = s[..end].parse().unwrap_or(0);
+    let rest = s[end..].trim_start();
+
+    if rest.starts_with(',') {
+        let rest2 = rest[1..].trim_start();
+        let (addr2, rest3) = parse_single_address(rest2)?;
+        return Ok((AddrSpec::Range(Address::Line(line_num), addr2), rest3));
+    }
+
+    Ok((AddrSpec::Single(Address::Line(line_num)), rest))
+}
+
+fn parse_single_address(s: &str) -> Result<(Address, &str)> {
+    let s = s.trim_start();
+    if s.starts_with('$') {
+        return Ok((Address::Last, &s[1..]));
+    }
+    if s.starts_with('/') {
+        return parse_regex_address(s);
+    }
+    let end = s.find(|c: char| !c.is_ascii_digit()).unwrap_or(s.len());
+    let n: usize = s[..end].parse().unwrap_or(1);
+    Ok((Address::Line(n), &s[end..]))
+}
+
+fn parse_regex_address(s: &str) -> Result<(Address, &str)> {
+    // s must start with '/'
+    let mut chars = s[1..].chars();
+    let mut pat = String::new();
+    let mut escaped = false;
+    let mut consumed = 1usize; // for the opening '/'
+    for c in &mut chars {
+        consumed += c.len_utf8();
+        if escaped {
+            pat.push(c);
+            escaped = false;
+        } else if c == '\\' {
+            escaped = true;
+        } else if c == '/' {
+            break;
+        } else {
+            pat.push(c);
+        }
+    }
+    let regex = Regex::new(&pat)
+        .with_context(|| format!("invalid address regex: {}", pat))?;
+    Ok((Address::Pattern(regex), &s[consumed..]))
+}
+
+/// Parse a single sed command (with optional address prefix).
+/// Handles: s/pat/repl/flags, d, p, q, and address prefixes N, N,M, $, /regex/.
+fn parse_command(s: &str) -> Result<SedCommand> {
+    let s = s.trim();
+    if s.is_empty() {
+        return Err(anyhow::anyhow!("empty command"));
+    }
+
+    let (addr, rest) = parse_address(s)?;
+    let rest = rest.trim_start();
+
+    if rest.is_empty() {
+        return Err(anyhow::anyhow!("missing command after address in: '{}'", s));
+    }
+
+    let cmd = match rest.chars().next().unwrap() {
+        'd' => Cmd::Delete,
+        'p' => Cmd::Print,
+        'q' => Cmd::Quit,
+        's' => {
+            let sc = parse_s_command_inner(rest)?;
+            sc
+        }
+        other => {
+            return Err(anyhow::anyhow!(
+                "unsupported sed command '{}' in: '{}'",
+                other, s
+            ))
+        }
+    };
+
+    Ok(SedCommand { addr, cmd })
+}
+
+fn parse_s_command_inner(s: &str) -> Result<Cmd> {
     let mut chars = s.chars().skip(1);
     let delimiter = chars.next().ok_or_else(|| anyhow::anyhow!("missing delimiter"))?;
-    
+
     let mut pattern = String::new();
     let mut replacement = String::new();
     let mut flags = String::new();
-    
+
     let mut current = 0; // 0: pattern, 1: replacement, 2: flags
     let mut escaped = false;
 
@@ -206,7 +352,7 @@ fn parse_s_command(s: &str) -> Result<SedCommand> {
         match c {
             '\\' => {
                 if let Some(&next) = r_chars.peek() {
-                    if next.is_digit(10) {
+                    if next.is_ascii_digit() {
                         regex_replacement.push('$');
                         regex_replacement.push(r_chars.next().unwrap());
                     } else if next == '\\' || next == delimiter || next == '&' {
@@ -234,7 +380,7 @@ fn parse_s_command(s: &str) -> Result<SedCommand> {
         }
     }
 
-    Ok(SedCommand {
+    Ok(Cmd::Substitute {
         regex,
         replacement: regex_replacement,
         global,
@@ -244,7 +390,7 @@ fn parse_s_command(s: &str) -> Result<SedCommand> {
 
 fn process_content(content: &[u8], commands: &[SedCommand], quiet: bool) -> Result<Vec<u8>> {
     let mut output = Vec::new();
-    
+
     // Determine line ending to use for output
     let line_ending: &[u8] = if content.contains_str("\r\n") {
         b"\r\n"
@@ -252,33 +398,106 @@ fn process_content(content: &[u8], commands: &[SedCommand], quiet: bool) -> Resu
         b"\n"
     };
 
-    for line in content.lines() {
+    // Collect all lines so we know the total for '$' address matching.
+    let all_lines: Vec<&[u8]> = content.lines().collect();
+    let total_lines = all_lines.len();
+
+    // Track range state for each command that has an AddrSpec::Range
+    // range_active[i] = true means we are inside the range for command i
+    let mut range_active = vec![false; commands.len()];
+
+    for (line_idx, line) in all_lines.iter().enumerate() {
+        let line_num = line_idx + 1; // 1-based
         let mut line_str = String::from_utf8_lossy(line).into_owned();
         let should_print = !quiet;
+        let mut deleted = false;
+        let mut quit_after = false;
 
-        for cmd in commands {
-            let substitution_happened;
-            let new_line = if cmd.global {
-                let replaced = cmd.regex.replace_all(&line_str, &cmd.replacement);
-                substitution_happened = !matches!(replaced, std::borrow::Cow::Borrowed(_));
-                replaced.into_owned()
-            } else {
-                let replaced = cmd.regex.replace(&line_str, &cmd.replacement);
-                substitution_happened = !matches!(replaced, std::borrow::Cow::Borrowed(_));
-                replaced.into_owned()
+        'cmd_loop: for (cmd_idx, cmd) in commands.iter().enumerate() {
+            // Determine whether this command's address matches this line
+            let matches = match &cmd.addr {
+                AddrSpec::None => true,
+                AddrSpec::Single(addr) => match addr {
+                    Address::Line(n) => line_num == *n,
+                    Address::Last => line_num == total_lines,
+                    Address::Pattern(re) => re.is_match(&line_str),
+                },
+                AddrSpec::Range(start, end) => {
+                    // Enter range when start matches, stay until end matches
+                    if !range_active[cmd_idx] {
+                        let enters = match start {
+                            Address::Line(n) => line_num == *n,
+                            Address::Last => line_num == total_lines,
+                            Address::Pattern(re) => re.is_match(&line_str),
+                        };
+                        if enters {
+                            range_active[cmd_idx] = true;
+                        }
+                    }
+                    if range_active[cmd_idx] {
+                        // Check if this is the end of the range
+                        let exits = match end {
+                            Address::Line(n) => line_num >= *n,
+                            Address::Last => line_num == total_lines,
+                            Address::Pattern(re) => line_num > 1 && re.is_match(&line_str),
+                        };
+                        if exits {
+                            range_active[cmd_idx] = false;
+                        }
+                        true
+                    } else {
+                        false
+                    }
+                }
             };
 
-            line_str = new_line;
-            if cmd.print_if_matched && substitution_happened {
-                output.extend_from_slice(line_str.as_bytes());
-                output.extend_from_slice(line_ending);
+            if !matches {
+                continue;
+            }
+
+            match &cmd.cmd {
+                Cmd::Delete => {
+                    deleted = true;
+                    break 'cmd_loop;
+                }
+                Cmd::Print => {
+                    output.extend_from_slice(line_str.as_bytes());
+                    output.extend_from_slice(line_ending);
+                }
+                Cmd::Quit => {
+                    quit_after = true;
+                    break 'cmd_loop;
+                }
+                Cmd::Substitute { regex, replacement, global, print_if_matched } => {
+                    let substitution_happened;
+                    let new_line = if *global {
+                        let replaced = regex.replace_all(&line_str, replacement.as_str());
+                        substitution_happened = !matches!(replaced, std::borrow::Cow::Borrowed(_));
+                        replaced.into_owned()
+                    } else {
+                        let replaced = regex.replace(&line_str, replacement.as_str());
+                        substitution_happened = !matches!(replaced, std::borrow::Cow::Borrowed(_));
+                        replaced.into_owned()
+                    };
+
+                    line_str = new_line;
+                    if *print_if_matched && substitution_happened {
+                        output.extend_from_slice(line_str.as_bytes());
+                        output.extend_from_slice(line_ending);
+                    }
+                }
             }
         }
 
-        if should_print {
+        if !deleted && should_print {
             output.extend_from_slice(line_str.as_bytes());
             output.extend_from_slice(line_ending);
         }
+
+        if quit_after {
+            break;
+        }
     }
+
     Ok(output)
 }
