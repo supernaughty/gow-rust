@@ -90,6 +90,10 @@ notify = "8.2"                       # tail -f watcher — gow-tail only
 terminal_size = "0.4"                # ls column layout — gow-ls only
 junction = "1.4"                     # D-36 directory-symlink fallback — gow-core + gow-ln
 
+# Phase 4 additions (S04 diff/patch)
+similar = "2.6"                      # diff algorithms (Myers, Patience) — gow-diff
+diffy = "0.4"                        # unified diff apply — gow-patch
+
 [profile.release]
 strip = true
 opt-level = "z"
