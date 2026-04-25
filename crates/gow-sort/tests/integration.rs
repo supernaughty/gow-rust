@@ -116,3 +116,64 @@ fn test_sort_output_file() {
 
     assert_eq!(fs::read_to_string(&out_path).unwrap(), "a\nb\nc\n");
 }
+
+#[test]
+fn test_sort_key_field_1() {
+    // Sort by second whitespace-delimited field (lexicographic)
+    let dir = tempdir().unwrap();
+    let file_path = dir.path().join("test.txt");
+    // Field 2: banana, apple, cherry -> apple, banana, cherry
+    fs::write(&file_path, "row1 banana x\nrow2 apple x\nrow3 cherry x\n").unwrap();
+
+    let mut cmd = Command::cargo_bin("sort").unwrap();
+    cmd.arg("-k2").arg(&file_path);
+    cmd.assert()
+        .success()
+        .stdout("row2 apple x\nrow1 banana x\nrow3 cherry x\n");
+}
+
+#[test]
+fn test_sort_key_numeric() {
+    // Sort by second field numerically (-k2n)
+    let dir = tempdir().unwrap();
+    let file_path = dir.path().join("test.txt");
+    // Field 2 values: 10, 2, 1 -> numeric order 1, 2, 10
+    fs::write(&file_path, "a 10\nb 2\nc 1\n").unwrap();
+
+    let mut cmd = Command::cargo_bin("sort").unwrap();
+    cmd.arg("-k2n").arg(&file_path);
+    cmd.assert()
+        .success()
+        .stdout("c 1\nb 2\na 10\n");
+}
+
+#[test]
+fn test_sort_key_reverse() {
+    // Sort by second field in reverse lexicographic order (-k2r)
+    let dir = tempdir().unwrap();
+    let file_path = dir.path().join("test.txt");
+    // Field 2: banana, apple, cherry -> reverse: cherry, banana, apple
+    fs::write(&file_path, "row1 banana\nrow2 apple\nrow3 cherry\n").unwrap();
+
+    let mut cmd = Command::cargo_bin("sort").unwrap();
+    cmd.arg("-k2r").arg(&file_path);
+    cmd.assert()
+        .success()
+        .stdout("row3 cherry\nrow1 banana\nrow2 apple\n");
+}
+
+#[test]
+fn test_sort_key_separator() {
+    // Sort by field 3 using colon as separator (-t: -k3)
+    let dir = tempdir().unwrap();
+    let file_path = dir.path().join("test.txt");
+    // /etc/passwd-style: name:x:uid:...
+    // field 3 (uid): 1000, 500, 0 -> lex order: 0, 1000, 500
+    fs::write(&file_path, "bob:x:1000\nalice:x:500\nroot:x:0\n").unwrap();
+
+    let mut cmd = Command::cargo_bin("sort").unwrap();
+    cmd.arg("-t:").arg("-k3").arg(&file_path);
+    cmd.assert()
+        .success()
+        .stdout("root:x:0\nbob:x:1000\nalice:x:500\n");
+}
