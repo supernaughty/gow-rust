@@ -120,3 +120,43 @@ fn test_sed_ampersand() {
         .success()
         .stdout(predicate::eq("[hello]\n"));
 }
+
+#[test]
+fn test_sed_delete_all() {
+    // 'd' with no address deletes every line -> empty output
+    let mut cmd = Command::cargo_bin("sed").unwrap();
+    cmd.arg("d").write_stdin("line1\nline2\nline3");
+    cmd.assert()
+        .success()
+        .stdout(predicate::str::is_empty());
+}
+
+#[test]
+fn test_sed_delete_line_number() {
+    // '2d' deletes only line 2
+    let mut cmd = Command::cargo_bin("sed").unwrap();
+    cmd.arg("2d").write_stdin("line1\nline2\nline3\n");
+    cmd.assert()
+        .success()
+        .stdout("line1\nline3\n");
+}
+
+#[test]
+fn test_sed_delete_range() {
+    // '1,2d' deletes lines 1 through 2; only line3 remains
+    let mut cmd = Command::cargo_bin("sed").unwrap();
+    cmd.arg("1,2d").write_stdin("line1\nline2\nline3\n");
+    cmd.assert()
+        .success()
+        .stdout("line3\n");
+}
+
+#[test]
+fn test_sed_address_range_substitute() {
+    // '2,3s/line/LINE/' substitutes only on lines 2 and 3
+    let mut cmd = Command::cargo_bin("sed").unwrap();
+    cmd.arg("2,3s/line/LINE/").write_stdin("line1\nline2\nline3\nline4\n");
+    cmd.assert()
+        .success()
+        .stdout("line1\nLINE2\nLINE3\nline4\n");
+}
