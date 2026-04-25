@@ -1,5 +1,5 @@
 ---
-status: partial
+status: resolved
 phase: 04-s04
 source: [04-VERIFICATION.md]
 started: 2026-04-25T14:00:00Z
@@ -33,14 +33,14 @@ echo "hello world rust" | .\target\debug\grep.exe --color=always world | xxd | h
 
 **Why human:** All 12 integration tests use `--color=never`. The code path at `crates/gow-grep/src/lib.rs:263-272` calls `stdout.set_color(ColorSpec::new().set_fg(Some(Color::Red)).set_bold(true))` when `supports_color()` returns true (which it always does for `ColorChoice::Always`). The code appears correct but no automated test captures the raw escape bytes.
 
-**Result:** [pending]
+**Result:** approved by user 2026-04-26
 
 ## Summary
 
 total: 1
-passed: 0
+passed: 1
 issues: 0
-pending: 1
+pending: 0
 skipped: 0
 blocked: 0
 
