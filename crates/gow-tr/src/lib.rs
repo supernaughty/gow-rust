@@ -151,6 +151,41 @@ pub fn uumain<I: IntoIterator<Item = OsString>>(args: I) -> i32 {
     0
 }
 
+fn expand_posix_class(class: &str, res: &mut Vec<u8>) {
+    match class {
+        "alpha" => {
+            for b in b'A'..=b'Z' { res.push(b); }
+            for b in b'a'..=b'z' { res.push(b); }
+        }
+        "digit" => {
+            for b in b'0'..=b'9' { res.push(b); }
+        }
+        "lower" => {
+            for b in b'a'..=b'z' { res.push(b); }
+        }
+        "upper" => {
+            for b in b'A'..=b'Z' { res.push(b); }
+        }
+        "space" => {
+            res.extend_from_slice(&[b' ', b'\t', b'\n', b'\r', b'\x0c', b'\x0b']);
+        }
+        "alnum" => {
+            for b in b'0'..=b'9' { res.push(b); }
+            for b in b'A'..=b'Z' { res.push(b); }
+            for b in b'a'..=b'z' { res.push(b); }
+        }
+        "blank" => {
+            res.extend_from_slice(&[b' ', b'\t']);
+        }
+        "xdigit" => {
+            for b in b'0'..=b'9' { res.push(b); }
+            for b in b'A'..=b'F' { res.push(b); }
+            for b in b'a'..=b'f' { res.push(b); }
+        }
+        _ => {} // unknown class — push nothing
+    }
+}
+
 fn expand_set(s: &str) -> Vec<u8> {
     let mut res = Vec::new();
     let chars: Vec<char> = s.chars().collect();
@@ -184,6 +219,27 @@ fn expand_set(s: &str) -> Vec<u8> {
                 _ => res.push(chars[i + 1] as u8),
             }
             i += 2;
+        } else if chars[i] == '[' && i + 1 < chars.len() && chars[i + 1] == ':' {
+            // POSIX character class: [:classname:]
+            let class_start = i + 2;
+            let mut class_end = None;
+            let mut j = class_start;
+            while j + 1 < chars.len() {
+                if chars[j] == ':' && chars[j + 1] == ']' {
+                    class_end = Some(j);
+                    break;
+                }
+                j += 1;
+            }
+            if let Some(end) = class_end {
+                let class_name: String = chars[class_start..end].iter().collect();
+                expand_posix_class(&class_name, &mut res);
+                i = end + 2; // skip past ':]'
+            } else {
+                // No closing :], treat '[' as a literal byte
+                res.push(b'[');
+                i += 1;
+            }
         } else if i + 2 < chars.len() && chars[i + 1] == '-' {
             // Range
             let start = chars[i] as u8;
