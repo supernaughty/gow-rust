@@ -16,7 +16,7 @@
   - [ ] 04-03-PLAN.md — Implement grep with regex, recursion, and color (R011)
   - [ ] 04-04-PLAN.md — Implement sed with s/d/p commands and atomic -i editing (R012)
   - [ ] 04-05-PLAN.md — Implement sort with -n -r -u -k key field and external merge (R008)
-  - [ ] 04-06-PLAN.md — Implement diff (unified format) and patch (atomic apply) (R014)
+  - [x] 04-06-PLAN.md — Implement diff (unified format) and patch (atomic apply) (R014)
   - [ ] 04-07-PLAN.md — Implement awk interpreter (field separation, printf, arrays) (R013)
 
 - [ ] **Phase 05: search-and-navigation** — Search and Navigation

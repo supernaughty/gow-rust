@@ -1,217 +1,403 @@
-# Requirements: gow-rust
+# Requirements
 
-**Defined:** 2026-04-20
-**Core Value:** Windows 사용자가 별도의 무거운 환경 없이 GNU 명령어를 네이티브 성능으로 사용할 수 있어야 한다.
+This file is the explicit capability and coverage contract for the project.
 
-## v1 Requirements
+## Active
 
-Requirements for initial release. Each maps to roadmap phases.
+### R008 — 줄 정렬 (-n 숫자, -r 역순, -u 유니크, -k 키필드)
+- Class: core-capability
+- Status: active
+- Description: 줄 정렬 (-n 숫자, -r 역순, -u 유니크, -k 키필드)
+- Why it matters: 텍스트 처리 기본 도구
+- Source: user
+- Primary owning slice: M001/S04
+- Supporting slices: none
+- Validation: mapped
+- Notes: TEXT-04
 
-### Foundation
+### R009 — 중복 줄 제거/카운트 (-c 카운트, -d 중복만)
+- Class: core-capability
+- Status: active
+- Description: 중복 줄 제거/카운트 (-c 카운트, -d 중복만)
+- Why it matters: 텍스트 처리 기본 도구
+- Source: user
+- Primary owning slice: M001/S04
+- Supporting slices: none
+- Validation: mapped
+- Notes: TEXT-05
 
-- [x] **FOUND-01**: Cargo workspace 구조로 다중 크레이트 프로젝트 구성 — completed Plan 01-01 (2026-04-20)
-- [x] **FOUND-02**: gow-core 공유 라이브러리 — UTF-8 콘솔 초기화 (SetConsoleOutputCP 65001) — completed Plan 01-02 (2026-04-20)
-- [x] **FOUND-03**: gow-core 공유 라이브러리 — GNU 호환 인자 파싱 (옵션 퍼뮤테이션, exit code 1, -- 종료) — completed Plan 01-02 (2026-04-20)
-- [x] **FOUND-04**: gow-core 공유 라이브러리 — 컬러/TTY 감지 및 ANSI VT100 활성화 — completed Plan 01-02 (2026-04-20)
-- [x] **FOUND-05**: gow-core 공유 라이브러리 — 통합 에러 처리 타입 — completed Plan 01-03 (2026-04-20)
-- [x] **FOUND-06**: Unix↔Windows 경로 자동 변환 (컨텍스트 인식, GOW #244 해결) — completed Plan 01-03 (2026-04-20)
-- [x] **FOUND-07**: Windows 심볼릭 링크/정션 추상화 레이어 — completed Plan 01-03 (2026-04-20)
+### R010 — 문자 변환/삭제 (-d 삭제, -s 압축, 문자 클래스)
+- Class: core-capability
+- Status: active
+- Description: 문자 변환/삭제 (-d 삭제, -s 압축, 문자 클래스)
+- Why it matters: 텍스트 처리 기본 도구
+- Source: user
+- Primary owning slice: M001/S04
+- Supporting slices: none
+- Validation: mapped
+- Notes: TEXT-06
 
-### Coreutils — File Operations
+### R011 — 정규식 패턴 검색 (-i 대소문자, -r 재귀, -n 줄번호, -c 카운트, -v 반전)
+- Class: core-capability
+- Status: active
+- Description: 정규식 패턴 검색 (-i 대소문자, -r 재귀, -n 줄번호, -c 카운트, -v 반전)
+- Why it matters: 핵심 텍스트 검색 도구, --color 지원 (GOW #85)
+- Source: user
+- Primary owning slice: M001/S04
+- Supporting slices: none
+- Validation: mapped
+- Notes: GREP-01, GREP-02, GREP-03
 
-- [ ] **FILE-01**: cat — 파일 연결 및 표준 출력 (-n 번호, -b 비공백 번호, -s 빈줄 압축)
-- [ ] **FILE-02**: ls — 디렉토리 목록 (-l 상세, -a 숨김, -R 재귀, --color 색상)
-- [ ] **FILE-03**: cp — 파일 복사 (-r 재귀, -f 강제, -p 권한 보존)
-- [ ] **FILE-04**: mv — 파일 이동/이름변경 (-f 강제, -i 대화형)
-- [ ] **FILE-05**: rm — 파일 삭제 (-r 재귀, -f 강제, -i 대화형)
-- [x] **FILE-06**: mkdir — 디렉토리 생성 (-p 부모 포함, GOW #133 해결) — completed Plan 02-06 (2026-04-21)
-- [x] **FILE-07**: rmdir — 빈 디렉토리 삭제 (-p 부모 포함) — completed Plan 02-06 (2026-04-21)
-- [x] **FILE-08**: touch — 파일 타임스탬프 변경/생성 — completed Plan 02-10 (2026-04-21) — full GNU parity incl. -d/-t/-h
-- [ ] **FILE-09**: ln — 링크 생성 (-s 심볼릭, Windows 심링크/정션 지원)
-- [ ] **FILE-10**: chmod — 파일 권한 변경 (Windows ACL 매핑)
+### R012 — 스트림 편집 (s/치환, d/삭제, p/출력, 주소 범위), sed -i 인플레이스 편집
+- Class: core-capability
+- Status: active
+- Description: 스트림 편집 (s/치환, d/삭제, p/출력, 주소 범위), sed -i 인플레이스 편집
+- Why it matters: 핵심 스트림 편집 도구, Windows 파일 잠금 처리 필요
+- Source: user
+- Primary owning slice: M001/S04
+- Supporting slices: none
+- Validation: mapped
+- Notes: SED-01, SED-02
 
-### Coreutils — Text Processing
+### R013 — 완전한 AWK 인터프리터, 필드 분리, printf, 연관 배열 지원
+- Class: core-capability
+- Status: active
+- Description: 완전한 AWK 인터프리터, 필드 분리, printf, 연관 배열 지원
+- Why it matters: 강력한 텍스트 분석 도구
+- Source: user
+- Primary owning slice: M001/S04
+- Supporting slices: none
+- Validation: mapped
+- Notes: AWK-01, AWK-02
 
-- [ ] **TEXT-01**: head — 파일 앞부분 출력 (-n 줄수, -c 바이트수, 숫자 축약 -5)
-- [ ] **TEXT-02**: tail — 파일 뒷부분 출력 (-n 줄수, -f 실시간 추적, GOW #169/#75/#89 해결)
-- [x] **TEXT-03**: wc — 단어/줄/바이트 수 카운트 — completed Plan 02-08 (2026-04-21) — Unicode-aware via bstr
-- [ ] **TEXT-04**: sort — 줄 정렬 (-n 숫자, -r 역순, -u 유니크, -k 키필드)
-- [ ] **TEXT-05**: uniq — 중복 줄 제거/카운트 (-c 카운트, -d 중복만)
-- [ ] **TEXT-06**: tr — 문자 변환/삭제 (-d 삭제, -s 압축, 문자 클래스)
+### R014 — 파일 비교 및 패치 적용
+- Class: core-capability
+- Status: validated
+- Description: 파일 비교 및 패치 적용
+- Why it matters: 코드 및 텍스트 변경 관리
+- Source: user
+- Primary owning slice: M001/S04
+- Supporting slices: none
+- Validation: validated in M001/S04 (Plan 04-06) with 11 integration tests covering identical files, unified diff format, context lines, recursive diff, -N absent-as-empty, patch apply, -p1 strip, --dry-run, -R reverse, and -i input file.
+- Notes: DIFF-01, DIFF-02
 
-### Coreutils — Utilities
+### R015 — 파일 검색 (-name, -type, -size, -mtime 등), -exec 지원, 공백 처리
+- Class: core-capability
+- Status: active
+- Description: 파일 검색 (-name, -type, -size, -mtime 등), -exec 지원, 공백 처리
+- Why it matters: 파일 탐색 핵심 도구
+- Source: user
+- Primary owning slice: M001/S05
+- Supporting slices: none
+- Validation: mapped
+- Notes: FIND-01, FIND-02, FIND-03
 
-- [x] **UTIL-01**: echo — 문자열 출력 (-n 개행 없이, -e 이스케이프 해석) — completed Plan 02-03 (2026-04-21)
-- [x] **UTIL-02**: pwd — 현재 디렉토리 출력 (-P 물리 경로) — completed Plan 02-04 (2026-04-21)
-- [x] **UTIL-03**: env — 환경변수 출력/설정 후 명령 실행 — completed Plan 02-09 (2026-04-21) — full GNU parity incl. -S state machine
-- [x] **UTIL-04**: tee — 표준 입력을 파일과 표준 출력에 동시 기록 (-a 추가) — completed Plan 02-07 (2026-04-21)
-- [x] **UTIL-05**: basename — 경로에서 파일명 추출 — completed Plan 02-05 (2026-04-21)
-- [x] **UTIL-06**: dirname — 경로에서 디렉토리 추출 — completed Plan 02-05 (2026-04-21)
-- [x] **UTIL-07**: yes — 무한 반복 문자열 출력 — completed Plan 02-02 (2026-04-21) — 16 KiB prefilled buffer
-- [x] **UTIL-08**: true — 항상 성공 (exit 0) — completed Plan 02-02 (2026-04-21)
-- [x] **UTIL-09**: false — 항상 실패 (exit 1) — completed Plan 02-02 (2026-04-21)
+### R016 — 표준 입력에서 명령줄 구성 (-0 null 구분, -I 치환)
+- Class: core-capability
+- Status: active
+- Description: 표준 입력에서 명령줄 구성 (-0 null 구분, -I 치환)
+- Why it matters: 파이프라인 연동 핵심 도구
+- Source: user
+- Primary owning slice: M001/S05
+- Supporting slices: none
+- Validation: mapped
+- Notes: XARGS-01
 
-### Text Search and Processing
+### R017 — 파일 페이저 (스크롤, 검색, 큰 파일 지원)
+- Class: core-capability
+- Status: active
+- Description: 파일 페이저 (스크롤, 검색, 큰 파일 지원)
+- Why it matters: 터미널 텍스트 가독성 도구
+- Source: user
+- Primary owning slice: M001/S05
+- Supporting slices: none
+- Validation: mapped
+- Notes: LESS-01
 
-- [ ] **GREP-01**: grep — 정규식 패턴 검색 (-i 대소문자, -r 재귀, -n 줄번호, -c 카운트, -v 반전)
-- [ ] **GREP-02**: grep --color가 Windows 터미널에서 올바르게 동작 (GOW #85 해결)
-- [ ] **GREP-03**: grep -E (확장 정규식) 및 grep -F (고정 문자열) 지원
-- [ ] **SED-01**: sed — 스트림 편집 (s/치환, d/삭제, p/출력, 주소 범위)
-- [ ] **SED-02**: sed -i 인플레이스 편집 (Windows 파일 잠금 처리)
-- [ ] **AWK-01**: awk — 완전한 AWK 인터프리터 (패턴-액션, 내장 변수, 내장 함수)
-- [ ] **AWK-02**: awk 필드 분리, printf, 연관 배열 지원
-- [ ] **DIFF-01**: diff — 파일 비교 (unified, context, normal 형식)
-- [ ] **DIFF-02**: patch — diff 출력으로 파일 패치 적용
+### R018 — 아카이브 생성/추출 (-c 생성, -x 추출, -t 목록, -z gzip, -j bzip2)
+- Class: core-capability
+- Status: active
+- Description: 아카이브 생성/추출 (-c 생성, -x 추출, -t 목록, -z gzip, -j bzip2)
+- Why it matters: 파일 아카이브 도구
+- Source: user
+- Primary owning slice: M001/S06
+- Supporting slices: none
+- Validation: mapped
+- Notes: ARCH-01
 
-### Search and Navigation
+### R019 — 압축/해제 도구 세트
+- Class: core-capability
+- Status: active
+- Description: 압축/해제 도구 세트
+- Why it matters: 표준 압축 형식 지원
+- Source: user
+- Primary owning slice: M001/S06
+- Supporting slices: none
+- Validation: mapped
+- Notes: ARCH-02, ARCH-03
 
-- [ ] **FIND-01**: find — 파일 검색 (-name, -type, -size, -mtime 등)
-- [ ] **FIND-02**: find -exec가 올바르게 동작 (GOW #208 해결)
-- [ ] **FIND-03**: find에서 공백 포함 경로 올바르게 처리 (GOW #209 해결)
-- [x] **WHICH-01**: which — 실행파일 위치 탐색 (Windows PATH 정확히 탐색, GOW #276 해결) — completed Plan 02-11 (2026-04-21) — hybrid PATHEXT resolver
-- [ ] **XARGS-01**: xargs — 표준 입력에서 명령줄 구성 (-0 null 구분, -I 치환)
-- [ ] **LESS-01**: less — 파일 페이저 (스크롤, 검색, 큰 파일 지원)
+### R020 — HTTP/HTTPS 요청, TLS 1.2/1.3 지원, 프록시 인증
+- Class: core-capability
+- Status: active
+- Description: HTTP/HTTPS 요청, TLS 1.2/1.3 지원, 프록시 인증
+- Why it matters: 네트워크 데이터 전송 도구
+- Source: user
+- Primary owning slice: M001/S06
+- Supporting slices: none
+- Validation: mapped
+- Notes: NET-01, NET-02
 
-### Archive and Compression
+## Validated
 
-- [ ] **ARCH-01**: tar — 아카이브 생성/추출 (-c 생성, -x 추출, -t 목록, -z gzip, -j bzip2)
-- [ ] **ARCH-02**: gzip/gunzip — gzip 압축/해제 (GOW #166 gunzip 누락 해결)
-- [ ] **ARCH-03**: bzip2/bunzip2 — bzip2 압축/해제
-- [ ] **ARCH-04**: zip — zip 아카이브 생성
-- [ ] **ARCH-05**: unrar — RAR 아카이브 추출
-- [ ] **CONV-01**: dos2unix — CRLF→LF 변환
-- [ ] **CONV-02**: unix2dos — LF→CRLF 변환
+### R001 — 디렉토리 목록 (-l 상세, -a 숨김, -R 재귀, --color 색상)
+- Class: core-capability
+- Status: validated
+- Description: 디렉토리 목록 (-l 상세, -a 숨김, -R 재귀, --color 색상)
+- Why it matters: GNU coreutils의 기본 기능
+- Source: user
+- Primary owning slice: M001/S03
+- Supporting slices: none
+- Validation: validated in M001/S03 (Plan 03-09) with 19 integration tests covering hidden files, permissions, and junction display.
+- Notes: FILE-02
 
-### Network
+### R002 — 파일 복사 (-r 재귀, -f 강제, -p 권한 보존)
+- Class: core-capability
+- Status: validated
+- Description: 파일 복사 (-r 재귀, -f 강제, -p 권한 보존)
+- Why it matters: GNU coreutils의 기본 기능
+- Source: user
+- Primary owning slice: M001/S03
+- Supporting slices: none
+- Validation: validated in M001/S03 (Plan 03-07) with 16 integration tests covering recursive copy, timestamps, and symlinks.
+- Notes: FILE-03
 
-- [ ] **NET-01**: curl — HTTP/HTTPS 요청 (-o 출력, -L 리다이렉트, -H 헤더, -d 데이터)
-- [ ] **NET-02**: curl TLS 1.2/1.3 지원, 프록시 인증 (GOW #277 해결)
+### R003 — 파일 이동/이름변경 (-f 강제, -i 대화형)
+- Class: core-capability
+- Status: validated
+- Description: 파일 이동/이름변경 (-f 강제, -i 대화형)
+- Why it matters: GNU coreutils의 기본 기능
+- Source: user
+- Primary owning slice: M001/S03
+- Supporting slices: none
+- Validation: validated in M001/S03 (Plan 03-11) with 12 integration tests covering same-volume rename and directory moves.
+- Notes: FILE-04
 
-### Binary Tools
+### R004 — 파일 삭제 (-r 재귀, -f 강제, -i 대화형)
+- Class: core-capability
+- Status: validated
+- Description: 파일 삭제 (-r 재귀, -f 강제, -i 대화형)
+- Why it matters: GNU coreutils의 기본 기능
+- Source: user
+- Primary owning slice: M001/S03
+- Supporting slices: none
+- Validation: validated in M001/S03 (Plan 03-08) with 18 integration tests covering recursive removal, drive-root safety, and read-only handling.
+- Notes: FILE-05
 
-- [ ] **BIN-01**: gsar — 바이너리 파일 검색 및 치환
+### R005 — 링크 생성 (-s 심볼릭, Windows 심링크/정션 지원)
+- Class: core-capability
+- Status: validated
+- Description: 링크 생성 (-s 심볼릭, Windows 심링크/정션 지원)
+- Why it matters: GNU coreutils의 기본 기능
+- Source: user
+- Primary owning slice: M001/S03
+- Supporting slices: none
+- Validation: validated in M001/S03 (Plan 03-10) with 12 integration tests covering hard links, symlinks, and junction fallbacks.
+- Notes: FILE-09
 
-### Windows Integration
+### R006 — 파일 뒷부분 출력 (-n 줄수, -f 실시간 추적, GOW #169/#75/#89 해결)
+- Class: core-capability
+- Status: validated
+- Description: 파일 뒷부분 출력 (-n 줄수, -f 실시간 추적, GOW #169/#75/#89 해결)
+- Why it matters: GNU coreutils의 기본 기능, Windows에서 tail -f가 안정적으로 동작해야 함
+- Source: user
+- Primary owning slice: M001/S03
+- Supporting slices: none
+- Validation: validated in M001/S03 (Plan 03-12) with 12 integration tests covering last-N lines/bytes and real-time follow via notify.
+- Notes: TEXT-02
 
-- [x] **WIN-01**: UTF-8이 모든 유틸리티의 기본 인코딩 (GOW #280, #77 해결) — completed Plan 01-02 (2026-04-20), end-to-end validation pending Plan 01-04
-- [x] **WIN-02**: Windows 긴 경로 지원 (MAX_PATH 260자 제한 해제) — completed Plan 01-04 (2026-04-21), longPathAware=true verified in PE manifest
-- [x] **WIN-03**: PowerShell에서 모든 유틸리티 정상 동작 — completed Plan 01-02 (2026-04-20), end-to-end validation pending Plan 01-04
+### R007 — LF→CRLF 변환
+- Class: core-capability
+- Status: validated
+- Description: LF→CRLF 변환
+- Why it matters: Windows 환경에서의 텍스트 인코딩 호환성
+- Source: user
+- Primary owning slice: M001/S03
+- Supporting slices: none
+- Validation: validated in M001/S03 (Plan 03-06) with 12 integration tests covering LF to CRLF conversion.
+- Notes: CONV-02
 
-## v2 Requirements
+### R100 — Cargo workspace 구조로 다중 크레이트 프로젝트 구성
+- Class: quality-attribute
+- Status: validated
+- Description: Cargo workspace 구조로 다중 크레이트 프로젝트 구성
+- Why it matters: 프로젝트 확장성 및 공유 라이브러리 구조
+- Source: user
+- Primary owning slice: M001/S01
+- Supporting slices: none
+- Validation: validated
+- Notes: FOUND-01, Plan 01-01
 
-Deferred to future release. Tracked but not in current roadmap.
+### R101 — gow-core 공유 라이브러리 — UTF-8 콘솔 초기화 (SetConsoleOutputCP 65001)
+- Class: quality-attribute
+- Status: validated
+- Description: gow-core 공유 라이브러리 — UTF-8 콘솔 초기화 (SetConsoleOutputCP 65001)
+- Why it matters: 한글 등 비ASCII 문자 지원을 위한 필수 조건
+- Source: user
+- Primary owning slice: M001/S01
+- Supporting slices: none
+- Validation: validated
+- Notes: FOUND-02, Plan 01-02, WIN-01
 
-### Distribution
+### R102 — gow-core 공유 라이브러리 — GNU 호환 인자 파싱 (옵션 퍼뮤테이션, exit code 1, -- 종료)
+- Class: differentiator
+- Status: validated
+- Description: gow-core 공유 라이브러리 — GNU 호환 인자 파싱 (옵션 퍼뮤테이션, exit code 1, -- 종료)
+- Why it matters: 기존 GNU 스크립트 호환성을 위한 핵심
+- Source: user
+- Primary owning slice: M001/S01
+- Supporting slices: none
+- Validation: validated
+- Notes: FOUND-03, Plan 01-02
 
-- **DIST-01**: MSI 설치 프로그램으로 배포 (PATH 자동 등록, 업그레이드 지원)
-- **DIST-02**: Chocolatey 패키지 배포
-- **DIST-03**: Scoop 매니페스트 배포
-- **DIST-04**: winget 패키지 배포
+### R103 — gow-core 공유 라이브러리 — 컬러/TTY 감지 및 ANSI VT100 활성화
+- Class: quality-attribute
+- Status: validated
+- Description: gow-core 공유 라이브러리 — 컬러/TTY 감지 및 ANSI VT100 활성화
+- Why it matters: Windows 터미널에서 컬러 출력 지원
+- Source: user
+- Primary owning slice: M001/S01
+- Supporting slices: none
+- Validation: validated
+- Notes: FOUND-04, Plan 01-02
 
-### Extended Utilities
+### R104 — Unix↔Windows 경로 자동 변환 (컨텍스트 인식, GOW #244 해결)
+- Class: core-capability
+- Status: validated
+- Description: Unix↔Windows 경로 자동 변환 (컨텍스트 인식, GOW #244 해결)
+- Why it matters: MSYS/Cygwin 스타일 경로 지원
+- Source: user
+- Primary owning slice: M001/S01
+- Supporting slices: none
+- Validation: validated
+- Notes: FOUND-06, Plan 01-03
 
-- **EXT-01**: rsync — 파일 동기화 (GOW #216, #175 요청)
-- **EXT-02**: nohup — 프로세스 백그라운드 실행 (GOW #269 요청)
-- **EXT-03**: comm — 정렬된 파일 비교 (GOW #76 요청)
-- **EXT-04**: ed — 라인 에디터 (GOW #236 요청)
-- **EXT-05**: host/dig — DNS 조회 (GOW #104, #83 요청)
-- **EXT-06**: sha256sum — 체크섬 계산 (GOW #137 요청)
+### R105 — 문자열 출력 (-n 개행 없이, -e 이스케이프 해석)
+- Class: core-capability
+- Status: validated
+- Description: 문자열 출력 (-n 개행 없이, -e 이스케이프 해석)
+- Why it matters: UTIL-01, Plan 02-03
+- Source: user
+- Primary owning slice: M001/S02
+- Supporting slices: none
+- Validation: validated
+- Notes: validated in Plan 02-03
 
-### Enhanced Features
+### R106 — 단어/줄/바이트 수 카운트, Unicode-aware via bstr
+- Class: core-capability
+- Status: validated
+- Description: 단어/줄/바이트 수 카운트, Unicode-aware via bstr
+- Why it matters: TEXT-03, Plan 02-08
+- Source: user
+- Primary owning slice: M001/S02
+- Supporting slices: none
+- Validation: validated
+- Notes: validated in Plan 02-08
 
-- **ENH-01**: PowerShell 모듈 래퍼 (PSObject 출력)
-- **ENH-02**: GNU 호환성 테스트 스위트 통과율 추적
-- **ENH-03**: 멀티콜 바이너리 옵션 (단일 exe)
+### R107 — 실행파일 위치 탐색 (Windows PATH 정확히 탐색, GOW #276 해결)
+- Class: core-capability
+- Status: validated
+- Description: 실행파일 위치 탐색 (Windows PATH 정확히 탐색, GOW #276 해결)
+- Why it matters: WHICH-01, Plan 02-11
+- Source: user
+- Primary owning slice: M001/S02
+- Supporting slices: none
+- Validation: validated
+- Notes: validated in Plan 02-11
 
-## Out of Scope
+### R108 — 파일 연결 및 표준 출력 (-n 번호, -b 비공백 번호, -s 빈줄 압축)
+- Class: core-capability
+- Status: validated
+- Description: 파일 연결 및 표준 출력 (-n 번호, -b 비공백 번호, -s 빈줄 압축)
+- Why it matters: FILE-01, Plan 03-02
+- Source: user
+- Primary owning slice: M001/S03
+- Supporting slices: none
+- Validation: validated
+- Notes: validated in Plan 03-02
 
-| Feature | Reason |
-|---------|--------|
-| vim/nano 에디터 재작성 | 기존 성숙한 Rust 대안 존재 (helix, zed) |
-| bison/flex 파서 생성기 | 전문 도구이며 별도 프로젝트 규모 |
-| make 빌드 시스템 | 기존 대안 충분 (just, cargo) |
-| putty SSH 클라이언트 | Windows에 OpenSSH 내장 |
-| bash 셸 자체 | 별도 프로젝트 규모 (nushell 등 대안) |
-| indent 코드 포매터 | 언어별 포매터가 더 우수 |
-| jwhois | 사용 빈도 낮음 |
-| IRC/채팅 클라이언트 | GOW 범위 밖 (GOW #131) |
-| PHP | GOW 범위 밖 (GOW #167) |
-| readline 라이브러리 | 셸 없이는 불필요 |
-| pcre 라이브러리 | Rust regex 크레이트가 대체 |
-| libintl (i18n) | v1에서는 영문/유니코드만 지원 |
+### R109 — 파일 앞부분 출력 (-n 줄수, -c 바이트수, 숫자 축약 -5)
+- Class: core-capability
+- Status: validated
+- Description: 파일 앞부분 출력 (-n 줄수, -c 바이트수, 숫자 축약 -5)
+- Why it matters: TEXT-01, Plan 03-03
+- Source: user
+- Primary owning slice: M001/S03
+- Supporting slices: none
+- Validation: validated
+- Notes: validated in Plan 03-03
+
+### R110 — 파일 권한 변경 (Windows ACL 매핑)
+- Class: core-capability
+- Status: validated
+- Description: 파일 권한 변경 (Windows ACL 매핑)
+- Why it matters: FILE-10, Plan 03-04
+- Source: user
+- Primary owning slice: M001/S03
+- Supporting slices: none
+- Validation: validated
+- Notes: validated in Plan 03-04
+
+### R111 — CRLF→LF 변환, atomic rewrite 지원
+- Class: core-capability
+- Status: validated
+- Description: CRLF→LF 변환, atomic rewrite 지원
+- Why it matters: CONV-01, Plan 03-05
+- Source: user
+- Primary owning slice: M001/S03
+- Supporting slices: none
+- Validation: validated
+- Notes: validated in Plan 03-05
 
 ## Traceability
 
-Which phases cover which requirements. Updated during roadmap creation.
+| ID | Class | Status | Primary owner | Supporting | Proof |
+|---|---|---|---|---|---|
+| R001 | core-capability | validated | M001/S03 | none | validated in M001/S03 (Plan 03-09) with 19 integration tests covering hidden files, permissions, and junction display. |
+| R002 | core-capability | validated | M001/S03 | none | validated in M001/S03 (Plan 03-07) with 16 integration tests covering recursive copy, timestamps, and symlinks. |
+| R003 | core-capability | validated | M001/S03 | none | validated in M001/S03 (Plan 03-11) with 12 integration tests covering same-volume rename and directory moves. |
+| R004 | core-capability | validated | M001/S03 | none | validated in M001/S03 (Plan 03-08) with 18 integration tests covering recursive removal, drive-root safety, and read-only handling. |
+| R005 | core-capability | validated | M001/S03 | none | validated in M001/S03 (Plan 03-10) with 12 integration tests covering hard links, symlinks, and junction fallbacks. |
+| R006 | core-capability | validated | M001/S03 | none | validated in M001/S03 (Plan 03-12) with 12 integration tests covering last-N lines/bytes and real-time follow via notify. |
+| R007 | core-capability | validated | M001/S03 | none | validated in M001/S03 (Plan 03-06) with 12 integration tests covering LF to CRLF conversion. |
+| R008 | core-capability | active | M001/S04 | none | mapped |
+| R009 | core-capability | active | M001/S04 | none | mapped |
+| R010 | core-capability | active | M001/S04 | none | mapped |
+| R011 | core-capability | active | M001/S04 | none | mapped |
+| R012 | core-capability | active | M001/S04 | none | mapped |
+| R013 | core-capability | active | M001/S04 | none | mapped |
+| R014 | core-capability | validated | M001/S04 | none | validated in M001/S04 (Plan 04-06) with 11 integration tests |
+| R015 | core-capability | active | M001/S05 | none | mapped |
+| R016 | core-capability | active | M001/S05 | none | mapped |
+| R017 | core-capability | active | M001/S05 | none | mapped |
+| R018 | core-capability | active | M001/S06 | none | mapped |
+| R019 | core-capability | active | M001/S06 | none | mapped |
+| R020 | core-capability | active | M001/S06 | none | mapped |
+| R100 | quality-attribute | validated | M001/S01 | none | validated |
+| R101 | quality-attribute | validated | M001/S01 | none | validated |
+| R102 | differentiator | validated | M001/S01 | none | validated |
+| R103 | quality-attribute | validated | M001/S01 | none | validated |
+| R104 | core-capability | validated | M001/S01 | none | validated |
+| R105 | core-capability | validated | M001/S02 | none | validated |
+| R106 | core-capability | validated | M001/S02 | none | validated |
+| R107 | core-capability | validated | M001/S02 | none | validated |
+| R108 | core-capability | validated | M001/S03 | none | validated |
+| R109 | core-capability | validated | M001/S03 | none | validated |
+| R110 | core-capability | validated | M001/S03 | none | validated |
+| R111 | core-capability | validated | M001/S03 | none | validated |
 
-| Requirement | Phase | Status |
-|-------------|-------|--------|
-| FOUND-01 | Phase 1 | Done (Plan 01-01) |
-| FOUND-02 | Phase 1 | Done (Plan 01-02) |
-| FOUND-03 | Phase 1 | Done (Plan 01-02) |
-| FOUND-04 | Phase 1 | Done (Plan 01-02) |
-| FOUND-05 | Phase 1 | Done (Plan 01-03) |
-| FOUND-06 | Phase 1 | Done (Plan 01-03) |
-| FOUND-07 | Phase 1 | Done (Plan 01-03) |
-| WIN-01 | Phase 1 | Done (Plan 01-04 — E2E verified) |
-| WIN-02 | Phase 1 | Done (Plan 01-04 — manifest longPathAware=true verified at PE binary level) |
-| WIN-03 | Phase 1 | Done (Plan 01-04 — PowerShell verification approved) |
-| UTIL-01 | Phase 2 | Done (Plan 02-03) |
-| UTIL-02 | Phase 2 | Done (Plan 02-04) |
-| UTIL-03 | Phase 2 | Done (Plan 02-09) |
-| UTIL-04 | Phase 2 | Done (Plan 02-07) |
-| UTIL-05 | Phase 2 | Done (Plan 02-05) |
-| UTIL-06 | Phase 2 | Done (Plan 02-05) |
-| UTIL-07 | Phase 2 | Done (Plan 02-02) |
-| UTIL-08 | Phase 2 | Done (Plan 02-02) |
-| UTIL-09 | Phase 2 | Done (Plan 02-02) |
-| TEXT-03 | Phase 2 | Done (Plan 02-08) |
-| FILE-06 | Phase 2 | Done (Plan 02-06) |
-| FILE-07 | Phase 2 | Done (Plan 02-06) |
-| FILE-08 | Phase 2 | Done (Plan 02-10) |
-| WHICH-01 | Phase 2 | Done (Plan 02-11) |
-| FILE-01 | Phase 3 | Pending |
-| FILE-02 | Phase 3 | Pending |
-| FILE-03 | Phase 3 | Pending |
-| FILE-04 | Phase 3 | Pending |
-| FILE-05 | Phase 3 | Pending |
-| FILE-09 | Phase 3 | Pending |
-| FILE-10 | Phase 3 | Pending |
-| TEXT-01 | Phase 3 | Pending |
-| TEXT-02 | Phase 3 | Pending |
-| CONV-01 | Phase 3 | Pending |
-| CONV-02 | Phase 3 | Pending |
-| TEXT-04 | Phase 4 | Pending |
-| TEXT-05 | Phase 4 | Pending |
-| TEXT-06 | Phase 4 | Pending |
-| GREP-01 | Phase 4 | Pending |
-| GREP-02 | Phase 4 | Pending |
-| GREP-03 | Phase 4 | Pending |
-| SED-01 | Phase 4 | Pending |
-| SED-02 | Phase 4 | Pending |
-| AWK-01 | Phase 4 | Pending |
-| AWK-02 | Phase 4 | Pending |
-| DIFF-01 | Phase 4 | Pending |
-| DIFF-02 | Phase 4 | Pending |
-| FIND-01 | Phase 5 | Pending |
-| FIND-02 | Phase 5 | Pending |
-| FIND-03 | Phase 5 | Pending |
-| XARGS-01 | Phase 5 | Pending |
-| LESS-01 | Phase 5 | Pending |
-| BIN-01 | Phase 5 | Pending |
-| ARCH-01 | Phase 6 | Pending |
-| ARCH-02 | Phase 6 | Pending |
-| ARCH-03 | Phase 6 | Pending |
-| ARCH-04 | Phase 6 | Pending |
-| ARCH-05 | Phase 6 | Pending |
-| NET-01 | Phase 6 | Pending |
-| NET-02 | Phase 6 | Pending |
+## Coverage Summary
 
-**Coverage:**
-- v1 requirements: 59 total (note: initial count of 52 was pre-final; actual count in document is 59)
-- Mapped to phases: 59
-- Unmapped: 0
-
----
-*Requirements defined: 2026-04-20*
-*Last updated: 2026-04-20 after roadmap creation*
+- Active requirements: 13
+- Mapped to slices: 13
+- Validated: 19 (R001, R002, R003, R004, R005, R006, R007, R100, R101, R102, R103, R104, R105, R106, R107, R108, R109, R110, R111)
+- Unmapped active requirements: 0
