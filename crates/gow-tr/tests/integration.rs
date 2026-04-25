@@ -39,3 +39,36 @@ fn test_tr_complement() {
         .success()
         .stdout("helloXXXXXXXXXX");
 }
+
+#[test]
+fn test_tr_posix_class_digit() {
+    // tr -dc '[:digit:]' deletes everything except digits
+    let mut cmd = Command::cargo_bin("tr").unwrap();
+    cmd.arg("-dc").arg("[:digit:]")
+        .write_stdin("abc123def")
+        .assert()
+        .success()
+        .stdout("123");
+}
+
+#[test]
+fn test_tr_posix_class_lower_to_upper() {
+    // tr '[:lower:]' '[:upper:]' translates lowercase to uppercase
+    let mut cmd = Command::cargo_bin("tr").unwrap();
+    cmd.arg("[:lower:]").arg("[:upper:]")
+        .write_stdin("hello world")
+        .assert()
+        .success()
+        .stdout("HELLO WORLD");
+}
+
+#[test]
+fn test_tr_posix_class_alpha_delete() {
+    // tr -d '[:alpha:]' deletes all letters, leaving only non-letters
+    let mut cmd = Command::cargo_bin("tr").unwrap();
+    cmd.arg("-d").arg("[:alpha:]")
+        .write_stdin("abc123def")
+        .assert()
+        .success()
+        .stdout("123");
+}
