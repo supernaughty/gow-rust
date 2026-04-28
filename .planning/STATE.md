@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
 milestone: v0.2.0
-milestone_name: M002
-status: in_progress
-stopped_at: "07-01 checkpoint:human-verify — awaiting release page verification"
-last_updated: "2026-04-29T16:40:35Z"
-last_activity: "2026-04-29 — Plan 07-01 tasks 1-3 complete; paused at checkpoint"
+milestone_name: "- [ ] **Phase 07: release-and-ci** — Release & CI/CD"
+status: paused
+stopped_at: Completed 07-02-PLAN.md — CI workflow created and pushed
+last_updated: "2026-04-28T22:07:15.732Z"
+last_activity: 2026-04-29 — Plan 07-01 tasks 1-3 complete; paused for human verification
 progress:
-  total_phases: 5
-  completed_phases: 0
-  total_plans: 3
-  completed_plans: 0
-  percent: 0
+  total_phases: 7
+  completed_phases: 2
+  total_plans: 13
+  completed_plans: 12
+  percent: 92
 ---
 
 # Project State
@@ -29,7 +29,7 @@ Plan: 07-01 (Wave 1 — Release & GitHub publication) — CHECKPOINT PENDING
 Status: Paused at checkpoint:human-verify — 3/4 tasks complete
 Last activity: 2026-04-29 — Plan 07-01 tasks 1-3 complete; paused for human verification
 
-Progress: [__________] 0% (M002 — 0/5 phases complete)
+Progress: [█████████░] 92%
 
 ## Accumulated Context
 
@@ -51,6 +51,9 @@ Migrated from GSD-2. Review PROJECT.md for key decisions.
 - 05-04: LineIndex uses Vec<u64> byte offsets, forward scan only, seek for random access (D-09)
 - 05-04: Stdin buffered to NamedTempFile for seekability in less (matches GNU less behavior)
 - 05-04: tempfile added to [dependencies] (not just dev-deps) for runtime stdin buffering
+- 07-02: branches: ["**"] on push EXCLUDES tag pushes — prevents duplicate CI runs when v* tags are pushed
+- 07-02: dtolnay/rust-toolchain@stable used (not deprecated actions-rs/toolchain)
+- 07-02: Swatinem/rust-cache@v2 key x86_64-pc-windows-msvc differentiates from release workflow cache keys
 
 ### Known Issues (from code review 05-REVIEW.md)
 
@@ -79,11 +82,12 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-29
-Stopped at: Plan 07-01 checkpoint:human-verify — GitHub Release v0.1.0 created, awaiting user confirmation
-Resume file: .planning/phases/07-release-and-ci/07-01-SUMMARY.md
+Last session: 2026-04-28T22:07:15.727Z
+Stopped at: Completed 07-02-PLAN.md — CI workflow created and pushed
+Resume file: None
 
 **Next Phase:** 07 (release-and-ci) — publish v0.1.0 GitHub Release + CI/CD automation
+
   - REL-01: git tag v0.1.0 + GitHub Release with x64/x86 MSI assets
   - REL-02: ARM64 build docs in README/CONTRIBUTING.md
   - REL-03: exclude gow-probe.exe from installer
