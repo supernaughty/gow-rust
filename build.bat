@@ -123,16 +123,15 @@ if errorlevel 1 ( echo [FAILED] cargo build & exit /b 1 )
 
 set _STAGE=target\wix-stage\%_ARCH%
 echo [2/4] Staging .exe files to %_STAGE%
-if exist %_STAGE% rmdir /s /q %_STAGE%
-mkdir %_STAGE%
-for %%F in (target\%_RT%\release\*.exe) do copy /Y "%%F" "%_STAGE%\" >nul
+powershell -NoProfile -Command "Remove-Item -Path '%_STAGE%' -Recurse -Force -ErrorAction SilentlyContinue; $null=New-Item '%_STAGE%' -ItemType Directory -Force; Get-ChildItem 'target\%_RT%\release\*.exe' | Copy-Item -Destination '%_STAGE%'"
+echo   Staged:
 dir /b %_STAGE%\*.exe 2>nul
 
 echo [3/4] Harvesting with heat.exe...
-if not exist wix mkdir wix
 heat.exe dir %_STAGE% -cg BinComponents -dr APPLICATIONFOLDER -scom -sreg -sfrag -srd -var var.SourceDir -out wix\BinHarvest-%_ARCH%.wxs
 if errorlevel 1 ( echo [FAILED] heat.exe - is WiX v3 installed? Run setup.bat first. & exit /b 1 )
-powershell -NoProfile -Command "(gc 'wix\BinHarvest-%_ARCH%.wxs') -replace 'PUT-GUID-HERE','*' | sc 'wix\BinHarvest-%_ARCH%.wxs'"
+powershell -NoProfile -File wix\fix-guids.ps1 -WxsFile wix\BinHarvest-%_ARCH%.wxs
+if errorlevel 1 ( echo [FAILED] fix-guids.ps1 & exit /b 1 )
 
 echo [4/4] Compiling and linking MSI...
 candle.exe wix\main.wxs wix\BinHarvest-%_ARCH%.wxs -arch %_WA% -dSourceDir=%_STAGE% -dVersion=!VERSION! -dPlatform=%_WA%

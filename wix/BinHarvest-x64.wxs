@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="APPLICATIONFOLDER">
+            <Component Id="cmp9F5B09C07B82E08EC825CC37D43D367A" Guid="*">
+                <File Id="fil5C92084303641C3B5675BB42A29FC981" KeyPath="yes" Source="$(var.SourceDir)\.rustdoc_fingerprint.json" />
+            </Component>
+            <Component Id="cmp1F18E0B630265FBC7693368288A7A0B1" Guid="*">
+                <File Id="fil0EE3D9C5E812EE051583D23DEB6C5844" KeyPath="yes" Source="$(var.SourceDir)\CACHEDIR.TAG" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="BinComponents">
+            <ComponentRef Id="cmp9F5B09C07B82E08EC825CC37D43D367A" />
+            <ComponentRef Id="cmp1F18E0B630265FBC7693368288A7A0B1" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
