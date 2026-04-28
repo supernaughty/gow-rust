@@ -61,6 +61,14 @@ if "!PKG!"=="" (
 goto end
 
 :installer
+:: Read version from workspace Cargo.toml
+for /f "tokens=3 delims= " %%V in ('findstr /r "^version = " Cargo.toml') do (
+    set VERSION=%%V
+    goto :version_done
+)
+:version_done
+set VERSION=!VERSION:"=!
+
 set INS_ARCH=%1
 if "%INS_ARCH%"=="" set INS_ARCH=x64
 shift
@@ -72,6 +80,13 @@ if /i "%INS_ARCH%"=="all" (
     if errorlevel 1 exit /b 1
     call :build_msi arm64
     if errorlevel 1 exit /b 1
+    echo.
+    echo ===================================================
+    echo  All installers built:
+    echo    %CD%\target\gow-rust-v!VERSION!-installer-x64.msi
+    echo    %CD%\target\gow-rust-v!VERSION!-installer-x86.msi
+    echo    %CD%\target\gow-rust-v!VERSION!-installer-arm64.msi
+    echo ===================================================
     goto end
 )
 
@@ -92,9 +107,12 @@ if "%_RT%"=="" (
     exit /b 2
 )
 
+set _OUT=target\gow-rust-v!VERSION!-installer-%_ARCH%.msi
+
 echo.
 echo ===================================================
-echo  Building MSI for %_ARCH% ^(target: %_RT%^)
+echo  Building installer: gow-rust-v!VERSION!-installer-%_ARCH%.msi
+echo  Target: %_RT%
 echo ===================================================
 
 echo [1/4] cargo build --release --target %_RT% %PKG%
@@ -113,18 +131,23 @@ heat.exe dir %_STAGE% -cg BinComponents -dr APPLICATIONFOLDER -scom -sreg -sfrag
 if errorlevel 1 ( echo [FAILED] heat.exe - is WiX v3 installed? Run setup.bat first. & exit /b 1 )
 
 echo [4/4] Compiling and linking MSI...
-candle.exe wix\main.wxs wix\BinHarvest-%_ARCH%.wxs -arch %_WA% -dSourceDir=%_STAGE% -dVersion=0.1.0 -dPlatform=%_WA%
+candle.exe wix\main.wxs wix\BinHarvest-%_ARCH%.wxs -arch %_WA% -dSourceDir=%_STAGE% -dVersion=!VERSION! -dPlatform=%_WA%
 if errorlevel 1 ( echo [FAILED] candle.exe & exit /b 1 )
 
-light.exe -b %_STAGE% main.wixobj BinHarvest-%_ARCH%.wixobj -o target\gow-rust-%_ARCH%.msi -ext WixUIExtension
+light.exe -b %_STAGE% main.wixobj BinHarvest-%_ARCH%.wixobj -o !_OUT! -ext WixUIExtension
 if errorlevel 1 ( echo [FAILED] light.exe & exit /b 1 )
 
 echo.
-echo [OK] MSI ready: target\gow-rust-%_ARCH%.msi
+echo ===================================================
+echo  Installer ready:
+echo    %CD%\!_OUT!
+echo ===================================================
+
 set _RT=
 set _WA=
 set _ARCH=
 set _STAGE=
+set _OUT=
 goto :eof
 
 :test
@@ -143,9 +166,9 @@ echo.
 echo  Build:
 echo    build.bat                          debug, all crates
 echo    build.bat release                  release, all crates
-echo    build.bat -p gow-curl              debug, curl only
 echo    build.bat release --arch x86       release x86
 echo    build.bat --arch arm64             debug ARM64
+echo    build.bat -p gow-curl              debug, curl only
 echo.
 echo  Installer  ^(run setup.bat first^):
 echo    build.bat installer                x64 MSI
@@ -154,12 +177,11 @@ echo    build.bat installer x86            x86 MSI
 echo    build.bat installer arm64          ARM64 MSI
 echo    build.bat installer all            all 3 MSIs
 echo.
+echo  Output: target\gow-rust-v^<version^>-installer-^<arch^>.msi
+echo.
 echo  Other:
 echo    build.bat test                     run all tests
 echo    build.bat clean                    cargo clean
-echo    build.bat help                     this help
-echo.
-echo  Arch map: x64=x86_64-pc-windows-msvc  x86=i686-pc-windows-msvc  arm64=aarch64-pc-windows-msvc
 goto end
 
 :end
