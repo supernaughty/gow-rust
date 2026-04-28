@@ -22,16 +22,16 @@
   - [x] 04-09-PLAN.md — Gap closure: sed d command and address ranges (R012)
   - [x] 04-10-PLAN.md — Gap closure: tr POSIX character classes [:alpha:] [:digit:] etc. (R010)
 
-- [ ] **Phase 05: search-and-navigation** — Search and Navigation
+- [x] **Phase 05: search-and-navigation** — Search and Navigation *(Complete: 2026-04-28)*
   - **Goal:** Implement three GNU navigation utilities — find (file search with predicates and -exec), xargs (stdin-to-command-line builder), and less (interactive terminal pager) — each as an independent binary with high GNU compatibility and Windows-native UTF-8 support.
   - **Requirements:** R015, R016, R017
   - **Plans:** 4 plans
 
   Plans:
-  - [ ] 05-01-PLAN.md — Scaffold gow-find/gow-xargs/gow-less crates and add crossterm + globset workspace deps (R015, R016, R017)
-  - [ ] 05-02-PLAN.md — Implement gow-find with -name/-iname/-type/-size/-mtime/-exec/-print0 (R015)
-  - [ ] 05-03-PLAN.md — Implement gow-xargs with -0/-I/-n/-L plus find-print0 pipeline test (R016)
-  - [ ] 05-04-PLAN.md — Implement gow-less with crossterm raw mode, LineIndex, ANSI passthrough, non-TTY fallback (R017)
+  - [x] 05-01-PLAN.md — Scaffold gow-find/gow-xargs/gow-less crates and add crossterm + globset workspace deps (R015, R016, R017)
+  - [x] 05-02-PLAN.md — Implement gow-find with -name/-iname/-type/-size/-mtime/-exec/-print0 (R015)
+  - [x] 05-03-PLAN.md — Implement gow-xargs with -0/-I/-n/-L plus find-print0 pipeline test (R016)
+  - [x] 05-04-PLAN.md — Implement gow-less with crossterm raw mode, LineIndex, ANSI passthrough, non-TTY fallback (R017)
 
 - [ ] **Phase 06: archive-compression-and-network** — Archive, Compression, and Network
   - **Goal:** Implement archive and compression utilities (tar, gzip, bzip2, xz, gunzip, zcat) and a curl replacement with HTTPS, proxy, and Windows SChannel TLS — each as independent binaries.

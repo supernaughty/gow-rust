@@ -83,35 +83,35 @@ This file is the explicit capability and coverage contract for the project.
 
 ### R015 — 파일 검색 (-name, -type, -size, -mtime 등), -exec 지원, 공백 처리
 - Class: core-capability
-- Status: active
+- Status: validated
 - Description: 파일 검색 (-name, -type, -size, -mtime 등), -exec 지원, 공백 처리
 - Why it matters: 파일 탐색 핵심 도구
 - Source: user
 - Primary owning slice: M001/S05
 - Supporting slices: none
-- Validation: mapped
+- Validation: validated in M001/S05 (Plan 05-02) with 15 unit + 13 integration tests covering -name/-iname/-type/-size/-mtime/-maxdepth/-exec (incl. paths with spaces, GOW #209)/-print0. Cross-binary find -print0 | xargs -0 pipeline verified.
 - Notes: FIND-01, FIND-02, FIND-03
 
 ### R016 — 표준 입력에서 명령줄 구성 (-0 null 구분, -I 치환)
 - Class: core-capability
-- Status: active
+- Status: validated
 - Description: 표준 입력에서 명령줄 구성 (-0 null 구분, -I 치환)
 - Why it matters: 파이프라인 연동 핵심 도구
 - Source: user
 - Primary owning slice: M001/S05
 - Supporting slices: none
-- Validation: mapped
+- Validation: validated in M001/S05 (Plan 05-03) with 11 unit + 8 integration tests covering -0/-I {}/-n/-L, GNU-compatible exit codes (0/123/124/125), and cross-binary find -print0 | xargs -0 pipeline on Windows.
 - Notes: XARGS-01
 
 ### R017 — 파일 페이저 (스크롤, 검색, 큰 파일 지원)
 - Class: core-capability
-- Status: active
+- Status: validated
 - Description: 파일 페이저 (스크롤, 검색, 큰 파일 지원)
 - Why it matters: 터미널 텍스트 가독성 도구
 - Source: user
 - Primary owning slice: M001/S05
 - Supporting slices: none
-- Validation: mapped
+- Validation: validated in M001/S05 (Plan 05-04) with 7 unit + 7 integration tests covering non-TTY passthrough, ANSI byte-exact passthrough (D-08), large-file no-OOM (D-09, 1 MiB), Unicode content, and missing-file error. Interactive TTY behavior (scroll, search, g/G, clean exit) verified by human UAT 2026-04-28.
 - Notes: LESS-01
 
 ### R018 — 아카이브 생성/추출 (-c 생성, -x 추출, -t 목록, -z gzip, -j bzip2)
@@ -376,9 +376,9 @@ This file is the explicit capability and coverage contract for the project.
 | R012 | core-capability | active | M001/S04 | none | mapped |
 | R013 | core-capability | active | M001/S04 | none | mapped |
 | R014 | core-capability | validated | M001/S04 | none | validated in M001/S04 (Plan 04-06) with 11 integration tests |
-| R015 | core-capability | active | M001/S05 | none | mapped |
-| R016 | core-capability | active | M001/S05 | none | mapped |
-| R017 | core-capability | active | M001/S05 | none | mapped |
+| R015 | core-capability | validated | M001/S05 | none | validated in M001/S05 (Plan 05-02) with 28 tests — find predicates, -exec, -print0, GOW #209 regression |
+| R016 | core-capability | validated | M001/S05 | none | validated in M001/S05 (Plan 05-03) with 19 tests — xargs -0/-I/-n/-L, exit codes, cross-binary pipeline |
+| R017 | core-capability | validated | M001/S05 | none | validated in M001/S05 (Plan 05-04) with 14 tests + human UAT 2026-04-28 — less pager, ANSI, large-file |
 | R018 | core-capability | active | M001/S06 | none | mapped |
 | R019 | core-capability | active | M001/S06 | none | mapped |
 | R020 | core-capability | active | M001/S06 | none | mapped |
@@ -397,7 +397,7 @@ This file is the explicit capability and coverage contract for the project.
 
 ## Coverage Summary
 
-- Active requirements: 13
-- Mapped to slices: 13
-- Validated: 19 (R001, R002, R003, R004, R005, R006, R007, R100, R101, R102, R103, R104, R105, R106, R107, R108, R109, R110, R111)
+- Active requirements: 10
+- Mapped to slices: 10
+- Validated: 22 (R001, R002, R003, R004, R005, R006, R007, R015, R016, R017, R100, R101, R102, R103, R104, R105, R106, R107, R108, R109, R110, R111)
 - Unmapped active requirements: 0
