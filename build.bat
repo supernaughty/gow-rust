@@ -61,13 +61,9 @@ if "!PKG!"=="" (
 goto end
 
 :installer
-:: Read version from workspace Cargo.toml
-for /f "tokens=3 delims= " %%V in ('findstr /r "^version = " Cargo.toml') do (
-    set VERSION=%%V
-    goto :version_done
-)
-:version_done
-set VERSION=!VERSION:"=!
+for /f "usebackq delims=" %%V in (`powershell -NoProfile -Command "(Select-String -Path 'Cargo.toml' -Pattern '^version = ').Line.Split('\"')[1]"`) do set VERSION=%%V
+if "!VERSION!"=="" ( echo [ERROR] Could not read version from Cargo.toml & exit /b 1 )
+echo [version] !VERSION!
 
 set INS_ARCH=%1
 if "%INS_ARCH%"=="" set INS_ARCH=x64
@@ -111,7 +107,7 @@ set _OUT=target\gow-rust-v!VERSION!-installer-%_ARCH%.msi
 
 echo.
 echo ===================================================
-echo  Building installer: gow-rust-v!VERSION!-installer-%_ARCH%.msi
+echo  Building: gow-rust-v!VERSION!-installer-%_ARCH%.msi
 echo  Target: %_RT%
 echo ===================================================
 
@@ -127,7 +123,7 @@ dir /b %_STAGE%\*.exe 2>nul
 
 echo [3/4] Harvesting with heat.exe...
 if not exist wix mkdir wix
-heat.exe dir %_STAGE% -cg BinComponents -dr APPLICATIONFOLDER -scom -sreg -sfrag -srd -var var.SourceDir -out wix\BinHarvest-%_ARCH%.wxs
+heat.exe dir %_STAGE% -cg BinComponents -dr APPLICATIONFOLDER -scom -sreg -sfrag -srd -ag -var var.SourceDir -out wix\BinHarvest-%_ARCH%.wxs
 if errorlevel 1 ( echo [FAILED] heat.exe - is WiX v3 installed? Run setup.bat first. & exit /b 1 )
 
 echo [4/4] Compiling and linking MSI...
