@@ -1,0 +1,31 @@
+[package]
+name = "gow-bzip2"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "GNU bzip2/bunzip2 — Windows port."
+
+[[bin]]
+name = "bzip2"
+path = "src/main.rs"
+
+[lib]
+name = "uu_bzip2"
+path = "src/lib.rs"
+
+[dependencies]
+gow-core = { path = "../gow-core" }
+clap = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+bzip2 = { workspace = true }
+
+[build-dependencies]
+embed-manifest = "1.5"
+
+[dev-dependencies]
+assert_cmd = { workspace = true }
+predicates = { workspace = true }
+tempfile = { workspace = true }
