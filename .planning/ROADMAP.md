@@ -56,6 +56,13 @@
   - [x] 07-02-PLAN.md — CI workflow: cargo test --workspace on push/PR (CI-01)
   - [x] 07-03-PLAN.md — Release workflow: tag-triggered x64+x86 MSI build + upload (CI-02, CI-03)
 - [ ] **Phase 08: code-review-fixes** — Code Review Fixes & Installer Polish
+  **Plans:** 4 plans
+
+  Plans:
+  - [ ] 08-01-PLAN.md — gow-tar fixes: MultiBzDecoder (WR-01), graceful CLI error (WR-02), had_error propagation (WR-03) (FIX-01, FIX-02, FIX-03)
+  - [ ] 08-02-PLAN.md — gow-xz fix: XzDecoder::new_multi_decoder for concatenated .xz streams (FIX-04)
+  - [ ] 08-03-PLAN.md — gow-gzip fixes: reject no-.gz suffix (WR-05), stdin dead code simplification (IN-01) (FIX-05)
+  - [ ] 08-04-PLAN.md — gow-curl fixes: suppress headers in silent mode (WR-06), remove partial file on error (WR-07) (FIX-06, FIX-07)
 - [ ] **Phase 09: external-bundling** — External Binary Bundling
 - [ ] **Phase 10: new-utilities-wave1** — New Rust Utilities Wave 1
 - [ ] **Phase 11: new-utilities-wave2** — New Rust Utilities Wave 2
@@ -114,7 +121,13 @@ Plans:
   5. `gzip -d file` (where file lacks .gz suffix) prints a GNU-compatible error and exits non-zero instead of producing a .out file
   6. `curl -I -s` suppresses header output; `curl -s` produces no progress or diagnostic output
   7. `curl -o out_file` removes the partial file when an I/O error occurs mid-download
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — gow-tar fixes: MultiBzDecoder, graceful CLI error, had_error propagation (FIX-01, FIX-02, FIX-03)
+- [ ] 08-02-PLAN.md — gow-xz fix: new_multi_decoder for concatenated xz streams (FIX-04)
+- [ ] 08-03-PLAN.md — gow-gzip fixes: reject no-.gz suffix, stdin dead code simplification (FIX-05)
+- [ ] 08-04-PLAN.md — gow-curl fixes: suppress headers in silent mode, remove partial file on error (FIX-06, FIX-07)
 
 ### Phase 09: external-bundling
 **Goal**: Users who install gow-rust get vim, wget, and nano available on their PATH alongside the Rust binaries, and legacy GOW command names continue to work via batch file shims.
