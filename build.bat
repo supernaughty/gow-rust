@@ -60,8 +60,14 @@ if "!PKG!"=="" (
 )
 goto end
 
+:read_version
+powershell -NoProfile -Command "(Select-String -Path 'Cargo.toml' -Pattern '^version = ').Line.Split([char]34)[1]" > "%TEMP%\gow_ver.tmp" 2>nul
+set /p VERSION= < "%TEMP%\gow_ver.tmp"
+del "%TEMP%\gow_ver.tmp" 2>nul
+goto :eof
+
 :installer
-for /f "usebackq delims=" %%V in (`powershell -NoProfile -Command "(Select-String -Path 'Cargo.toml' -Pattern '^version = ').Line.Split('\"')[1]"`) do set VERSION=%%V
+call :read_version
 if "!VERSION!"=="" ( echo [ERROR] Could not read version from Cargo.toml & exit /b 1 )
 echo [version] !VERSION!
 
