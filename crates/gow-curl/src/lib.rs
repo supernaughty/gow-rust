@@ -7,7 +7,7 @@
 //!        -L (follow redirects, default), -f (fail on HTTP 4xx/5xx).
 
 use std::ffi::OsString;
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::{self, Write};
 
 use anyhow::Result;
@@ -89,12 +89,12 @@ fn run(cli: Cli) -> Result<i32> {
     if cli.head {
         let response = client.head(&cli.url).send()?;
         let status = response.status();
-        // Print status line in HTTP/1.1 format.
+        // Print status line and headers only when not in silent mode (WR-06).
         if !cli.silent {
             println!("HTTP/1.1 {}", status);
-        }
-        for (name, value) in response.headers() {
-            println!("{}: {}", name, value.to_str().unwrap_or("<binary>"));
+            for (name, value) in response.headers() {
+                println!("{}: {}", name, value.to_str().unwrap_or("<binary>"));
+            }
         }
         return Ok(0);
     }
@@ -104,9 +104,12 @@ fn run(cli: Cli) -> Result<i32> {
     let status = response.status();
 
     if let Some(ref output_path) = cli.output {
-        // Write response body to file.
+        // Write response body to file; remove partial file on I/O failure (WR-07).
         let mut file = File::create(output_path)?;
-        io::copy(&mut response, &mut file)?;
+        if let Err(e) = io::copy(&mut response, &mut file) {
+            let _ = fs::remove_file(output_path);
+            return Err(e.into());
+        }
     } else {
         // Write response body bytes directly to stdout.
         // Use bytes() to get the full body then write all at once to preserve binary safety.
