@@ -21,10 +21,10 @@ if /i "%1"=="help"      ( goto help )
 shift & goto parse
 
 :resolve_arch
-if /i "!ARCH!"=="x64"   ( set RUST_TARGET=x86_64-pc-windows-msvc  & set WIX_ARCH=x64   & goto :eof )
-if /i "!ARCH!"=="x86"   ( set RUST_TARGET=i686-pc-windows-msvc    & set WIX_ARCH=x86   & goto :eof )
-if /i "!ARCH!"=="arm64" ( set RUST_TARGET=aarch64-pc-windows-msvc & set WIX_ARCH=arm64 & goto :eof )
-if "!ARCH!"==""         ( set RUST_TARGET= & set WIX_ARCH= & goto :eof )
+if /i "!ARCH!"=="x64"   ( set "RUST_TARGET=x86_64-pc-windows-msvc" & set "WIX_ARCH=x64"   & goto :eof )
+if /i "!ARCH!"=="x86"   ( set "RUST_TARGET=i686-pc-windows-msvc"   & set "WIX_ARCH=x86"   & goto :eof )
+if /i "!ARCH!"=="arm64" ( set "RUST_TARGET=aarch64-pc-windows-msvc"& set "WIX_ARCH=arm64" & goto :eof )
+if "!ARCH!"==""         ( set "RUST_TARGET=" & set "WIX_ARCH=" & goto :eof )
 echo [ERROR] Unknown --arch value: !ARCH!  Valid: x64  x86  arm64
 exit /b 2
 
@@ -100,9 +100,9 @@ set _ARCH=%1
 set _RT=
 set _WA=
 
-if /i "%_ARCH%"=="x64"   ( set _RT=x86_64-pc-windows-msvc  & set _WA=x64   )
-if /i "%_ARCH%"=="x86"   ( set _RT=i686-pc-windows-msvc    & set _WA=x86   )
-if /i "%_ARCH%"=="arm64" ( set _RT=aarch64-pc-windows-msvc & set _WA=arm64 )
+if /i "%_ARCH%"=="x64"   ( set "_RT=x86_64-pc-windows-msvc"  & set "_WA=x64"   )
+if /i "%_ARCH%"=="x86"   ( set "_RT=i686-pc-windows-msvc"    & set "_WA=x86"   )
+if /i "%_ARCH%"=="arm64" ( set "_RT=aarch64-pc-windows-msvc" & set "_WA=arm64" )
 
 if "%_RT%"=="" (
     echo [ERROR] Unknown arch: %_ARCH%  Valid: x64  x86  arm64
