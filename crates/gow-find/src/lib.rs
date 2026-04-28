@@ -124,7 +124,7 @@ pub fn uumain<I: IntoIterator<Item = OsString>>(args: I) -> i32 {
     };
 
     match run(cli) {
-        Ok(()) => 0,
+        Ok(code) => code,
         Err(e) => {
             eprintln!("find: {}", e);
             2
@@ -132,7 +132,7 @@ pub fn uumain<I: IntoIterator<Item = OsString>>(args: I) -> i32 {
     }
 }
 
-fn run(mut cli: Cli) -> Result<()> {
+fn run(mut cli: Cli) -> Result<i32> {
     // Default search path to "." if none provided
     if cli.paths.is_empty() {
         cli.paths.push(PathBuf::from("."));
@@ -173,6 +173,8 @@ fn run(mut cli: Cli) -> Result<()> {
 
     let min_depth = cli.mindepth.unwrap_or(0);
     let max_depth = cli.maxdepth.unwrap_or(usize::MAX);
+
+    let mut any_exec_failed = false;
 
     for root in &cli.paths {
         // Verify path exists
@@ -216,10 +218,12 @@ fn run(mut cli: Cli) -> Result<()> {
                 match exec_for_entry(cmd_parts, path) {
                     Ok(code) if code != 0 => {
                         eprintln!("find: -exec failed (exit {})", code);
+                        any_exec_failed = true;
                     }
                     Ok(_) => {}
                     Err(e) => {
                         eprintln!("find: {}", e);
+                        any_exec_failed = true;
                     }
                 }
             } else if cli.print0 {
@@ -235,7 +239,7 @@ fn run(mut cli: Cli) -> Result<()> {
         }
     }
 
-    Ok(())
+    Ok(if any_exec_failed { 1 } else { 0 })
 }
 
 /// Evaluate all active predicates against a directory entry.
