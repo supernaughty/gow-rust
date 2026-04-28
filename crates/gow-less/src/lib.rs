@@ -167,6 +167,9 @@ struct PagerState {
     search_pattern: Option<Regex>,
     match_lines: Vec<usize>,
     current_match_idx: Option<usize>,
+    /// True when find_all_matches hit the 100 000-line safety cap so the user
+    /// knows search results may be incomplete (WR-04).
+    search_truncated: bool,
 }
 
 impl PagerState {
@@ -183,6 +186,7 @@ impl PagerState {
             search_pattern: None,
             match_lines: Vec::new(),
             current_match_idx: None,
+            search_truncated: false,
         })
     }
 
@@ -214,7 +218,14 @@ impl PagerState {
         // Status line at the bottom.
         out.execute(MoveTo(0, self.viewport_h.saturating_sub(1)))?;
         let prompt = match &self.search_pattern {
-            Some(p) => format!(":/{}/ (n=next, N=prev, q=quit) ", p.as_str()),
+            Some(p) => {
+                let truncation = if self.search_truncated {
+                    " [search truncated at 100k lines]"
+                } else {
+                    ""
+                };
+                format!(":/{}/ (n=next, N=prev, q=quit){} ", p.as_str(), truncation)
+            }
             None => ":".to_string(),
         };
         out.write_all(prompt.as_bytes())?;
@@ -275,6 +286,7 @@ impl PagerState {
         self.search_pattern = Some(re);
         self.match_lines.clear();
         self.current_match_idx = None;
+        self.search_truncated = false;
         // Scan all indexed lines (and extend forward) to find matches.
         self.find_all_matches()?;
         if let Some(&first) = self.match_lines.first() {
@@ -308,6 +320,8 @@ impl PagerState {
             line += 1;
             if line > 100_000 {
                 // Safety cap — gap-closure plan can remove this limit.
+                // Notify the user via the status line that results are partial (WR-04).
+                self.search_truncated = true;
                 break;
             }
         }
