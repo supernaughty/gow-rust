@@ -2,10 +2,12 @@ param([string]$WxsFile)
 $md5     = [System.Security.Cryptography.MD5]::Create()
 $content = Get-Content $WxsFile -Raw
 
-# Match: <Component Id="XXXX" Guid="*">  and replace Guid with MD5-based stable GUID
+# heat.exe without -ag produces Guid="PUT-GUID-HERE"
+# Replace each one with a stable GUID derived from the Component Id
+$pattern = '(<Component\s+Id=")([^"]+)("\s+Guid=")PUT-GUID-HERE(")'
 $content = [regex]::Replace(
     $content,
-    '(<Component\s+Id=")([^"]+)("\s+Guid=")\*(")',
+    $pattern,
     {
         param($m)
         $id    = $m.Groups[2].Value
@@ -16,10 +18,11 @@ $content = [regex]::Replace(
         "$($m.Groups[1].Value)$id$($m.Groups[3].Value){$($guid.ToUpper())}$($m.Groups[4].Value)"
     }
 )
+
+$count = ([regex]::Matches($content, 'Guid="\{[0-9A-F-]+\}"')).Count
 [System.IO.File]::WriteAllText(
     (Resolve-Path $WxsFile).Path,
     $content,
     [System.Text.Encoding]::UTF8
 )
-$count = ([regex]::Matches($content, '<Component ')).Count
-Write-Host "  Stable GUIDs written for $count components in $WxsFile"
+Write-Host "  Stable GUIDs written: $count components in $WxsFile"
