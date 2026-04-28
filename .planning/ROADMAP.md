@@ -33,18 +33,18 @@
   - [x] 05-03-PLAN.md — Implement gow-xargs with -0/-I/-n/-L plus find-print0 pipeline test (R016)
   - [x] 05-04-PLAN.md — Implement gow-less with crossterm raw mode, LineIndex, ANSI passthrough, non-TTY fallback (R017)
 
-- [ ] **Phase 06: archive-compression-and-network** — Archive, Compression, and Network
+- [x] **Phase 06: archive-compression-and-network** — Archive, Compression, and Network *(Complete: 2026-04-28)*
   - **Goal:** Implement archive and compression utilities (tar, gzip, bzip2, xz, gunzip, zcat) and a curl replacement with HTTPS, proxy, and Windows SChannel TLS — each as independent binaries.
   - **Requirements:** R018, R019, R020
   - **Plans:** 6 plans
 
   Plans:
-  - [ ] 06-01-PLAN.md — Scaffold gow-gzip/gow-bzip2/gow-xz/gow-tar/gow-curl crates; add workspace deps; liblzma MSVC compile canary (R018, R019, R020)
-  - [ ] 06-02-PLAN.md — Implement gow-gzip: gzip/gunzip/zcat with argv[0] dispatch and flate2 streaming (R019)
-  - [ ] 06-03-PLAN.md — Implement gow-bzip2: bzip2/bunzip2 with MultiBzDecoder and pure-Rust backend (R019)
-  - [ ] 06-04-PLAN.md — Implement gow-xz: xz/unxz with liblzma XzEncoder/XzDecoder (R019)
-  - [ ] 06-05-PLAN.md — Implement gow-tar: -c/-x/-t with -z/-j codec dispatch; follow_symlinks(false) (R018)
-  - [ ] 06-06-PLAN.md — Implement gow-curl: reqwest blocking + native-tls SChannel; -o/-x/-I/-k/-f flags (R020)
+  - [x] 06-01-PLAN.md — Scaffold gow-gzip/gow-bzip2/gow-xz/gow-tar/gow-curl crates; add workspace deps; liblzma MSVC compile canary (R018, R019, R020)
+  - [x] 06-02-PLAN.md — Implement gow-gzip: gzip/gunzip/zcat with argv[0] dispatch and flate2 streaming (R019)
+  - [x] 06-03-PLAN.md — Implement gow-bzip2: bzip2/bunzip2 with MultiBzDecoder and pure-Rust backend (R019)
+  - [x] 06-04-PLAN.md — Implement gow-xz: xz/unxz with liblzma XzEncoder/XzDecoder (R019)
+  - [x] 06-05-PLAN.md — Implement gow-tar: -c/-x/-t with -z/-j codec dispatch; follow_symlinks(false) (R018)
+  - [x] 06-06-PLAN.md — Implement gow-curl: reqwest blocking + native-tls SChannel; -o/-x/-I/-k/-f flags (R020)
 
 ## Phase Details
 
