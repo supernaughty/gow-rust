@@ -1,0 +1,96 @@
+name: Release
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-x64:
+    name: Build x64 MSI
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add WiX Toolset to PATH
+        shell: bash
+        run: echo "${WIX}bin" >> $GITHUB_PATH
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: x64-release
+
+      - name: Download extras (vim, wget, nano, rg)
+        shell: pwsh
+        run: .\download-extras.ps1
+
+      - name: Build x64 MSI
+        shell: cmd
+        run: build.bat installer x64
+
+      - name: Upload x64 MSI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: msi-x64
+          path: target/gow-rust-*-installer-x64.msi
+          if-no-files-found: error
+
+  build-x86:
+    name: Build x86 MSI
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add WiX Toolset to PATH
+        shell: bash
+        run: echo "${WIX}bin" >> $GITHUB_PATH
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: i686-pc-windows-msvc
+
+      - name: Set up MSVC 32-bit environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64_x86
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: x86-release
+
+      - name: Download extras (vim, wget, nano, rg)
+        shell: pwsh
+        run: .\download-extras.ps1
+
+      - name: Build x86 MSI
+        shell: cmd
+        run: build.bat installer x86
+
+      - name: Upload x86 MSI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: msi-x86
+          path: target/gow-rust-*-installer-x86.msi
+          if-no-files-found: error
+
+  publish:
+    name: Create GitHub Release
+    needs: [build-x64, build-x86]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all MSI artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: msi-*
+          merge-multiple: true
+          path: dist/
+
+      - name: Create GitHub Release and upload MSIs
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.msi
+          fail_on_unmatched_files: true
