@@ -151,9 +151,50 @@ jobs:
           path: target/gow-rust-*-installer-x86.msi
           if-no-files-found: error
 
+  build-arm64:
+    name: Build ARM64 MSI
+    needs: bump-and-tag
+    if: ${{ needs.bump-and-tag.outputs.skip != 'true' }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.bump-and-tag.outputs.tag }}
+
+      - name: Add WiX Toolset to PATH
+        shell: bash
+        run: echo "${WIX}bin" >> $GITHUB_PATH
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-pc-windows-msvc
+
+      - name: Set up MSVC ARM64 environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64_arm64
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: arm64-auto-release
+
+      - name: Download extras (vim, wget, nano, rg)
+        shell: pwsh
+        run: .\download-extras.ps1
+
+      - name: Build ARM64 MSI
+        shell: cmd
+        run: build.bat installer arm64
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: msi-arm64
+          path: target/gow-rust-*-installer-arm64.msi
+          if-no-files-found: error
+
   publish:
     name: Create GitHub Release
-    needs: [bump-and-tag, build-x64, build-x86]
+    needs: [bump-and-tag, build-x64, build-x86, build-arm64]
     if: ${{ needs.bump-and-tag.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
     steps:
