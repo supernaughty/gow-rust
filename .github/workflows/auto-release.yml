@@ -1,0 +1,171 @@
+name: Auto Release
+
+# Triggered when CI passes on master — bumps patch version, builds MSIs, publishes release.
+# Uses [skip ci] in the version-bump commit to prevent re-triggering CI (and this workflow).
+# GITHUB_TOKEN tag pushes don't re-trigger release.yml, so build+publish happen here directly.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [master]
+
+permissions:
+  contents: write
+
+jobs:
+  bump-and-tag:
+    name: Bump patch version
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.ver.outputs.tag }}
+      version: ${{ steps.ver.outputs.version }}
+      skip: ${{ steps.ver.outputs.skip }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute next patch version
+        id: ver
+        run: |
+          git fetch --tags
+          LATEST=$(git tag -l "v[0-9]*.[0-9]*.[0-9]*" | sort -V | tail -1)
+          if [ -z "$LATEST" ]; then
+            # No tags yet — increment from Cargo.toml baseline
+            CARGO_VER=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
+            MAJOR=$(echo "$CARGO_VER" | cut -d. -f1)
+            MINOR=$(echo "$CARGO_VER" | cut -d. -f2)
+            PATCH=$(echo "$CARGO_VER" | cut -d. -f3)
+            NEXT="v${MAJOR}.${MINOR}.$((PATCH + 1))"
+          else
+            VERSION="${LATEST#v}"
+            MAJOR=$(echo "$VERSION" | cut -d. -f1)
+            MINOR=$(echo "$VERSION" | cut -d. -f2)
+            PATCH=$(echo "$VERSION" | cut -d. -f3)
+            NEXT="v${MAJOR}.${MINOR}.$((PATCH + 1))"
+          fi
+
+          # Guard against concurrent runs creating the same tag
+          if git rev-parse "$NEXT" >/dev/null 2>&1; then
+            echo "Tag $NEXT already exists — skipping duplicate run"
+            echo "skip=true"  >> $GITHUB_OUTPUT
+            echo "tag=${NEXT}"     >> $GITHUB_OUTPUT
+            echo "version=${NEXT#v}" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "skip=false"        >> $GITHUB_OUTPUT
+          echo "tag=${NEXT}"       >> $GITHUB_OUTPUT
+          echo "version=${NEXT#v}" >> $GITHUB_OUTPUT
+          echo "Next release: ${NEXT}"
+
+      - name: Update Cargo.toml and push tag
+        if: ${{ steps.ver.outputs.skip == 'false' }}
+        run: |
+          sed -i 's/^version = "[0-9]*\.[0-9]*\.[0-9]*"/version = "${{ steps.ver.outputs.version }}"/' Cargo.toml
+          echo "Cargo.toml version updated to ${{ steps.ver.outputs.version }}:"
+          grep '^version = ' Cargo.toml
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Cargo.toml
+          git commit -m "chore: release ${{ steps.ver.outputs.tag }} [skip ci]"
+          git pull --rebase origin master
+          git push origin HEAD:master
+          git tag ${{ steps.ver.outputs.tag }}
+          git push origin ${{ steps.ver.outputs.tag }}
+
+  build-x64:
+    name: Build x64 MSI
+    needs: bump-and-tag
+    if: ${{ needs.bump-and-tag.outputs.skip != 'true' }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.bump-and-tag.outputs.tag }}
+
+      - name: Add WiX Toolset to PATH
+        shell: bash
+        run: echo "${WIX}bin" >> $GITHUB_PATH
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: x64-auto-release
+
+      - name: Download extras (vim, wget, nano, rg)
+        shell: pwsh
+        run: .\download-extras.ps1
+
+      - name: Build x64 MSI
+        shell: cmd
+        run: build.bat installer x64
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: msi-x64
+          path: target/gow-rust-*-installer-x64.msi
+          if-no-files-found: error
+
+  build-x86:
+    name: Build x86 MSI
+    needs: bump-and-tag
+    if: ${{ needs.bump-and-tag.outputs.skip != 'true' }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.bump-and-tag.outputs.tag }}
+
+      - name: Add WiX Toolset to PATH
+        shell: bash
+        run: echo "${WIX}bin" >> $GITHUB_PATH
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: i686-pc-windows-msvc
+
+      - name: Set up MSVC 32-bit environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64_x86
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: x86-auto-release
+
+      - name: Download extras (vim, wget, nano, rg)
+        shell: pwsh
+        run: .\download-extras.ps1
+
+      - name: Build x86 MSI
+        shell: cmd
+        run: build.bat installer x86
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: msi-x86
+          path: target/gow-rust-*-installer-x86.msi
+          if-no-files-found: error
+
+  publish:
+    name: Create GitHub Release
+    needs: [bump-and-tag, build-x64, build-x86]
+    if: ${{ needs.bump-and-tag.outputs.skip != 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: msi-*
+          merge-multiple: true
+          path: dist/
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.bump-and-tag.outputs.tag }}
+          name: Release ${{ needs.bump-and-tag.outputs.tag }}
+          files: dist/*.msi
+          fail_on_unmatched_files: true

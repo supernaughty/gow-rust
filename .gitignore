@@ -47,3 +47,7 @@ BinHarvest-x64.wixobj
 BinHarvest-x86.wixobj
 main.wixobj
 target/wix-stage/
+
+# Downloaded extras (vim, wget, nano, rg — fetched by download-extras.ps1, not committed)
+extras/bin/*.exe
+extras/bin/vim-runtime/

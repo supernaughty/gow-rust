@@ -149,9 +149,6 @@
             <Component Id="cmpEB294F171470CF405DBF27D2DEB20D07" Guid="{4A962081-DD5D-B6B7-C1FB-B66B2B7CA456}">
                 <File Id="fil8291C0DB75D7D5336AF2E0CF9C920DB3" KeyPath="yes" Source="$(var.SourceDir)\vim.bat" />
             </Component>
-            <Component Id="cmp0DAD18D3955C3C11B28C595E92714625" Guid="{951C5A35-524C-BBF2-52C0-0374F36AF1EB}">
-                <File Id="fil5417FA3F78760099746E78AD9907D641" KeyPath="yes" Source="$(var.SourceDir)\vim.exe" />
-            </Component>
             <Component Id="cmp1E309F280CE47C4CB3E64B789E0DCC9E" Guid="{C7433525-E8C2-F142-F172-C94DDA9FB6D9}">
                 <File Id="filA6EF978D88D5C41EBE87185CC0130E51" KeyPath="yes" Source="$(var.SourceDir)\wc.exe" />
             </Component>
@@ -7979,7 +7976,6 @@
             <ComponentRef Id="cmp936C5CEE766FBEDE3AA95779EEF57197" />
             <ComponentRef Id="cmpD7503A87980D6F84163CE7FF03E0EFC6" />
             <ComponentRef Id="cmpEB294F171470CF405DBF27D2DEB20D07" />
-            <ComponentRef Id="cmp0DAD18D3955C3C11B28C595E92714625" />
             <ComponentRef Id="cmp1E309F280CE47C4CB3E64B789E0DCC9E" />
             <ComponentRef Id="cmp30650FE0015E30794A02A568C26B9BEA" />
             <ComponentRef Id="cmp8F394C3963B34A289D32D3DB084F21BC" />

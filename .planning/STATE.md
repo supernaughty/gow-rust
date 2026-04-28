@@ -20,14 +20,14 @@ progress:
 
 See: .planning/PROJECT.md
 
-**Current focus:** Phase 07 — Release & CI/CD (v0.1.0 GitHub Release + automated CI/CD pipeline)
+**Current focus:** Phase 08 — Code Review Fixes & Installer Polish (7 bug fixes across gow-tar, gow-xz, gow-gzip, gow-curl)
 
 ## Current Position
 
-Phase: 07 — COMPLETE
-Plan: All 3 plans complete
-Status: Phase 07 done. Next: Phase 08 (Code Review Fixes & Installer Polish)
-Last activity: 2026-04-29 — Phase 07 complete (v0.1.0 released, CI/CD live)
+Phase: 08 — PLANNED (Ready to execute)
+Plan: 4 plans created, 0/4 complete
+Status: Phase 08 planned. Ready to execute.
+Last activity: 2026-04-29 — Phase 08 planned: 4 plans (08-01 thru 08-04), all Wave 1
 
 Progress: [██________] 20% (M002 — 1/5 phases complete)
 
