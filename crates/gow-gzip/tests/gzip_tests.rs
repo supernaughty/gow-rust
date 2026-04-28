@@ -254,3 +254,63 @@ fn keep_flag_with_multiple_files() {
     assert!(file1.exists(), "a.txt should still exist with -k");
     assert!(file2.exists(), "b.txt should still exist with -k");
 }
+
+// ── WR-05: files without .gz suffix are rejected ──────────────────────────────
+
+/// gzip -d on a file without .gz suffix must print "unknown suffix -- ignored"
+/// and exit 1. No .out file should be created (per GNU gzip behavior).
+#[test]
+fn no_gz_suffix_rejected() {
+    let dir = tempdir().unwrap();
+    let file = dir.path().join("plainfile.txt");
+    fs::write(&file, b"this is not a gzip file").unwrap();
+
+    gzip_cmd()
+        .arg("-d")
+        .arg(file.to_str().unwrap())
+        .assert()
+        .failure()
+        .code(1)
+        .stderr(predicate::str::contains("unknown suffix"));
+}
+
+/// Verifies that no .out file is created when gzip -d rejects a non-.gz file.
+/// (The old behavior would create plainfile.txt.out — this must not happen.)
+#[test]
+fn no_gz_suffix_does_not_create_out_file() {
+    let dir = tempdir().unwrap();
+    let file = dir.path().join("plainfile.txt");
+    fs::write(&file, b"this is not a gzip file").unwrap();
+
+    gzip_cmd()
+        .arg("-d")
+        .arg(file.to_str().unwrap())
+        .assert()
+        .failure();
+
+    // The .out file must NOT exist
+    let out_file = dir.path().join("plainfile.txt.out");
+    assert!(
+        !out_file.exists(),
+        "gzip created a spurious .out file: {out_file:?}"
+    );
+    // The original file must still exist (not consumed)
+    assert!(file.exists(), "original file was removed unexpectedly");
+}
+
+// ── IN-01: stdin decompress dead code simplification ─────────────────────────
+
+/// After IN-01 fix: gzip -d on invalid stdin data exits 1 and prints the actual
+/// decoder error to stderr (not the hard-coded "not in gzip format" message).
+/// The test verifies "stdin" appears in stderr — the exact error text from flate2
+/// is implementation-defined but always references the stream source.
+#[test]
+fn stdin_decompress_invalid_data_exits_1() {
+    gzip_cmd()
+        .arg("-d")
+        .write_stdin(b"this is definitely not gzip data".as_ref())
+        .assert()
+        .failure()
+        .code(1)
+        .stderr(predicate::str::contains("stdin").or(predicate::str::contains("gzip")));
+}
