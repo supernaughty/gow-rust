@@ -36,7 +36,15 @@
 - [ ] **Phase 06: archive-compression-and-network** — Archive, Compression, and Network
   - **Goal:** Implement archive and compression utilities (tar, gzip, bzip2, xz, gunzip, zcat) and a curl replacement with HTTPS, proxy, and Windows SChannel TLS — each as independent binaries.
   - **Requirements:** R018, R019, R020
-  - **Plans:** TBD
+  - **Plans:** 6 plans
+
+  Plans:
+  - [ ] 06-01-PLAN.md — Scaffold gow-gzip/gow-bzip2/gow-xz/gow-tar/gow-curl crates; add workspace deps; liblzma MSVC compile canary (R018, R019, R020)
+  - [ ] 06-02-PLAN.md — Implement gow-gzip: gzip/gunzip/zcat with argv[0] dispatch and flate2 streaming (R019)
+  - [ ] 06-03-PLAN.md — Implement gow-bzip2: bzip2/bunzip2 with MultiBzDecoder and pure-Rust backend (R019)
+  - [ ] 06-04-PLAN.md — Implement gow-xz: xz/unxz with liblzma XzEncoder/XzDecoder (R019)
+  - [ ] 06-05-PLAN.md — Implement gow-tar: -c/-x/-t with -z/-j codec dispatch; follow_symlinks(false) (R018)
+  - [ ] 06-06-PLAN.md — Implement gow-curl: reqwest blocking + native-tls SChannel; -o/-x/-I/-k/-f flags (R020)
 
 ## Phase Details
 
@@ -61,4 +69,4 @@
   2. `gzip`/`gunzip`/`zcat` compress and decompress files
   3. `curl` performs HTTP/HTTPS requests with TLS 1.2/1.3 via Windows SChannel
   4. All binaries compile cleanly as independent crates in the workspace
-**Plans**: TBD
+**Plans**: 6 plans (06-01 scaffold, 06-02 gzip, 06-03 bzip2, 06-04 xz, 06-05 tar, 06-06 curl)
