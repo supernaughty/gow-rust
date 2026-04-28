@@ -43,3 +43,7 @@ vendor/
 coverage/
 .cache/
 tmp/
+BinHarvest-x64.wixobj
+BinHarvest-x86.wixobj
+main.wixobj
+target/wix-stage/

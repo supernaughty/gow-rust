@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="APPLICATIONFOLDER">
+            <Component Id="cmpB18C150D2822F283DC36936035A0256F" Guid="{D3FB56D0-0B56-FE1B-4815-B5E087B97BEF}">
+                <File Id="fil0586BCCD2EBC5DF58435CE00F5FCC64D" KeyPath="yes" Source="$(var.SourceDir)\awk.exe" />
+            </Component>
+            <Component Id="cmp474459515B55E3C87E48B2FB20F318B0" Guid="{C76F721A-2A2A-5261-646A-105E159CEC0E}">
+                <File Id="filD8021ED84E929CE8F0004B80B4729396" KeyPath="yes" Source="$(var.SourceDir)\basename.exe" />
+            </Component>
+            <Component Id="cmpD44C771962893B0C22542D3AD8D76C65" Guid="{E4F650A6-51E1-C7CD-5791-32A19426164B}">
+                <File Id="filA825836A6EF35266A28D8A196E33FBD8" KeyPath="yes" Source="$(var.SourceDir)\bzip2.exe" />
+            </Component>
+            <Component Id="cmpD6D7A1976574BF6FB1EC7A6085ACD4F0" Guid="{BF6AEAD1-6122-5970-3718-DBEEB1ACD879}">
+                <File Id="filC5BEE7FB0B46E1D71ADE0D2893074775" KeyPath="yes" Source="$(var.SourceDir)\cat.exe" />
+            </Component>
+            <Component Id="cmp09461B47449772E3938CAD76CCF4E1A2" Guid="{1B6C8185-74BC-1057-564E-FAA7AFE6205B}">
+                <File Id="fil68FA1513CB75147534A0C8C25F8C1C33" KeyPath="yes" Source="$(var.SourceDir)\chmod.exe" />
+            </Component>
+            <Component Id="cmp6AC0AEC861538E1D1576D322335AD8F4" Guid="{B84FF6A6-9B89-C063-63C3-2C790AC8669C}">
+                <File Id="fil15A25125323DA282755FCFC57546F20F" KeyPath="yes" Source="$(var.SourceDir)\cp.exe" />
+            </Component>
+            <Component Id="cmp51EBC13CCFD179446A625081C1BB6117" Guid="{DCF1C454-DDB2-CEFC-7AFA-5C2143C02A70}">
+                <File Id="filEB7CCC7D6499E6A2D46885F6E4F311E0" KeyPath="yes" Source="$(var.SourceDir)\curl.exe" />
+            </Component>
+            <Component Id="cmpC8D496B60AB685F632127194D08A5CEF" Guid="{275F0450-6127-7526-912C-C97994AD0193}">
+                <File Id="fil3749D723A4D26E65C83076269F1DB699" KeyPath="yes" Source="$(var.SourceDir)\cut.exe" />
+            </Component>
+            <Component Id="cmpD920E59E5171F5354EA7B094512518A4" Guid="{985CF1EC-6070-2FEE-2EA5-C7ECF017D56B}">
+                <File Id="fil03B8F3D91EEAC9946EB3CD40B2546839" KeyPath="yes" Source="$(var.SourceDir)\diff.exe" />
+            </Component>
+            <Component Id="cmp8C53E7F3968DB75A3051B0F270B4858C" Guid="{E97E4CF0-EFF5-5246-F5BC-63E7D24D849A}">
+                <File Id="fil68B9E2B1EC81AC5387D202EB2B0E7876" KeyPath="yes" Source="$(var.SourceDir)\dirname.exe" />
+            </Component>
+            <Component Id="cmp775604E88F3F45DF1815691A72CEC986" Guid="{38A9FFF7-800C-0AC2-4045-5F79A231EB4C}">
+                <File Id="filF21371811A31D500AB512EC3CBDE258F" KeyPath="yes" Source="$(var.SourceDir)\dos2unix.exe" />
+            </Component>
+            <Component Id="cmpCFEBB081C96A71F0B7F7EBB9A2D6EFBB" Guid="{C519CDF2-A908-1491-CC86-DD5AFA41B50D}">
+                <File Id="fil63640063A69295FBDE1CC24AF75B5D8F" KeyPath="yes" Source="$(var.SourceDir)\echo.exe" />
+            </Component>
+            <Component Id="cmpCFF3315D78997B124D449C087A55C6D3" Guid="{941A6BFC-1724-1B27-825C-834D9CAD0781}">
+                <File Id="filBA65EEFD0BA0F884ED783088E4EE654B" KeyPath="yes" Source="$(var.SourceDir)\env.exe" />
+            </Component>
+            <Component Id="cmp2DF57C98C6465E7C7289AA3AE3DBB69E" Guid="{5BC9B70B-51E5-383F-D294-164DC1C49B30}">
+                <File Id="fil14B44A68D566136F03D4D6AAAAA04259" KeyPath="yes" Source="$(var.SourceDir)\false.exe" />
+            </Component>
+            <Component Id="cmpBA2075EBD2269C4AECA719CE09724FDA" Guid="{7FAE1E18-900E-36E2-C44A-7BA27A2E7609}">
+                <File Id="fil940C418FBBA617B210FBD2480EF4965B" KeyPath="yes" Source="$(var.SourceDir)\find.exe" />
+            </Component>
+            <Component Id="cmpC16ABD0CC959B09C7F8C739E292F25BE" Guid="{BFBA866C-72CB-D2E9-6718-2C06C6A7ED29}">
+                <File Id="fil62E452C6D163B8009C08765EBB9E85F2" KeyPath="yes" Source="$(var.SourceDir)\gow-probe.exe" />
+            </Component>
+            <Component Id="cmp261D44F99FC7657363069DC8F7FD66EB" Guid="{28C1EFCA-F946-4E3F-11EE-4058CFA768EF}">
+                <File Id="filD5B4D777658A4068C90E943DE4D8A9B6" KeyPath="yes" Source="$(var.SourceDir)\grep.exe" />
+            </Component>
+            <Component Id="cmp0455532337EC22BB2C1A787256B820D2" Guid="{8EC238A6-2A32-5FA6-EE06-6043E99576A8}">
+                <File Id="filF6A97DC3142045107F0F097CF0F57D82" KeyPath="yes" Source="$(var.SourceDir)\gunzip.exe" />
+            </Component>
+            <Component Id="cmp7E2747C5141D660F6694FDDF396F342D" Guid="{3A928F46-F8FD-3EB0-202A-137F37CF20B1}">
+                <File Id="fil7622EA1F080706EBB612509EF1075170" KeyPath="yes" Source="$(var.SourceDir)\gzip.exe" />
+            </Component>
+            <Component Id="cmp2CDCEC12BDF2815D3DB6FD1155BD3C5D" Guid="{7F4DC47A-E60D-873D-6126-70F9394DDDD5}">
+                <File Id="fil85D86A3F6FBD165AB5F1485EA4171F07" KeyPath="yes" Source="$(var.SourceDir)\head.exe" />
+            </Component>
+            <Component Id="cmp5A76E1E67BBC9C72491FBFBE79158D82" Guid="{93FBBC78-F990-22A5-503D-1D46386659DF}">
+                <File Id="fil90039EA09DF87EC90DC8A5D1667C9930" KeyPath="yes" Source="$(var.SourceDir)\less.exe" />
+            </Component>
+            <Component Id="cmp3874819624D6C745C55480712647BF8F" Guid="{93166299-F3D5-38DE-319B-EA048BCC4035}">
+                <File Id="fil53E750DC67C6E341932598E4B0002C86" KeyPath="yes" Source="$(var.SourceDir)\ln.exe" />
+            </Component>
+            <Component Id="cmpDC74988A5EEAAB99C37C3219B98E49E2" Guid="{65C8FF7D-C5CC-EBB1-A508-4E0FEB607778}">
+                <File Id="filE35103DFC93D0F747D75AC7D9326C159" KeyPath="yes" Source="$(var.SourceDir)\ls.exe" />
+            </Component>
+            <Component Id="cmp84C1FE00AC88222125D2DB4FB2119009" Guid="{D7ABC776-EEBF-A9BF-18BD-9010E66FEE0A}">
+                <File Id="fil55CABF9BCF7BE1D5D68C329B2696F023" KeyPath="yes" Source="$(var.SourceDir)\mkdir.exe" />
+            </Component>
+            <Component Id="cmp0A7468887F3DCE798526034C99DDDA34" Guid="{9332AA72-8838-690E-05D4-7C2916AF35DC}">
+                <File Id="fil21FF96726DCC1FAA0EEE190F9B84982E" KeyPath="yes" Source="$(var.SourceDir)\mv.exe" />
+            </Component>
+            <Component Id="cmpB2DD49A7182997D2BB5D9AC6C8363C4B" Guid="{5AF4CAB6-70CC-B850-F992-0B7136533B44}">
+                <File Id="fil18F34FC7BBFB7FAC809CBA834E934641" KeyPath="yes" Source="$(var.SourceDir)\patch.exe" />
+            </Component>
+            <Component Id="cmpCADC5D15656FB3592D027A8CDA1C933D" Guid="{DD4FC105-2CF9-AF05-942C-5F4ADB73B593}">
+                <File Id="fil39C9415D60AB487A4FEC13D06F1C8C44" KeyPath="yes" Source="$(var.SourceDir)\pwd.exe" />
+            </Component>
+            <Component Id="cmp3E50DB81849D625832D3E2AD09B1D8C5" Guid="{09D5AD9A-ED35-EDA8-D830-705B79CC8F47}">
+                <File Id="fil49A58D85D49DECBD836A6F606B9D23E3" KeyPath="yes" Source="$(var.SourceDir)\rm.exe" />
+            </Component>
+            <Component Id="cmpB97492B3F6DDFDFF4BB38A353CDB81D6" Guid="{6081CB10-2956-B26C-1DD4-43FA9CEEDC15}">
+                <File Id="filF4737668C787FC3DC1D4D380C74E3AE7" KeyPath="yes" Source="$(var.SourceDir)\rmdir.exe" />
+            </Component>
+            <Component Id="cmp5C449C2C9D3122CA93442168CDA93B38" Guid="{CB603B53-8A67-A1D7-2013-2A12FA723937}">
+                <File Id="fil37844B7532DBE400399ADD4CEAAB4FF6" KeyPath="yes" Source="$(var.SourceDir)\sed.exe" />
+            </Component>
+            <Component Id="cmp2D4951652386DEEB53567A8E60FE5B9E" Guid="{EAB55EDC-690D-5F2B-B1CF-FEA2DE5E850E}">
+                <File Id="filC6BF9CCDACAD91A07CB54AF53D1A2691" KeyPath="yes" Source="$(var.SourceDir)\sort.exe" />
+            </Component>
+            <Component Id="cmp437414C978C97E6A6244E6AAB1170DDD" Guid="{43B8A89E-8FCE-20AE-DBF2-33A838E48531}">
+                <File Id="filC5AF056857F7944B494FB062F44081F6" KeyPath="yes" Source="$(var.SourceDir)\tail.exe" />
+            </Component>
+            <Component Id="cmpC987DBFE3AB10750A2C71330C7CBB245" Guid="{EC88EA05-D464-78E6-CAA9-E16555E63267}">
+                <File Id="filE3472CD1BF97E7AE515676F50D7D0829" KeyPath="yes" Source="$(var.SourceDir)\tar.exe" />
+            </Component>
+            <Component Id="cmpA5675EC7FED0948F5BA54E1591B95FC7" Guid="{F502F8E8-EBE2-D9CC-5650-BCE332D7F637}">
+                <File Id="fil70E7039EDA3692E62DA5D4A0A05E62D8" KeyPath="yes" Source="$(var.SourceDir)\tee.exe" />
+            </Component>
+            <Component Id="cmp024C8860A2D1E2224C4FF69599E15CDF" Guid="{046F6982-EF8C-086E-6B18-E8A6DAA89C18}">
+                <File Id="fil776D391E4C83E3B7A64F645B61D203E5" KeyPath="yes" Source="$(var.SourceDir)\touch.exe" />
+            </Component>
+            <Component Id="cmpED23EA3ACB729E2D195877485D5D5595" Guid="{E06BE91F-34CF-A1F2-B948-7BD1D975FCD2}">
+                <File Id="filDB8B23F33EAD0187FD65EE418276D0FC" KeyPath="yes" Source="$(var.SourceDir)\tr.exe" />
+            </Component>
+            <Component Id="cmp888CF2D3890D62BEF4F3A916D2DB127E" Guid="{AC553E09-D4EF-50D4-6E11-4287B5CA57C3}">
+                <File Id="fil86F05655E0F2F99632A4555BA064B871" KeyPath="yes" Source="$(var.SourceDir)\true.exe" />
+            </Component>
+            <Component Id="cmpE0EA386CDAD7B1F8D4A25E2A3A5CF5D6" Guid="{C334977F-9921-E0CA-D33B-1BB483F893B5}">
+                <File Id="fil2C3D626F059497FE7BAD3FE2F1FF337E" KeyPath="yes" Source="$(var.SourceDir)\uniq.exe" />
+            </Component>
+            <Component Id="cmp936C5CEE766FBEDE3AA95779EEF57197" Guid="{F0A01351-45B8-B00E-EE83-2BA53ED8A6CF}">
+                <File Id="filD6FAE51A2CE0B5FBE3968013EB65E39F" KeyPath="yes" Source="$(var.SourceDir)\unix2dos.exe" />
+            </Component>
+            <Component Id="cmp1E309F280CE47C4CB3E64B789E0DCC9E" Guid="{C7433525-E8C2-F142-F172-C94DDA9FB6D9}">
+                <File Id="filA6EF978D88D5C41EBE87185CC0130E51" KeyPath="yes" Source="$(var.SourceDir)\wc.exe" />
+            </Component>
+            <Component Id="cmp8F394C3963B34A289D32D3DB084F21BC" Guid="{12BF72A4-ECB0-2DAF-C4E9-DBE0C28729BE}">
+                <File Id="filD716A2C59EA53E567EC9970135598BD3" KeyPath="yes" Source="$(var.SourceDir)\which.exe" />
+            </Component>
+            <Component Id="cmp22D231FDCAC70561B004A4F740BA8DB1" Guid="{3B65ED53-A175-DDD1-599D-554B185912CD}">
+                <File Id="fil92685C8900F48D882A8B6B23A68056AF" KeyPath="yes" Source="$(var.SourceDir)\xargs.exe" />
+            </Component>
+            <Component Id="cmp5AA4DD94E07F2811AD299221F249FB8C" Guid="{8E9693CC-7F09-90D7-3542-38C1B66FC4BA}">
+                <File Id="filF302D8C9D01DAE9AE14371B202CD884C" KeyPath="yes" Source="$(var.SourceDir)\xz.exe" />
+            </Component>
+            <Component Id="cmp3D497FF72B589C92A1F87EEC0855459E" Guid="{BAFDCD3E-D884-FFA5-2679-79EFAD926377}">
+                <File Id="fil273CFEDAD6DBB9FB6F22A30E009E4FD9" KeyPath="yes" Source="$(var.SourceDir)\yes.exe" />
+            </Component>
+            <Component Id="cmp19D314076FDE867BA228E32AA3442F99" Guid="{D6AD3BC2-B4A4-DFAE-95B9-90AB0471F2F1}">
+                <File Id="fil6ED9F49C5FB6D8E00DDD2F3FAEF29D29" KeyPath="yes" Source="$(var.SourceDir)\zcat.exe" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="BinComponents">
+            <ComponentRef Id="cmpB18C150D2822F283DC36936035A0256F" />
+            <ComponentRef Id="cmp474459515B55E3C87E48B2FB20F318B0" />
+            <ComponentRef Id="cmpD44C771962893B0C22542D3AD8D76C65" />
+            <ComponentRef Id="cmpD6D7A1976574BF6FB1EC7A6085ACD4F0" />
+            <ComponentRef Id="cmp09461B47449772E3938CAD76CCF4E1A2" />
+            <ComponentRef Id="cmp6AC0AEC861538E1D1576D322335AD8F4" />
+            <ComponentRef Id="cmp51EBC13CCFD179446A625081C1BB6117" />
+            <ComponentRef Id="cmpC8D496B60AB685F632127194D08A5CEF" />
+            <ComponentRef Id="cmpD920E59E5171F5354EA7B094512518A4" />
+            <ComponentRef Id="cmp8C53E7F3968DB75A3051B0F270B4858C" />
+            <ComponentRef Id="cmp775604E88F3F45DF1815691A72CEC986" />
+            <ComponentRef Id="cmpCFEBB081C96A71F0B7F7EBB9A2D6EFBB" />
+            <ComponentRef Id="cmpCFF3315D78997B124D449C087A55C6D3" />
+            <ComponentRef Id="cmp2DF57C98C6465E7C7289AA3AE3DBB69E" />
+            <ComponentRef Id="cmpBA2075EBD2269C4AECA719CE09724FDA" />
+            <ComponentRef Id="cmpC16ABD0CC959B09C7F8C739E292F25BE" />
+            <ComponentRef Id="cmp261D44F99FC7657363069DC8F7FD66EB" />
+            <ComponentRef Id="cmp0455532337EC22BB2C1A787256B820D2" />
+            <ComponentRef Id="cmp7E2747C5141D660F6694FDDF396F342D" />
+            <ComponentRef Id="cmp2CDCEC12BDF2815D3DB6FD1155BD3C5D" />
+            <ComponentRef Id="cmp5A76E1E67BBC9C72491FBFBE79158D82" />
+            <ComponentRef Id="cmp3874819624D6C745C55480712647BF8F" />
+            <ComponentRef Id="cmpDC74988A5EEAAB99C37C3219B98E49E2" />
+            <ComponentRef Id="cmp84C1FE00AC88222125D2DB4FB2119009" />
+            <ComponentRef Id="cmp0A7468887F3DCE798526034C99DDDA34" />
+            <ComponentRef Id="cmpB2DD49A7182997D2BB5D9AC6C8363C4B" />
+            <ComponentRef Id="cmpCADC5D15656FB3592D027A8CDA1C933D" />
+            <ComponentRef Id="cmp3E50DB81849D625832D3E2AD09B1D8C5" />
+            <ComponentRef Id="cmpB97492B3F6DDFDFF4BB38A353CDB81D6" />
+            <ComponentRef Id="cmp5C449C2C9D3122CA93442168CDA93B38" />
+            <ComponentRef Id="cmp2D4951652386DEEB53567A8E60FE5B9E" />
+            <ComponentRef Id="cmp437414C978C97E6A6244E6AAB1170DDD" />
+            <ComponentRef Id="cmpC987DBFE3AB10750A2C71330C7CBB245" />
+            <ComponentRef Id="cmpA5675EC7FED0948F5BA54E1591B95FC7" />
+            <ComponentRef Id="cmp024C8860A2D1E2224C4FF69599E15CDF" />
+            <ComponentRef Id="cmpED23EA3ACB729E2D195877485D5D5595" />
+            <ComponentRef Id="cmp888CF2D3890D62BEF4F3A916D2DB127E" />
+            <ComponentRef Id="cmpE0EA386CDAD7B1F8D4A25E2A3A5CF5D6" />
+            <ComponentRef Id="cmp936C5CEE766FBEDE3AA95779EEF57197" />
+            <ComponentRef Id="cmp1E309F280CE47C4CB3E64B789E0DCC9E" />
+            <ComponentRef Id="cmp8F394C3963B34A289D32D3DB084F21BC" />
+            <ComponentRef Id="cmp22D231FDCAC70561B004A4F740BA8DB1" />
+            <ComponentRef Id="cmp5AA4DD94E07F2811AD299221F249FB8C" />
+            <ComponentRef Id="cmp3D497FF72B589C92A1F87EEC0855459E" />
+            <ComponentRef Id="cmp19D314076FDE867BA228E32AA3442F99" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
