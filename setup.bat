@@ -40,10 +40,12 @@ if errorlevel 1 (
 echo.
 
 echo [4/5] Installing WiX Toolset v3 via winget...
-winget install --id WiXToolset.WiXToolset --version 3.14.1 --accept-source-agreements --accept-package-agreements
+winget install --id WiXToolset.WiXToolset -e --accept-source-agreements --accept-package-agreements
 if errorlevel 1 (
-    echo [WARN] winget install failed - try manually:
+    echo [WARN] winget could not install WiX automatically.
+    echo        Download manually from:
     echo        https://github.com/wixtoolset/wix3/releases
+    echo        Install wix314.exe, then reopen this terminal.
 ) else (
     echo [OK] WiX Toolset v3 installed
 )
@@ -52,8 +54,10 @@ echo.
 echo [5/5] Verifying heat.exe is on PATH...
 where heat.exe >nul 2>&1
 if errorlevel 1 (
-    echo [WARN] heat.exe not found - open a new terminal or add WiX to PATH:
-    echo        set PATH=%%PATH%%;C:\Program Files (x86)\WiX Toolset v3.14\bin
+    echo [WARN] heat.exe not found. After installing WiX, add its bin to PATH:
+    set WIX_BIN=C:\Program Files ^(x86^)\WiX Toolset v3.14\bin
+    echo        !WIX_BIN!
+    echo        Then reopen this terminal and run setup.bat again.
 ) else (
     echo [OK] heat.exe found
 )
@@ -63,7 +67,7 @@ echo ===================================================
 if !ERRORS!==0 (
     echo  Setup complete - all steps succeeded.
 ) else (
-    echo  Setup finished with !ERRORS! error(s). See above.
+    echo  Setup finished with !ERRORS! error^(s^). See above.
 )
 echo.
 echo  Next steps:
