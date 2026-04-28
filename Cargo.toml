@@ -39,6 +39,10 @@ members = [
     "crates/gow-diff",
     "crates/gow-patch",
     "crates/gow-awk",
+    # Phase 5 — search and navigation (S05)
+    "crates/gow-find",
+    "crates/gow-xargs",
+    "crates/gow-less",
 ]
 resolver = "3"
 
@@ -93,6 +97,10 @@ junction = "1.4"                     # D-36 directory-symlink fallback — gow-c
 # Phase 4 additions (S04 diff/patch)
 similar = "2.6"                      # diff algorithms (Myers, Patience) — gow-diff
 diffy = "0.4"                        # unified diff apply — gow-patch
+
+# Phase 5 additions (S05 search and navigation)
+crossterm = "0.29"                   # terminal pager raw mode — gow-less only
+globset = "0.4"                      # compiled glob matching — gow-find only
 
 [profile.release]
 strip = true
