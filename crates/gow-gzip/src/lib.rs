@@ -77,26 +77,24 @@ fn run(cli: &Cli, invoked_as: &str) -> i32 {
     let mut exit_code = 0;
 
     if cli.files.is_empty() {
-        // Read from stdin, write to stdout
         let stdin = io::stdin();
         let stdout = io::stdout();
-        let result = match mode {
-            Mode::Compress => compress_stream(stdin.lock(), stdout.lock()),
-            Mode::Decompress => {
-                // Guard: attempt decode; if it fails, emit error (Pitfall 4)
-                let res = decompress_stream(stdin.lock(), stdout.lock());
-                if res.is_err() {
-                    eprintln!("gzip: stdin: not in gzip format");
+        match mode {
+            Mode::Compress => {
+                if let Err(e) = compress_stream(stdin.lock(), stdout.lock()) {
+                    eprintln!("gzip: stdin: {e}");
                     return 1;
                 }
-                res
+                return 0;
             }
-        };
-        if let Err(e) = result {
-            eprintln!("gzip: stdin: {e}");
-            exit_code = 1;
+            Mode::Decompress => {
+                if let Err(e) = decompress_stream(stdin.lock(), stdout.lock()) {
+                    eprintln!("gzip: stdin: {e}");
+                    return 1;
+                }
+                return 0;
+            }
         }
-        return exit_code;
     }
 
     for file_path in &cli.files {
@@ -156,8 +154,9 @@ fn run(cli: &Cli, invoked_as: &str) -> i32 {
                     let out_path = if converted.ends_with(".gz") {
                         converted[..converted.len() - 3].to_string()
                     } else {
-                        // GNU gzip appends ".out" if no .gz suffix; here we just try anyway
-                        format!("{converted}.out")
+                        eprintln!("gzip: {converted}: unknown suffix -- ignored");
+                        exit_code = 1;
+                        continue;
                     };
                     match (File::open(path), File::create(&out_path)) {
                         (Ok(input), Ok(output)) => {
