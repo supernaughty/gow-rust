@@ -71,10 +71,16 @@ Migrated from GSD-2. Review PROJECT.md for key decisions.
 
 None.
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260429-q01 | Multi-arch builds (x64/x86/ARM64) + WiX v3 MSI installer infrastructure | 2026-04-29 | e1d6fb1 | [260429-q01-multi-arch-msi](.planning/quick/260429-q01-multi-arch-msi/) |
+
 ## Session Continuity
 
-Last session: 2026-04-28
-Stopped at: Phase 05 complete — human UAT approved
+Last session: 2026-04-29
+Stopped at: Phase 06 complete + multi-arch MSI installer infrastructure added
 Resume file: None
 
 **Planned Phase:** 06 (archive-compression-and-network) — 6 plans — Wave 1: scaffold, Wave 2: gzip+bzip2+xz+tar parallel, Wave 3: curl
