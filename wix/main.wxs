@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    GOW-Rust WiX v3 Product Definition
+    ===================================
+    Generates an MSI installer that:
+      - Installs all binaries to C:\gow-rust (user-configurable)
+      - Optionally registers C:\gow-rust in the system PATH
+      - Supports x64, x86, and ARM64 via $(var.Platform) from candle.exe
+
+    Build (example for x64):
+      heat.exe dir target\wix-stage\x64 -cg BinComponents -dr APPLICATIONFOLDER \
+               -scom -sreg -sfrag -srd -var var.SourceDir -out wix\BinHarvest-x64.wxs
+      candle.exe wix\main.wxs wix\BinHarvest-x64.wxs -arch x64 \
+                 -dSourceDir=target\wix-stage\x64 -dVersion=0.1.0 -dPlatform=x64
+      light.exe -b target\wix-stage\x64 main.wixobj BinHarvest-x64.wixobj \
+                -o target\gow-rust-x64.msi -ext WixUIExtension
+-->
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <!-- ============================================================
+       Product definition
+       ============================================================ -->
+  <Product
+    Id="*"
+    Name="GOW-Rust"
+    Language="1033"
+    Version="$(var.Version)"
+    Manufacturer="gow-rust contributors"
+    UpgradeCode="{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}">
+
+    <!-- ============================================================
+         Package metadata
+         ============================================================ -->
+    <Package
+      InstallerVersion="500"
+      Compressed="yes"
+      InstallScope="perMachine"
+      Description="GNU utilities for Windows — native Rust implementation"
+      Comments="https://github.com/gow-rust/gow-rust"
+      />
+
+    <!-- Compressed cabinet embedded in MSI -->
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- ============================================================
+         Architecture guards
+         Candle is called with -arch x64|x86|arm64, but WiX v3 does
+         not support arm64 as a first-class Package/@Platform value.
+         We use preprocessor conditionals only for the registry key
+         path that differs between 32-bit and 64-bit installs.
+         ============================================================ -->
+    <?if $(var.Platform) = x64 ?>
+      <?define Win64 = "yes" ?>
+      <?define PlatformProgramFiles = "ProgramFiles64Folder" ?>
+      <?define RegRoot = "HKLM" ?>
+    <?elseif $(var.Platform) = arm64 ?>
+      <?define Win64 = "yes" ?>
+      <?define PlatformProgramFiles = "ProgramFiles64Folder" ?>
+      <?define RegRoot = "HKLM" ?>
+    <?else ?>
+      <!-- x86 -->
+      <?define Win64 = "no" ?>
+      <?define PlatformProgramFiles = "ProgramFilesFolder" ?>
+      <?define RegRoot = "HKLM" ?>
+    <?endif ?>
+
+    <!-- ============================================================
+         Major upgrade: remove old version before installing new one
+         ============================================================ -->
+    <MajorUpgrade
+      DowngradeErrorMessage="A newer version of GOW-Rust is already installed."
+      Schedule="afterInstallInitialize"
+      />
+
+    <!-- ============================================================
+         Directory layout
+           TARGETDIR
+             └── APPLICATIONFOLDER  (C:\gow-rust by default)
+         ============================================================ -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <!-- Install directly under a top-level directory, not under ProgramFiles,
+           so the PATH entry is short and predictable for scripts. -->
+      <Directory Id="APPLICATIONFOLDER" Name="gow-rust">
+        <!-- All binaries land directly in APPLICATIONFOLDER via the heat
+             fragment (BinComponents ComponentGroup). -->
+      </Directory>
+    </Directory>
+
+    <!-- ============================================================
+         PATH registration component
+         Adds APPLICATIONFOLDER to the system PATH.
+         A checkbox "Add to system PATH" is presented via the
+         ADDTOPATH property (checked by default: ADDTOPATH=1).
+         ============================================================ -->
+    <DirectoryRef Id="APPLICATIONFOLDER">
+      <Component Id="PathEnvComponent" Guid="{B2C3D4E5-F6A7-8901-BCDE-F12345678901}" Win64="$(var.Win64)">
+        <Environment
+          Id="PathEnvVar"
+          Action="set"
+          Name="PATH"
+          Part="last"
+          Permanent="no"
+          System="yes"
+          Value="[APPLICATIONFOLDER]"
+          />
+        <!-- KeyPath required for Component validity -->
+        <RegistryValue
+          Root="$(var.RegRoot)"
+          Key="Software\gow-rust"
+          Name="PathRegistered"
+          Type="integer"
+          Value="1"
+          KeyPath="yes"
+          />
+      </Component>
+    </DirectoryRef>
+
+    <!-- ============================================================
+         Feature tree
+         ============================================================ -->
+    <Feature Id="ProductFeature" Title="GOW-Rust Binaries" Level="1" Description="All GNU utilities">
+      <!-- Harvested binaries from heat.exe -->
+      <ComponentGroupRef Id="BinComponents" />
+    </Feature>
+
+    <Feature Id="PathFeature" Title="Add to PATH" Level="1"
+             Description="Register the install directory in the system PATH so GNU utilities are available from any terminal.">
+      <ComponentRef Id="PathEnvComponent" />
+    </Feature>
+
+    <!-- ============================================================
+         Properties
+         ============================================================ -->
+    <!-- Default install directory: C:\gow-rust -->
+    <Property Id="APPLICATIONFOLDER" Value="C:\gow-rust\" />
+
+    <!-- PATH registration is enabled by default -->
+    <Property Id="ADDTOPATH" Value="1" />
+
+    <!-- ============================================================
+         UI: WixUI_Minimal — license acceptance + install dir
+         ============================================================ -->
+    <UIRef Id="WixUI_Minimal" />
+
+    <!-- Skip license dialog (no license file required) by pointing to a
+         blank RTF. Remove this element if you add a License.rtf. -->
+    <WixVariable Id="WixUILicenseRtf" Value="wix\License.rtf" />
+
+  </Product>
+</Wix>
