@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v0.2.0
 milestone_name: "- [ ] **Phase 07: release-and-ci** — Release & CI/CD"
 status: paused
-stopped_at: Completed 07-02-PLAN.md — CI workflow created and pushed
-last_updated: "2026-04-28T22:07:15.732Z"
+stopped_at: Completed 07-03-PLAN.md — release.yml created, committed, and pushed
+last_updated: "2026-04-28T22:09:11.184Z"
 last_activity: 2026-04-29 — Plan 07-01 tasks 1-3 complete; paused for human verification
 progress:
   total_phases: 7
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 13
-  completed_plans: 12
-  percent: 92
+  completed_plans: 13
+  percent: 100
 ---
 
 # Project State
@@ -29,7 +29,7 @@ Plan: 07-01 (Wave 1 — Release & GitHub publication) — CHECKPOINT PENDING
 Status: Paused at checkpoint:human-verify — 3/4 tasks complete
 Last activity: 2026-04-29 — Plan 07-01 tasks 1-3 complete; paused for human verification
 
-Progress: [█████████░] 92%
+Progress: [██████████] 100%
 
 ## Accumulated Context
 
@@ -54,6 +54,9 @@ Migrated from GSD-2. Review PROJECT.md for key decisions.
 - 07-02: branches: ["**"] on push EXCLUDES tag pushes — prevents duplicate CI runs when v* tags are pushed
 - 07-02: dtolnay/rust-toolchain@stable used (not deprecated actions-rs/toolchain)
 - 07-02: Swatinem/rust-cache@v2 key x86_64-pc-windows-msvc differentiates from release workflow cache keys
+- softprops/action-gh-release@v2 chosen over v3 — v3 requires Node 24, not available on windows-latest
+- ilammy/msvc-dev-cmd@v1 placed after rust-toolchain and before rust-cache for liblzma-sys 32-bit C compilation
+- download-extras.ps1 added to both CI build jobs — runners have no extras/bin/ pre-populated
 
 ### Known Issues (from code review 05-REVIEW.md)
 
@@ -82,8 +85,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-28T22:07:15.727Z
-Stopped at: Completed 07-02-PLAN.md — CI workflow created and pushed
+Last session: 2026-04-28T22:09:11.177Z
+Stopped at: Completed 07-03-PLAN.md — release.yml created, committed, and pushed
 Resume file: None
 
 **Next Phase:** 07 (release-and-ci) — publish v0.1.0 GitHub Release + CI/CD automation
