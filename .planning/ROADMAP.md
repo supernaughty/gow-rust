@@ -89,7 +89,12 @@
   3. Pushing a `v*` git tag automatically builds x64 and x86 release MSIs and attaches them to the GitHub Release — no manual steps required
   4. gow-probe.exe is absent from the installer; only user-facing utilities are bundled
   5. README or CONTRIBUTING.md contains ARM64 build instructions so a contributor can produce an ARM64 MSI without guidance from the maintainer
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Tag v0.1.0, create GitHub Release with x64+x86 MSIs, write CONTRIBUTING.md with ARM64 docs (REL-01, REL-02, REL-03)
+- [ ] 07-02-PLAN.md — Create .github/workflows/ci.yml: cargo test --workspace on push/PR (CI-01)
+- [ ] 07-03-PLAN.md — Create .github/workflows/release.yml: tag-triggered x64+x86 MSI build + GitHub Release upload (CI-02, CI-03)
 
 ### Phase 08: code-review-fixes
 **Goal**: All seven code review findings from Phase 06 are resolved; gow-tar, gow-xz, gow-gzip, and gow-curl behave correctly on edge cases that previously caused data loss or wrong exit codes.
@@ -154,7 +159,7 @@
 | 04. s04 | 10/10 | Complete | 2026-04-25 |
 | 05. search-and-navigation | 4/4 | Complete | 2026-04-28 |
 | 06. archive-compression-and-network | 6/6 | Complete | 2026-04-28 |
-| 07. release-and-ci | 0/? | Not started | - |
+| 07. release-and-ci | 0/3 | Not started | - |
 | 08. code-review-fixes | 0/? | Not started | - |
 | 09. external-bundling | 0/? | Not started | - |
 | 10. new-utilities-wave1 | 0/? | Not started | - |
