@@ -227,11 +227,12 @@ fn run(mut cli: Cli) -> Result<i32> {
                     }
                 }
             } else if cli.print0 {
-                // Write path bytes followed by NUL, no newline
+                // Write path bytes followed by NUL, no newline.
+                // Propagate write errors (broken pipe from xargs -0) via ? (WR-03).
                 let path_bytes = path.as_os_str().to_string_lossy();
                 let mut stdout = std::io::stdout().lock();
-                stdout.write_all(path_bytes.as_bytes()).ok();
-                stdout.write_all(b"\0").ok();
+                stdout.write_all(path_bytes.as_bytes())?;
+                stdout.write_all(b"\0")?;
             } else {
                 // Default action: -print
                 println!("{}", path.display());
