@@ -21,11 +21,11 @@ if errorlevel 1 ( echo [FAILED] build failed & exit /b 1 )
 echo.
 echo [ok] binaries in target\%MODE%\
 if "%PKG%"=="" (
-    echo   gzip.exe  gunzip.exe  zcat.exe
-    echo   bzip2.exe
-    echo   xz.exe    unxz.exe
-    echo   tar.exe
-    echo   curl.exe
+    echo   awk  basename  cat  chmod  cp  curl  cut  diff  dirname
+    echo   dos2unix  echo  env  false  find  grep  gunzip  gzip
+    echo   head  less  ln  ls  mkdir  mv  patch  pwd  rm  rmdir
+    echo   sed  sort  tail  tar  tee  touch  tr  true  uniq
+    echo   unix2dos  wc  which  xargs  xz  yes  zcat
 )
 goto end
 
