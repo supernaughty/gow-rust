@@ -24,7 +24,7 @@ use crossterm::ExecutableCommand;
 use regex::Regex;
 use std::ffi::OsString;
 use std::fs::File;
-use std::io::{self, Write};
+use std::io::{self, Seek, SeekFrom, Write};
 use std::panic;
 use std::path::PathBuf;
 use std::time::Duration;
@@ -113,12 +113,15 @@ fn open_source(cli: &Cli) -> Result<LineIndex> {
             Ok(LineIndex::new(f))
         }
         None => {
-            // Stdin is non-seekable; buffer to a temp file so LineIndex can seek.
-            let mut tmp = tempfile::NamedTempFile::new()?;
-            io::copy(&mut io::stdin().lock(), tmp.as_file_mut())?;
-            tmp.as_file().sync_all()?;
-            let f = File::open(tmp.path())?;
-            Ok(LineIndex::new(f))
+            // Stdin is non-seekable; buffer to an anonymous temp file so LineIndex can seek.
+            // Use tempfile::tempfile() (no path on disk) to avoid the deletion race that
+            // NamedTempFile::drop causes on Windows: NamedTempFile deletes the file immediately
+            // on drop (before LineIndex has finished reading), whereas an anonymous file handle
+            // stays alive until the last handle is closed on all platforms (CR-02).
+            let mut tmp = tempfile::tempfile()?;
+            io::copy(&mut io::stdin().lock(), &mut tmp)?;
+            tmp.seek(SeekFrom::Start(0))?;
+            Ok(LineIndex::new(tmp))
         }
     }
 }
