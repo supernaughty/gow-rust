@@ -43,6 +43,12 @@ members = [
     "crates/gow-find",
     "crates/gow-xargs",
     "crates/gow-less",
+    # Phase 6 — archive, compression, and network (S06)
+    "crates/gow-gzip",
+    "crates/gow-bzip2",
+    "crates/gow-xz",
+    "crates/gow-tar",
+    "crates/gow-curl",
 ]
 resolver = "3"
 
@@ -101,6 +107,14 @@ diffy = "0.4"                        # unified diff apply — gow-patch
 # Phase 5 additions (S05 search and navigation)
 crossterm = "0.29"                   # terminal pager raw mode — gow-less only
 globset = "0.4"                      # compiled glob matching — gow-find only
+
+# Phase 6 additions (S06 archive, compression, and network)
+flate2 = "1.1"                       # gzip/deflate (miniz_oxide pure-Rust backend) — gow-gzip, gow-tar
+bzip2 = "0.6"                        # bzip2 (libbz2-rs-sys pure-Rust backend) — gow-bzip2, gow-tar
+liblzma = { version = "0.4", features = ["static"] }  # xz/lzma (MSVC-safe fork of xz2) — gow-xz
+tar = "0.4"                          # tar archive create/extract — gow-tar
+reqwest = { version = "0.13", features = ["blocking", "native-tls"], default-features = false }
+                                     # HTTP client (Windows SChannel TLS) — gow-curl only
 
 [profile.release]
 strip = true
