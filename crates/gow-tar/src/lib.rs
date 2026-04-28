@@ -285,12 +285,10 @@ fn run_extract(cli: &Cli, codec: Codec) -> Result<()> {
 }
 
 fn unpack_archive<R: Read>(mut archive: Archive<R>, dest: &str, cli: &Cli) -> Result<()> {
-    // Use per-entry unpack_in() so we can handle symlink errors gracefully.
-    // unpack_in() has the same path-traversal guard as unpack() — it skips
-    // entries with ".." components (T-06-05-01 mitigation).
-    //
-    // T-06-05-02: On Windows, symlink extraction requires SeCreateSymbolicLinkPrivilege.
-    // We log a warning and continue so the rest of the archive is still extracted.
+    let mut had_error = false;
+    // set_ignore_zeros allows reading past end-of-archive zero blocks, which is
+    // required for concatenated archives (e.g. two tar.bz2 files joined together).
+    archive.set_ignore_zeros(true);
     for entry in archive.entries()? {
         let mut entry = entry?;
         let path = entry.path()?.into_owned();
@@ -310,10 +308,15 @@ fn unpack_archive<R: Read>(mut archive: Archive<R>, dest: &str, cli: &Cli) -> Re
                      (symlink extraction may require elevated privileges on Windows)",
                     path.display()
                 );
+                // Symlink failures are warnings, not fatal errors; keep had_error false (per D-06).
             } else {
                 eprintln!("tar: {}: {e}", path.display());
+                had_error = true;
             }
         }
+    }
+    if had_error {
+        anyhow::bail!("one or more files could not be extracted");
     }
     Ok(())
 }
