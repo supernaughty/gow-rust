@@ -122,10 +122,17 @@ cargo build --release --target %_RT% %PKG%
 if errorlevel 1 ( echo [FAILED] cargo build & exit /b 1 )
 
 set _STAGE=target\wix-stage\%_ARCH%
-echo [2/4] Staging .exe files to %_STAGE%
-powershell -NoProfile -Command "Remove-Item -Path '%_STAGE%' -Recurse -Force -ErrorAction SilentlyContinue; $null=New-Item '%_STAGE%' -ItemType Directory -Force; Get-ChildItem 'target\%_RT%\release\*.exe' | Copy-Item -Destination '%_STAGE%'"
+echo [2/4] Staging binaries to %_STAGE%
+powershell -NoProfile -Command "Remove-Item -Path '%_STAGE%' -Recurse -Force -ErrorAction SilentlyContinue; $null=New-Item '%_STAGE%' -ItemType Directory -Force; Get-ChildItem 'target\%_RT%\release\*.exe' | Where-Object { $_.Name -ne 'gow-probe.exe' } | Copy-Item -Destination '%_STAGE%'"
+:: Stage extras (vim, wget, nano, batch aliases) if present
+if exist extras\bin (
+    powershell -NoProfile -Command "Get-ChildItem 'extras\bin\*' -Include '*.exe','*.bat' | Copy-Item -Destination '%_STAGE%'"
+    if exist extras\bin\vim-runtime (
+        powershell -NoProfile -Command "Copy-Item -Path 'extras\bin\vim-runtime' -Destination '%_STAGE%\vim-runtime' -Recurse -Force"
+    )
+)
 echo   Staged:
-dir /b %_STAGE%\*.exe 2>nul
+dir /b %_STAGE% 2>nul | findstr /v "^vim-runtime$"
 
 echo [3/4] Harvesting with heat.exe...
 heat.exe dir %_STAGE% -cg BinComponents -dr APPLICATIONFOLDER -scom -sreg -sfrag -srd -var var.SourceDir -out wix\BinHarvest-%_ARCH%.wxs

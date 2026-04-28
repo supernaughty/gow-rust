@@ -8,6 +8,17 @@ GOW (Gnu On Windows) 유틸리티를 Rust로 재작성하는 오픈소스 프로
 
 Windows 사용자가 별도의 무거운 환경(WSL, Cygwin) 없이 GNU 명령어를 네이티브 성능으로 사용할 수 있어야 한다.
 
+## Current Milestone: v0.2.0 — Distribution & Completeness
+
+**Goal:** v0.1.0 공개 릴리즈 + GitHub Actions 자동화 + 원본 GOW 누락 유틸리티 완성 (Rust 구현 + 외부 바이너리 번들링)
+
+**Target features:**
+- v0.1.0 GitHub Release (x64/x86 MSI 첨부, git tag)
+- GitHub Actions CI/CD — push → 3개 아키텍처 MSI 빌드 → Release 자동 업로드
+- Phase 06 코드리뷰 수정 (WR-01~07, gow-probe 제외)
+- 외부 바이너리 번들 — vim (portable), wget, nano, batch aliases
+- Rust 유틸리티 추가 — seq, sleep, tac, nl, od, fold, expand, du, df, md5sum/sha1sum, whoami, uname, paste, join, split, printf, expr, test, fmt, unlink
+
 ## Requirements
 
 ### Validated

@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: complete
-stopped_at: Phase 06 complete — all 6 plans verified, 31 tests passing
+milestone: v0.2.0
+milestone_name: M002
+status: in_progress
+stopped_at: Phase 07 not started — M002 roadmap created
 last_updated: "2026-04-28T00:00:00.000Z"
-last_activity: "2026-04-28 — Phase 06 complete (tar, gzip, bzip2, xz, curl — Windows SChannel TLS confirmed)"
+last_activity: "2026-04-28 — M002 roadmap initialized; Phase 07 (Release & CI/CD) is next"
 progress:
-  total_phases: 6
-  completed_phases: 6
-  total_plans: 6
-  completed_plans: 6
-  percent: 100
+  total_phases: 5
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -20,16 +20,16 @@ progress:
 
 See: .planning/PROJECT.md
 
-**Current focus:** Milestone v1.0 complete — all 6 phases done.
+**Current focus:** Phase 07 — Release & CI/CD (v0.1.0 GitHub Release + automated CI/CD pipeline)
 
 ## Current Position
 
-Phase: 06 — COMPLETE (6/6 plans, all verified)
+Phase: 07 — NOT STARTED
 Plan: —
-Status: Phase 06 verified. All R018/R019/R020 requirements satisfied. Milestone v1.0 complete.
-Last activity: 2026-04-28 — Phase 06 complete (tar, gzip, bzip2, xz, curl — Windows SChannel TLS confirmed)
+Status: M002 roadmap written. Phase 07 is the next unit of work: publish v0.1.0 GitHub Release with x64/x86 MSIs, set up cargo test CI on every push/PR, and automate MSI builds on tag push.
+Last activity: 2026-04-28 — M002 roadmap created (Phases 07–11 added to ROADMAP.md)
 
-Progress: [██████████] 100% (within current milestone)
+Progress: [__________] 0% (M002 — 0/5 phases complete)
 
 ## Accumulated Context
 
@@ -57,15 +57,15 @@ Migrated from GSD-2. Review PROJECT.md for key decisions.
 - CR-01: find -exec exit code not propagated — run() always returns Ok(()); GNU find should exit 1 on exec failure
 - CR-02: NamedTempFile deleted before LineIndex reads in less stdin path on Windows — use tempfile::tempfile() instead
 
-### Known Issues (from code review 06-REVIEW.md)
+### Known Issues (from code review 06-REVIEW.md — to be fixed in Phase 08)
 
-- WR-01: tar uses BzDecoder instead of MultiBzDecoder — multi-stream .tar.bz2 truncates
-- WR-02: tar Cli::from_arg_matches().unwrap() panics instead of graceful error + exit 2
-- WR-03: tar unpack_archive returns Ok(()) on extraction errors — exit code 0 on partial extract
-- WR-04: xz uses single-stream XzDecoder — concatenated .xz files silently truncate
-- WR-05: gzip appends .out for files without .gz suffix instead of rejecting (GNU incompatibility)
-- WR-06: curl -I -s prints headers in silent mode (should be suppressed)
-- WR-07: curl -o leaves partial file on I/O error (should remove on failure)
+- WR-01: tar uses BzDecoder instead of MultiBzDecoder — multi-stream .tar.bz2 truncates (FIX-01)
+- WR-02: tar Cli::from_arg_matches().unwrap() panics instead of graceful error + exit 2 (FIX-02)
+- WR-03: tar unpack_archive returns Ok(()) on extraction errors — exit code 0 on partial extract (FIX-03)
+- WR-04: xz uses single-stream XzDecoder — concatenated .xz files silently truncate (FIX-04)
+- WR-05: gzip appends .out for files without .gz suffix instead of rejecting (GNU incompatibility) (FIX-05)
+- WR-06: curl -I -s prints headers in silent mode (should be suppressed) (FIX-06)
+- WR-07: curl -o leaves partial file on I/O error (should remove on failure) (FIX-07)
 
 ### Blockers/Concerns
 
@@ -79,8 +79,14 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-29
-Stopped at: Phase 06 complete + multi-arch MSI installer infrastructure added
+Last session: 2026-04-28
+Stopped at: M002 roadmap created — Phases 07–11 defined
 Resume file: None
 
-**Planned Phase:** 06 (archive-compression-and-network) — 6 plans — Wave 1: scaffold, Wave 2: gzip+bzip2+xz+tar parallel, Wave 3: curl
+**Next Phase:** 07 (release-and-ci) — publish v0.1.0 GitHub Release + CI/CD automation
+  - REL-01: git tag v0.1.0 + GitHub Release with x64/x86 MSI assets
+  - REL-02: ARM64 build docs in README/CONTRIBUTING.md
+  - REL-03: exclude gow-probe.exe from installer
+  - CI-01: cargo test --workspace on every push/PR
+  - CI-02: tag-triggered MSI build workflow
+  - CI-03: auto-attach MSIs to GitHub Release
