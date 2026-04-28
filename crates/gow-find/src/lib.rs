@@ -40,19 +40,23 @@ struct Cli {
     type_: Option<String>,
 
     /// Filter by file size (+N/-N/N with optional c/k/M/G suffix)
-    #[arg(long = "size", value_name = "SPEC", num_args = 1)]
+    /// allow_hyphen_values: value may start with '-' (e.g. -size -1k)
+    #[arg(long = "size", value_name = "SPEC", num_args = 1, allow_hyphen_values = true)]
     size: Option<String>,
 
     /// Filter by mtime in days (+N/-N/N)
-    #[arg(long = "mtime", value_name = "SPEC", num_args = 1)]
+    /// allow_hyphen_values: value may start with '-' (e.g. -mtime -1)
+    #[arg(long = "mtime", value_name = "SPEC", num_args = 1, allow_hyphen_values = true)]
     mtime: Option<String>,
 
     /// Filter by atime in days (+N/-N/N) — see D-04 NTFS caveat
-    #[arg(long = "atime", value_name = "SPEC", num_args = 1)]
+    /// allow_hyphen_values: value may start with '-' (e.g. -atime -1)
+    #[arg(long = "atime", value_name = "SPEC", num_args = 1, allow_hyphen_values = true)]
     atime: Option<String>,
 
     /// Filter by ctime in days (+N/-N/N)
-    #[arg(long = "ctime", value_name = "SPEC", num_args = 1)]
+    /// allow_hyphen_values: value may start with '-' (e.g. -ctime -1)
+    #[arg(long = "ctime", value_name = "SPEC", num_args = 1, allow_hyphen_values = true)]
     ctime: Option<String>,
 
     /// Maximum traversal depth (0 = path itself only)
