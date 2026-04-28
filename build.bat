@@ -130,7 +130,7 @@ dir /b %_STAGE%\*.exe 2>nul
 echo [3/4] Harvesting with heat.exe...
 heat.exe dir %_STAGE% -cg BinComponents -dr APPLICATIONFOLDER -scom -sreg -sfrag -srd -var var.SourceDir -out wix\BinHarvest-%_ARCH%.wxs
 if errorlevel 1 ( echo [FAILED] heat.exe - is WiX v3 installed? Run setup.bat first. & exit /b 1 )
-powershell -NoProfile -File wix\fix-guids.ps1 -WxsFile wix\BinHarvest-%_ARCH%.wxs
+powershell -NoProfile -ExecutionPolicy Bypass -File wix\fix-guids.ps1 -WxsFile wix\BinHarvest-%_ARCH%.wxs
 if errorlevel 1 ( echo [FAILED] fix-guids.ps1 & exit /b 1 )
 
 echo [4/4] Compiling and linking MSI...
