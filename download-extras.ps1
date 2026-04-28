@@ -105,7 +105,7 @@ Tool-Done "wget $WgetVersion"
 # 3. nano 7.2 portable (win64)
 # ─────────────────────────────────────────────────────────────────
 Write-Host ""
-Write-Host "[3/3] nano 7.2 portable (win64)" -ForegroundColor Cyan
+Write-Host "[3/4] nano 7.2 portable (win64)" -ForegroundColor Cyan
 
 $NanoVersion = "7.2-22.1"
 $NanoZip     = Join-Path $TmpDir "nano-for-windows_win64_v${NanoVersion}.zip"
@@ -129,10 +129,38 @@ if (-not (Test-Path $NanoExe) -or $Force) {
 Tool-Done "nano $NanoVersion"
 
 # ─────────────────────────────────────────────────────────────────
-# 4. Batch aliases (egrep, fgrep, bunzip2, gawk, gfind, gsort)
+# 4. ripgrep (rg) — fast regex search
+# ─────────────────────────────────────────────────────────────────
+Write-Host ""
+Write-Host "[4/4] ripgrep (win64, static)" -ForegroundColor Cyan
+
+$RgVersion = "14.1.1"
+$RgZip     = Join-Path $TmpDir "ripgrep-${RgVersion}-x86_64-pc-windows-msvc.zip"
+$RgExe     = Join-Path $BinDir "rg.exe"
+$RgUrl     = "https://github.com/BurntSushi/ripgrep/releases/download/${RgVersion}/ripgrep-${RgVersion}-x86_64-pc-windows-msvc.zip"
+
+if (-not (Test-Path $RgExe) -or $Force) {
+    Download-File $RgUrl $RgZip
+
+    Write-Host "  Extracting rg.exe..."
+    $RgExtract = Join-Path $TmpDir "rg_extract"
+    $null = New-Item -ItemType Directory -Path $RgExtract -Force
+    Expand-Archive -Path $RgZip -DestinationPath $RgExtract -Force
+
+    $RgSrc = Get-ChildItem -Path $RgExtract -Recurse -Filter "rg.exe" | Select-Object -First 1
+    if (-not $RgSrc) { throw "rg.exe not found in zip" }
+    Copy-Item -Path $RgSrc.FullName -Destination $RgExe -Force
+} else {
+    Write-Host "  Already present: rg.exe"
+}
+Tool-Done "ripgrep $RgVersion"
+
+# ─────────────────────────────────────────────────────────────────
+# 5. Batch aliases (egrep, fgrep, bunzip2, gawk, gfind, gsort)
 # ─────────────────────────────────────────────────────────────────
 Write-Host ""
 Write-Host "[+] Writing batch aliases..." -ForegroundColor Cyan
+
 
 $Aliases = @{
     'egrep.bat'   = '@echo off & "%~dp0grep.exe" -E %*'
