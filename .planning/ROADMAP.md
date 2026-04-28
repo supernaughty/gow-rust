@@ -48,7 +48,13 @@
 
 ## M002: v0.2.0
 
-- [ ] **Phase 07: release-and-ci** — Release & CI/CD
+- [x] **Phase 07: release-and-ci** — Release & CI/CD *(Complete: 2026-04-29)*
+  - **Goal:** Publish v0.1.0 GitHub Release with x64/x86 MSI installers, set up cargo test CI on every push/PR, and automate MSI builds on tag push.
+  - **Requirements:** REL-01, REL-02, REL-03, CI-01, CI-02, CI-03
+  - **Plans:** 3 plans
+  - [x] 07-01-PLAN.md — v0.1.0 GitHub Release with x64/x86 MSI assets + CONTRIBUTING.md ARM64 docs (REL-01, REL-02, REL-03)
+  - [x] 07-02-PLAN.md — CI workflow: cargo test --workspace on push/PR (CI-01)
+  - [x] 07-03-PLAN.md — Release workflow: tag-triggered x64+x86 MSI build + upload (CI-02, CI-03)
 - [ ] **Phase 08: code-review-fixes** — Code Review Fixes & Installer Polish
 - [ ] **Phase 09: external-bundling** — External Binary Bundling
 - [ ] **Phase 10: new-utilities-wave1** — New Rust Utilities Wave 1

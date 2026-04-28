@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
 milestone: v0.2.0
-milestone_name: "- [ ] **Phase 07: release-and-ci** — Release & CI/CD"
-status: paused
-stopped_at: Completed 07-03-PLAN.md — release.yml created, committed, and pushed
-last_updated: "2026-04-28T22:09:11.184Z"
-last_activity: 2026-04-29 — Plan 07-01 tasks 1-3 complete; paused for human verification
+milestone_name: M002
+status: in_progress
+stopped_at: ""
+last_updated: "2026-04-29T00:00:00Z"
+last_activity: "2026-04-29 — Phase 07 complete: v0.1.0 released, CI/CD workflows live"
 progress:
-  total_phases: 7
-  completed_phases: 3
-  total_plans: 13
-  completed_plans: 13
-  percent: 100
+  total_phases: 5
+  completed_phases: 1
+  total_plans: 3
+  completed_plans: 3
+  percent: 20
 ---
 
 # Project State
@@ -24,12 +24,12 @@ See: .planning/PROJECT.md
 
 ## Current Position
 
-Phase: 07 — IN PROGRESS
-Plan: 07-01 (Wave 1 — Release & GitHub publication) — CHECKPOINT PENDING
-Status: Paused at checkpoint:human-verify — 3/4 tasks complete
-Last activity: 2026-04-29 — Plan 07-01 tasks 1-3 complete; paused for human verification
+Phase: 07 — COMPLETE
+Plan: All 3 plans complete
+Status: Phase 07 done. Next: Phase 08 (Code Review Fixes & Installer Polish)
+Last activity: 2026-04-29 — Phase 07 complete (v0.1.0 released, CI/CD live)
 
-Progress: [██████████] 100%
+Progress: [██________] 20% (M002 — 1/5 phases complete)
 
 ## Accumulated Context
 
