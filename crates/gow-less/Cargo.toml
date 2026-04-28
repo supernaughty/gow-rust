@@ -24,6 +24,7 @@ regex = { workspace = true }
 crossterm = { workspace = true }
 terminal_size = { workspace = true }
 bstr = { workspace = true }
+tempfile = { workspace = true }
 
 [build-dependencies]
 embed-manifest = "1.5"

@@ -91,7 +91,7 @@ impl LineIndex {
         //
         // Invariant: offsets.len() - 1 == number of lines scanned.
         // If offsets.len() == 1 and eof has been reached, file is empty.
-        if self.offsets.len() == 0 {
+        if self.offsets.is_empty() {
             return 0;
         }
         // Each entry after the first [0] represents one complete line read.
