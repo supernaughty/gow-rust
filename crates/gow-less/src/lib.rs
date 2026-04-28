@@ -3,6 +3,8 @@
 //! This file is a SCAFFOLD STUB. Plan 05-04 replaces this body with the real
 //! pager (crossterm raw mode, LineIndex, event loop).
 
+pub mod line_index;
+
 use std::ffi::OsString;
 
 pub fn uumain<I: IntoIterator<Item = OsString>>(_args: I) -> i32 {
