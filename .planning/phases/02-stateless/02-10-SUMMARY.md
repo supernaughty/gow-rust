@@ -1,67 +1,13 @@
 ---
-phase: 02-stateless
-plan: 10
-subsystem: file
-tags: [touch, filetime, jiff, parse_datetime, symlink, tdd, wave-4, file-08, gnu-parity]
-
-# Dependency graph
-requires:
-  - phase: 01-foundation
-    provides: gow_core::init / args::parse_gnu / path::try_convert_msys_path (inherited unchanged)
-  - plan: 02-01
-    provides: workspace filetime = { workspace = true } dep; gow-touch stub crate scaffold (Cargo.toml + stub lib.rs + main.rs)
-provides:
-  - crates/gow-touch compiled-clean with real uumain (11 unit tests + 14 integration tests = 25 passing; symlink-self test runs on Dev-Mode host)
-  - uu_touch::uumain with full GNU parity (-a, -m, -c, -r, -d, -t, -h) — FILE-08 delivered
-  - date::parse_touch_date (jiff 0.2 + parse_datetime 0.14 — exact uutils combination per RESEARCH.md Q1)
-  - date::parse_touch_stamp (strict 12-digit YYYYMMDDhhmm[.ss])
-  - timestamps::apply(path, atime, mtime, no_deref) — filetime wrapper that routes -h to set_symlink_file_times
-  - Threat T-02-10-02 mitigation verified: non-digit / wrong-length / bad-seconds stamps all return InvalidStamp (3 guard tests)
-  - ROADMAP success criterion (FILE-08): touch newfile.txt creates the file with mtime≈now
-affects: [Phase 3+ filesystem utilities that may reuse timestamps::apply pattern; Phase 6 multicall binary (touch slot)]
-
-# Tech tracking
-tech-stack:
-  added:
-    - jiff 0.2.23 (per-crate gow-touch dep; civil::datetime / TimeZone::system for local-tz stamp; Zoned::now / Timestamp::as_second + subsec_nanosecond for jiff->FileTime bridge)
-    - parse_datetime 0.14.0 (per-crate gow-touch dep; parse_datetime_at_date covers now/today/yesterday/tomorrow, "N units ago", ISO-8601, RFC-3339)
-    - filetime 0.2.27 (already in workspace from Plan 02-01; set_file_times for default path, set_symlink_file_times for -h)
-  patterns:
-    - "TouchError enum with InvalidDate / InvalidStamp / Io variants via thiserror — propagated to uumain for GNU-format stderr and exit_code=1"
-    - "Priority resolution for time source: -r (reference file metadata) > -d (parse_datetime) > -t (strict stamp) > FileTime::now() — computed once per invocation"
-    - "Per-operand loop with MSYS path pre-convert + per-operand error (stderr + exit_code=1, continue to next operand)"
-    - "Selective flag handling: when only one of -a/-m set, read current md via symlink_metadata (no_deref) or metadata to preserve the other timestamp"
-    - "disable_help_flag(true) + explicit --help Arg with ArgAction::Help — required because GNU touch reserves -h for --no-dereference (clap debug_assert would panic otherwise)"
-
-key-files:
-  created:
-    - crates/gow-touch/build.rs
-    - crates/gow-touch/src/date.rs
-    - crates/gow-touch/src/timestamps.rs
-    - crates/gow-touch/tests/integration.rs
-    - .planning/phases/02-stateless/02-10-SUMMARY.md
-  modified:
-    - crates/gow-touch/Cargo.toml
-    - crates/gow-touch/src/lib.rs
-    - Cargo.lock
-
-key-decisions:
-  - "jiff civil API: used jiff::civil::datetime(year,month,day,hour,min,sec,0) + jiff::tz::TimeZone::system() + dt.to_zoned(tz) — the plan suggested in_tz(\"system\") as an alternative, but TimeZone::system() returns a TimeZone directly (no Result) and the .to_zoned(tz) method is the idiomatic jiff 0.2 bridge. No code changes needed beyond the plan's action text noted this as an adjustment candidate."
-  - "clap -h collision: GNU touch uses -h for --no-dereference, but clap 4 auto-registers -h/--help. Resolved by disable_help_flag(true) and re-adding a --help-only Arg with ArgAction::Help. Matches GNU coreutils behavior (no -h shortcut for help)."
-  - "Accepted 12-digit-only YYYYMMDDhhmm[.ss] stamp form for v1 — the full GNU form [[CC]YY]MMDDhhmm[.ss] supports 8/10/12-digit variants with YY ambiguity. Deferred to v2 if user demand appears."
-  - "NOT adding gow_core::fs::touch_link_time — RESEARCH.md Q2 corrected CONTEXT.md D-19e: filetime::set_symlink_file_times already handles FILE_FLAG_OPEN_REPARSE_POINT + SetFileTime on Windows. gow-touch calls filetime directly."
-
-patterns-established:
-  - "Pattern: lib/bin split with lib test smoke (uu_app_builds_without_panic) — catches clap flag-registration regressions without booting the binary"
-  - "Pattern: TDD RED via todo!() stubs + #[allow(dead_code)] on partially-consumed enum variants — allows committing a compile-clean RED state when the test uses only part of the public API"
-  - "Pattern: Test-environment-gated symlink integration — std::os::windows::fs::symlink_file probe + graceful return on failure so the test passes on hosts without SeCreateSymbolicLinkPrivilege / Developer Mode"
-
-requirements-completed: [FILE-08]
-
-# Metrics
-duration: 8m57s          # plan start 01:10:07Z → end 01:19:04Z
-completed: 2026-04-21
+phase: "02"
+plan: "10"
 ---
+
+# T10: Plan 10
+
+**# Phase 2 Plan 10: gow-touch Summary**
+
+## What Happened
 
 # Phase 2 Plan 10: gow-touch Summary
 

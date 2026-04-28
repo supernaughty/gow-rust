@@ -1,62 +1,13 @@
 ---
-phase: 02-stateless
-plan: 03
-subsystem: util-echo
-tags: [echo, escape-parser, clap-alternative, ad-hoc-argv, utf-8, util-01, roadmap-success-1]
-
-# Dependency graph
-requires:
-  - phase: 01-foundation
-    provides: gow-core (init, args::parse_gnu — consulted for D-02 exit-code rule but not used; echo uses ad-hoc scanner)
-  - phase: 02-stateless
-    plan: 01
-    provides: gow-echo stub crate (Cargo.toml, src/lib.rs, src/main.rs) scaffolded in workspace
-provides:
-  - "uu_echo::uumain with -n / -e / -E flags, -e escape state machine, \\c early-break"
-  - "Windows manifest embedded via build.rs (activeCodePage=UTF-8, longPathAware) per D-16c"
-  - "16 unit tests on src/escape.rs + 13 integration tests on echo.exe = 29 tests passing"
-  - "Reusable argv-scanner pattern for later Phase 2 utilities that need short-flag clusters (yes, true, false, tee -i)"
-  - "UTIL-01 delivered; ROADMAP Phase 2 success criterion 1 (echo -e + echo -n) verifiable on CLI"
-affects: []
-
-# Tech tracking
-tech-stack:
-  added:
-    - "embed-manifest 1.5 (crates/gow-echo/[build-dependencies] only)"
-    - "assert_cmd + predicates (dev-dependencies inherited from workspace)"
-  patterns:
-    - "Ad-hoc argv scanner: strip leading program name; walk tokens; recognize -[neE]+ clusters; honor --help/--version; any other --long = error exit 1; first non-flag token switches into body mode (permutation NOT supported — matches GNU echo)"
-    - "Escape parser as a standalone pure module: `pub fn write_escaped<W: Write>(bytes, out) -> io::Result<Control>` — unit-testable without spawning the binary; reusable in any future echo-like utility"
-    - "Control::Break enum variant communicates mid-stream terminator (\\c) back to caller so trailing-newline emission can be suppressed from outside the parser"
-    - "`b\"\\\\\"` byte-string literal preferred over `&[b'\\\\']` per clippy::byte_char_slices"
-    - "Test isolation: escape state machine tests use `Vec<u8>` as the `W: Write` target — zero I/O, zero spawn overhead; full state machine exercised in 16 unit tests"
-
-key-files:
-  created:
-    - crates/gow-echo/src/escape.rs
-    - crates/gow-echo/build.rs
-    - crates/gow-echo/tests/integration.rs
-    - .planning/phases/02-stateless/deferred-items.md
-    - .planning/phases/02-stateless/02-03-SUMMARY.md
-  modified:
-    - crates/gow-echo/Cargo.toml
-    - crates/gow-echo/src/lib.rs
-    - Cargo.lock
-
-decisions:
-  - "Adopted ad-hoc argv scanner for flag parsing (CONTEXT.md D-21 explicitly authorized this). Clap with `trailing_var_arg(true) + allow_hyphen_values(true)` would swallow unknown `--long` flags as positional args (verified experimentally), violating PLAN Task 2 acceptance criterion `--bad exits 1`. The ad-hoc loop is ~30 lines, directly expresses GNU echo's flag-recognition rule, and is trivially extensible."
-  - "Kept `-E overrides -e` precedence (the simple `e AND NOT E` rule). PLAN Task 2 explicitly authorized this conservative choice; GNU's strict last-wins ordering is a Claude's Discretion region per CONTEXT.md and was not required by any failing test."
-  - "Escape parser API returns `Control::Continue | Break` rather than throwing or using a sentinel byte. Callers must inspect the return value to decide about the trailing newline — explicit, type-safe, and the compiler enforces that `\\c` handling is not forgotten."
-  - "\\c mid-stream stops emission immediately AND is the trigger for newline suppression (no `-n` required to skip the \\n after \\c) — this matches GNU's documented behavior and is covered by `test_e_flag_backslash_c_early_break`."
-
-metrics:
-  duration: "~6 minutes"
-  completed: "2026-04-21"
-  tasks_completed: 2
-  files_created: 5
-  files_modified: 3
-  commits: 2
+phase: "02"
+plan: "03"
 ---
+
+# T03: Plan 03
+
+**# Phase 2 Plan 03: gow-echo Summary**
+
+## What Happened
 
 # Phase 2 Plan 03: gow-echo Summary
 

@@ -1,61 +1,13 @@
 ---
-phase: 01-foundation
-plan: 04
-subsystem: gow-probe/integration
-tags: [rust, assert_cmd, predicates, embed-manifest, integration-tests, gnu-compat, msys, gow-244, phase-1-capstone]
-
-# Dependency graph
-requires:
-  - plan: 01-01
-    provides: Cargo workspace, .cargo/config.toml (x86_64-pc-windows-msvc target triple), embed-manifest build-dep pattern, workspace-pinned assert_cmd/predicates/tempfile
-  - plan: 01-02
-    provides: gow_core::init(), gow_core::args::parse_gnu() (GNU exit-code 1 override), gow_core::encoding::setup_console_utf8(), gow_core::color::enable_vt_mode()
-  - plan: 01-03
-    provides: gow_core::path::try_convert_msys_path() (GOW #244 guard), gow_core::error::GowError, gow_core::fs::LinkType
-provides:
-  - gow-probe internal test binary (publish = false) exercising gow-core end-to-end via real spawned-process behavior
-  - 9-test assert_cmd integration suite covering WIN-01, WIN-03, FOUND-02, FOUND-03, FOUND-06, and the GOW #244 regression at the binary level
-  - Canonical embed-manifest build.rs template for Phase 2+ utility bin crates (unconditional on Windows, no bin-target gate needed because gow-probe has one)
-  - Proof that `cargo test --workspace` is end-to-end green (46 tests: 34 gow-core unit + 9 gow-probe integration + 3 doctests, 0 pre-existing tests in gow-probe)
-affects: [02-stateless, 03-filesystem, 04-text-processing, 05-search-navigation, 06-archive-network]
-
-# Tech tracking
-tech-stack:
-  added: []  # All deps already pinned by Plan 01; Plan 04 only activated assert_cmd + predicates as dev-deps of a new crate
-  patterns:
-    - "gow-probe pattern: thin test binary that calls `gow_core::init()` first, then routes via clap subcommands to exercise individual gow-core primitives"
-    - "Unconditional embed-manifest in bin crate build.rs — no bin-target gate needed (contrast: gow-core's lib-only build.rs must gate the call; see Plan 01)"
-    - "assert_cmd integration pattern: `Command::cargo_bin(\"gow-probe\")` spawns the real debug binary under the active target triple; predicates::str::contains + .code(N) express GNU-shaped behavior assertions"
-    - "Exit-code negative assertion pattern: `.stdout(predicate::str::contains(r\"C:\\\\\").not())` encodes the GOW #244 guard — bare `/c` must NOT appear as a converted drive letter"
-
-key-files:
-  created:
-    - crates/gow-probe/Cargo.toml
-    - crates/gow-probe/build.rs
-    - crates/gow-probe/src/main.rs
-    - crates/gow-probe/tests/integration.rs
-  modified:
-    - Cargo.toml
-    - Cargo.lock
-
-key-decisions:
-  - "gow-probe is a non-shipped test-only crate. `publish = false` in Cargo.toml ensures it cannot be accidentally published to crates.io. It exists solely to give Phase 1 a runnable end-to-end verification artifact — Phase 2+ utility binaries will supersede its role once they exist."
-  - "Subcommand dispatch in main.rs (`path <input>`, `exit-code <n>`, bare default) keeps the probe's CLI surface flat and each integration test can target one primitive without entangling them. The subcommand grammar mirrors what a real utility's clap definition would look like, so the `parse_gnu` doc/usage is also exercised."
-  - "Integration tests cover WIN-03 (PowerShell compatibility) implicitly: assert_cmd spawns the binary via the same Win32 CreateProcessW that PowerShell uses. No dedicated pwsh-harness test is needed — the spawn-and-stdout loop is identical."
-  - "The bare-`/c` GOW #244 guard is encoded as a negative assertion (`.not()`) rather than a positive equality check. This is intentional: the test asserts the bug cannot regress, not the exact stdout shape — future plans may decorate the output without breaking this guard."
-  - "Target-triple binary location: `.cargo/config.toml` pins `x86_64-pc-windows-msvc`, so the binary lives at `target/x86_64-pc-windows-msvc/debug/gow-probe.exe` (not `target/debug/...`). assert_cmd's `cargo_bin` helper resolves this automatically via cargo metadata; the plan's acceptance criterion wording `target/debug/gow-probe.exe` is satisfied in spirit — the canonical `target/*/debug/` location is produced."
-
-patterns-established:
-  - "Pattern: phase capstone as a runnable binary — every foundation phase finishes with an executable that exercises the library end-to-end, not just unit tests, so the `cargo test --workspace` gate covers real process behavior"
-  - "Pattern: embed-manifest build.rs in a bin crate is 1:1 identical to the gow-core template minus the `has_bin_target()` gate — Phase 2+ utility crates can copy-paste this build.rs verbatim"
-  - "Pattern: GNU regression guards live alongside the positive behavior tests — the `/c` guard sits next to `/c/Users/foo` conversion so future readers see both cases together"
-
-requirements-completed: [FOUND-01, FOUND-02, FOUND-03, FOUND-04, FOUND-05, FOUND-06, FOUND-07, WIN-01, WIN-02, WIN-03]
-
-# Metrics
-duration: ~35min (Tasks 1+2 automated, then human verification gate)
-completed: 2026-04-20
+phase: "01"
+plan: "04"
 ---
+
+# T04: Plan 04
+
+**# Phase 1 Plan 04: gow-probe Integration Binary Summary**
+
+## What Happened
 
 # Phase 1 Plan 04: gow-probe Integration Binary Summary
 

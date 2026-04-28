@@ -1,60 +1,13 @@
 ---
-phase: 02-stateless
-plan: 05
-subsystem: stateless-utilities
-tags: [basename, dirname, msys-path, util-05, util-06, wave-2]
-
-# Dependency graph
-requires:
-  - phase: 01-foundation
-    provides: gow_core::path::try_convert_msys_path (MSYS /c/Users → C:\Users conversion)
-  - phase: 01-foundation
-    provides: gow_core::args::parse_gnu (clap wrapper with exit-code-1 on bad flags)
-  - phase: 02-stateless
-    plan: 01
-    provides: gow-basename + gow-dirname stub crates already listed in workspace members
-provides:
-  - crates/gow-basename (binary `basename.exe` + lib uu_basename) — UTIL-05
-  - crates/gow-dirname (binary `dirname.exe` + lib uu_dirname) — UTIL-06
-  - Pattern proof: MSYS pre-convert + std::path wrapper pattern (S4 from PATTERNS.md) works end-to-end for the simplest utilities; later plans (gow-touch, gow-mkdir, gow-rmdir, gow-tee, gow-wc) can reuse the exact same pre-convert call site shape.
-affects: []
-
-# Tech tracking
-tech-stack:
-  added: []
-  patterns:
-    - "MSYS pre-convert at operand ingestion: `let converted = gow_core::path::try_convert_msys_path(raw);` first line of each per-operand helper fn"
-    - "Trailing-separator strip via `trim_end_matches(['/', '\\\\'])` — array pattern (clippy-preferred over closure)"
-    - "Multi-mode dispatch: basename has single-arg and multi (`-a`/`-s`) modes selected by flag presence; dirname always multi (GNU default)"
-    - "NUL terminator via `terminator: &[u8] = if zero { b\"\\0\" } else { b\"\\n\" };` then `out.write_all(terminator)` after each result"
-
-key-files:
-  created:
-    - crates/gow-basename/build.rs
-    - crates/gow-basename/tests/integration.rs
-    - crates/gow-dirname/build.rs
-    - crates/gow-dirname/tests/integration.rs
-    - .planning/phases/02-stateless/02-05-SUMMARY.md
-  modified:
-    - crates/gow-basename/Cargo.toml (added [build-dependencies] embed-manifest, [dev-dependencies] assert_cmd/predicates/tempfile)
-    - crates/gow-basename/src/lib.rs (stub replaced with full uumain + basename_with_optional_suffix)
-    - crates/gow-dirname/Cargo.toml (added [build-dependencies] embed-manifest, [dev-dependencies] assert_cmd/predicates/tempfile)
-    - crates/gow-dirname/src/lib.rs (stub replaced with full uumain + dirname_of)
-    - Cargo.lock (transitive changes from adding embed-manifest to two crates)
-
-decisions:
-  - "dirname(\"\") returns `.` not `\"\"` — GNU behavior. Fixed during Task 2 unit-test verification (see Deviations)."
-  - "UTF-8 dirname test uses `contains(\"안녕\")` + `contains(\"foo\")` pattern instead of exact `stdout(\"foo\\\\안녕\\n\")`. Rationale: `Path::parent` on Windows preserves whatever separator was in the source string (it does not normalize `/` to `\\`). Plan docs acknowledged this ambiguity; loose assertions survive both behaviors without sacrificing the core check (parent computed, UTF-8 round-tripped)."
-  - "Per-utility `[build-dependencies] embed-manifest = \"1.5\"` is duplicated across basename and dirname Cargo.toml rather than hoisted to workspace.dependencies. Matches the existing gow-probe pattern; hoisting would require touching workspace Cargo.toml which is forbidden by Plan 02-01 handoff notes."
-
-metrics:
-  duration: "~3 minutes"
-  completed: "2026-04-21"
-  tasks_completed: 2
-  files_created: 5
-  files_modified: 5
-  commits: 2
+phase: "02"
+plan: "05"
 ---
+
+# T05: Plan 05
+
+**# Phase 02 Plan 05: gow-basename + gow-dirname Summary**
+
+## What Happened
 
 # Phase 02 Plan 05: gow-basename + gow-dirname Summary
 

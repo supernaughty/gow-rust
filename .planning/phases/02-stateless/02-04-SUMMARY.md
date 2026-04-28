@@ -1,59 +1,13 @@
 ---
-phase: 02-stateless
-plan: 04
-subsystem: pwd
-tags: [pwd, util-02, unc-prefix, canonical-path, windows-path, stateless-utility]
-
-# Dependency graph
-requires:
-  - phase: 02-stateless
-    plan: 01
-    provides: gow-pwd stub crate (Cargo.toml + lib.rs stub + main.rs thin wrapper) already scaffolded by Plan 02-01
-  - phase: 01-foundation
-    provides: gow_core::init(), gow_core::args::parse_gnu — consumed by uumain
-provides:
-  - pwd.exe binary with GNU -L (logical, default) / -P (physical) flag parity
-  - uu_pwd::uumain entry point (gow-core integrated, Windows manifest embedded)
-  - uu_pwd::canonical::simplify_canonical — UNC-aware \\?\ prefix strip (dunce-equivalent, inline, no workspace dep)
-  - PWD env validation via validate_pwd (canonicalize both sides + compare) — mitigates T-02-04-01
-  - 17 tests (9 unit covering prefix-strip rules incl. UNC preservation; 8 integration covering -L/-P behavior, exit codes, GNU error format)
-affects: []
-
-# Tech tracking
-tech-stack:
-  added: []  # no new workspace deps; dunce avoided by inlining 10-line safety rule (D-20b)
-  patterns:
-    - "pub fn simplify_canonical(&Path) -> PathBuf: strip \\?\\ only when followed by [A-Za-z]:\\ — else preserve verbatim"
-    - "pwd -P = current_dir().and_then(fs::canonicalize).map(simplify_canonical) with GNU-format error on failure"
-    - "pwd default/-L = PWD if validate_pwd(PWD) else current_dir() else `.`"
-    - "validate_pwd canonicalizes both PWD and current_dir; any error or mismatch rejects PWD"
-    - "#[allow(dead_code)] bridging pattern: Task 1 marks helper dead, Task 2 removes annotation when consumed"
-
-key-files:
-  created:
-    - .planning/phases/02-stateless/02-04-SUMMARY.md
-    - crates/gow-pwd/build.rs
-    - crates/gow-pwd/src/canonical.rs
-    - crates/gow-pwd/tests/integration.rs
-  modified:
-    - crates/gow-pwd/Cargo.toml
-    - crates/gow-pwd/src/lib.rs
-    - Cargo.lock
-
-decisions:
-  - "Inline dunce::simplified rule rather than adding dunce to workspace.dependencies — keeps dep surface minimal per D-20b and we only need the one 10-line function."
-  - "Kept the full validate_pwd logic (not simplified): canonicalize both PWD and current_dir, compare for equality. This is the defense for T-02-04-01 (malicious PWD override) and matches standard GNU pwd semantics."
-  - "Task 1 annotated simplify_canonical with #[allow(dead_code)] so TDD-style landing of the module (tests pass before lib.rs consumes it) keeps clippy -D warnings clean; Task 2 removes the annotation in the same commit that wires it to uumain."
-  - "Integration test for -P asserts BOTH `.not().starts_with(\"\\\\?\\\\\")` AND regex `^[A-Z]:\\\\` — the negative guard catches accidental prefix pass-through, the positive guard catches bogus non-path output."
-
-metrics:
-  duration: "~3 min 11 sec"
-  completed: "2026-04-21"
-  tasks_completed: 2
-  files_created: 4
-  files_modified: 3
-  commits: 2
+phase: "02"
+plan: "04"
 ---
+
+# T04: Plan 04
+
+**# Phase 2 Plan 04: gow-pwd — GNU pwd with -L/-P and UNC-safe canonicalization**
+
+## What Happened
 
 # Phase 2 Plan 04: gow-pwd — GNU pwd with -L/-P and UNC-safe canonicalization
 

@@ -1,54 +1,13 @@
 ---
-phase: 02-stateless
-plan: 09
-subsystem: utilities/env
-tags: [gnu-compat, env, split-string, state-machine, argv-only-spawn, utf-8]
-requires:
-  - 02-01   # gow-env crate scaffold + workspace registration
-  - gow-core::init                 # UTF-8 console + VT bootstrap
-  - gow-core::args::parse_gnu     # GNU arg parsing with exit-1 + `{bin}: {msg}`
-provides:
-  - uu_env::uumain                 # `pub fn uumain(args) -> i32` — GNU env entry point
-  - uu_env::split::split           # pure state machine (testable without env)
-  - uu_env::split::SplitError     # MissingBrace / UnterminatedQuote / InputTooLong
-  - env.exe                        # bin crate, UTF-8 + long-path manifest
-affects:
-  - crates/gow-env/Cargo.toml
-  - crates/gow-env/build.rs
-  - crates/gow-env/src/lib.rs
-  - crates/gow-env/src/split.rs
-  - crates/gow-env/tests/integration.rs
-tech-stack:
-  added: []
-  patterns:
-    - "Lib+bin split (D-16): uumain in uu_env lib, 3-line main.rs wrapper"
-    - "Pre-parse argv rewrite for `-0` → `--null` to bypass allow_negative_numbers(true) in gow_core::args::parse_gnu"
-    - "State-machine parser with caller-injected env lookup closure (testability)"
-    - "argv-array spawn via std::process::Command::args — no shell interpolation pathway"
-    - "Source-level threat-register enforcement via grep test in integration.rs"
-key-files:
-  created:
-    - crates/gow-env/build.rs
-    - crates/gow-env/src/split.rs
-    - crates/gow-env/tests/integration.rs
-  modified:
-    - crates/gow-env/Cargo.toml
-    - crates/gow-env/src/lib.rs
-decisions:
-  - "`-0` ≡ `--null` rewrite happens pre-clap to sidestep allow_negative_numbers(true) (gow-core Phase 1 decision) without mutating shared infra"
-  - "Parser is a pure function taking a closure `F: Fn(&str) -> Option<String>` for ${VAR} lookup — decouples from std::env so unit tests can inject deterministic values"
-  - "Comments trigger only at token start (delim context); `#` inside an unquoted token is literal (matches uutils/GNU)"
-  - "`\\c` fast-path: in delim context returns current token list as-is; in unquoted-body context flushes the in-progress token then returns"
-  - "SplitError::MissingBrace fires both on `$VAR` (no brace) and `${UNTERMINATED` (no closing brace), both → exit 125"
-  - "chdir validation happens before env_clear/spawn: non-existent DIR → 125 (not 126/127) so scripts can distinguish env's own failure from child failure"
-metrics:
-  duration: ~35 min
-  completed: 2026-04-21
-  tasks_completed: 2/2
-  tests_added: 31 (17 unit + 14 integration)
-  test_pass_rate: 100%
-  clippy: pass (-D warnings)
+phase: "02"
+plan: "09"
 ---
+
+# T09: Plan 09
+
+**# Phase 2 Plan 09: gow-env (GNU `env`) Summary**
+
+## What Happened
 
 # Phase 2 Plan 09: gow-env (GNU `env`) Summary
 

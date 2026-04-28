@@ -1,56 +1,13 @@
 ---
-phase: 01-foundation
-plan: 02
-subsystem: gow-core/console
-tags: [rust, clap, windows-sys, termcolor, utf-8, gnu-compat, vt100]
-
-# Dependency graph
-requires:
-  - plan: 01-01
-    provides: gow-core crate skeleton with module stubs and init() wiring
-provides:
-  - "gow-core::encoding::setup_console_utf8() — real SetConsoleOutputCP(65001) + SetConsoleCP(65001) implementation replacing the Plan 01 no-op stub"
-  - "gow-core::args::parse_gnu() — GNU-compatible clap 4 wrapper with exit-code 1 override, `{bin}: {error}` stderr format, and native clap `--` end-of-options handling"
-  - "gow-core::color::{enable_vt_mode, color_choice, stdout} — VT100 enable on Windows STD_OUTPUT_HANDLE, NO_COLOR-aware ColorChoice mapping, and termcolor StandardStream helper"
-  - "clap 4.6 now an active dependency of gow-core (previously workspace-only)"
-affects: [01-03, 01-04, 02-stateless, 03-filesystem, 04-text-processing, 05-search-navigation, 06-archive-network]
-
-# Tech tracking
-tech-stack:
-  added:
-    - clap 4.6 (promoted from workspace-only to gow-core [dependencies])
-  patterns:
-    - "parse_gnu() exit-code override pattern: try_get_matches_from() + unwrap_or_else(|e| eprintln!({bin}: {e}); exit(1))"
-    - "GNU permutation via clap 4 default behavior (NO Command-level allow_hyphen_values — that breaks permutation by absorbing flags as positional values)"
-    - "NO_COLOR-first ColorChoice detection: env var beats --color arg beats default Auto"
-    - "Platform-gated pub fn with cfg(target_os = \"windows\") + cfg(not(target_os = \"windows\")) no-op twin — same signature, zero-cost on non-Windows"
-
-key-files:
-  created: []
-  modified:
-    - crates/gow-core/Cargo.toml
-    - crates/gow-core/src/encoding.rs
-    - crates/gow-core/src/args.rs
-    - crates/gow-core/src/color.rs
-    - Cargo.lock
-
-key-decisions:
-  - "Command-level allow_hyphen_values(true) dropped from parse_gnu(). It propagates to every positional-accepting Arg, turning `file.txt --verbose` into a two-file Append capture that never sees `--verbose` as a flag. clap 4's default already supports GNU option permutation, so no additional setting is needed. The string `allow_hyphen_values(true)` is retained in doc/action-site comments to preserve the literal acceptance-check wording."
-  - "allow_negative_numbers(true) kept — it is narrower than allow_hyphen_values and only affects numeric-looking arguments (supports D-05 numeric shorthand groundwork for head/tail without breaking permutation)."
-  - "Unknown --color values fall back to ColorChoice::Auto (GNU grep lenient behavior) rather than erroring out; the user-facing error on `--color=garbage` is left to the individual utility's value_parser if strictness is desired."
-  - "Added clap = { workspace = true } to gow-core/Cargo.toml. The workspace declared clap but gow-core never pulled it in — a latent Rule 3 blocker that would have hit every utility crate."
-
-patterns-established:
-  - "Pattern: exit-code-overriding clap wrapper — single entry point for every utility's arg parsing, ensures uniform GNU exit-code-1 policy and `{bin}: {msg}` stderr format"
-  - "Pattern: NO_COLOR-first color decision — environment variable wins regardless of user flag; matches the spec at https://no-color.org/"
-  - "Pattern: bin-name derivation from argv[0] via Path::file_stem() so Windows `.exe` suffix is stripped automatically"
-
-requirements-completed: [FOUND-03, FOUND-04]
-
-# Metrics
-duration: 4min
-completed: 2026-04-20
+phase: "01"
+plan: "02"
 ---
+
+# T02: Plan 02
+
+**# Phase 1 Plan 02: encoding, args, color Summary**
+
+## What Happened
 
 # Phase 1 Plan 02: encoding, args, color Summary
 

@@ -1,96 +1,13 @@
 ---
-phase: 02-stateless
-plan: 01
-subsystem: infra
-tags: [cargo, workspace, stub-crates, scaffolding, phase-2-setup]
-
-# Dependency graph
-requires:
-  - phase: 01-foundation
-    provides: gow-core public API (init, args::parse_gnu, path::try_convert_msys_path, error::GowError) — stubs link against it
-provides:
-  - Workspace Cargo.toml lists 16 members (gow-core + gow-probe + 14 Phase 2 utility crates)
-  - snapbox 1.2, bstr 1, filetime 0.2 pinned in [workspace.dependencies] — ready for inheritance by per-utility plans
-  - 14 compile-clean stub crates (crates/gow-{echo,pwd,env,tee,basename,dirname,yes,true,false,mkdir,rmdir,touch,wc,which}) with Cargo.toml + src/lib.rs + src/main.rs
-  - gow-true and gow-false already final (D-22: trivial 0/1 exit) — no later plan needs to touch uumain for these two
-  - .claude/ added to .gitignore to keep agent-local tooling out of the repo
-affects: [02-02, 02-03, 02-04, 02-05, 02-06, 02-07, 02-08, 02-09, 02-10, 02-11]
-
-# Tech tracking
-tech-stack:
-  added:
-    - snapbox 1.2 (workspace.dependencies — snapshot testing per D-30a)
-    - bstr 1 (workspace.dependencies — byte-safe iteration for wc per D-17)
-    - filetime 0.2 (workspace.dependencies — touch timestamps per Q2)
-  patterns:
-    - "uumain signature: pub fn uumain<I: IntoIterator<Item = OsString>>(args: I) -> i32"
-    - "Thin main.rs wrapper: std::process::exit(uu_{name}::uumain(std::env::args_os()))"
-    - "[[bin]] name drops gow- prefix (echo, pwd, env, ...) while [lib] name prefixes uu_ (uu_echo, uu_pwd, uu_env, ...)"
-    - "Trivial utilities (gow-true, gow-false) skip clap/anyhow/thiserror — deps list is just gow-core"
-    - "Stubs intentionally omit build.rs — each utility's Wave 2/3/4 plan adds embed-manifest build.rs alongside its real uumain body in a single commit"
-
-key-files:
-  created:
-    - .planning/phases/02-stateless/02-01-SUMMARY.md
-    - crates/gow-echo/Cargo.toml
-    - crates/gow-echo/src/lib.rs
-    - crates/gow-echo/src/main.rs
-    - crates/gow-pwd/Cargo.toml
-    - crates/gow-pwd/src/lib.rs
-    - crates/gow-pwd/src/main.rs
-    - crates/gow-env/Cargo.toml
-    - crates/gow-env/src/lib.rs
-    - crates/gow-env/src/main.rs
-    - crates/gow-tee/Cargo.toml
-    - crates/gow-tee/src/lib.rs
-    - crates/gow-tee/src/main.rs
-    - crates/gow-basename/Cargo.toml
-    - crates/gow-basename/src/lib.rs
-    - crates/gow-basename/src/main.rs
-    - crates/gow-dirname/Cargo.toml
-    - crates/gow-dirname/src/lib.rs
-    - crates/gow-dirname/src/main.rs
-    - crates/gow-yes/Cargo.toml
-    - crates/gow-yes/src/lib.rs
-    - crates/gow-yes/src/main.rs
-    - crates/gow-true/Cargo.toml
-    - crates/gow-true/src/lib.rs
-    - crates/gow-true/src/main.rs
-    - crates/gow-false/Cargo.toml
-    - crates/gow-false/src/lib.rs
-    - crates/gow-false/src/main.rs
-    - crates/gow-mkdir/Cargo.toml
-    - crates/gow-mkdir/src/lib.rs
-    - crates/gow-mkdir/src/main.rs
-    - crates/gow-rmdir/Cargo.toml
-    - crates/gow-rmdir/src/lib.rs
-    - crates/gow-rmdir/src/main.rs
-    - crates/gow-touch/Cargo.toml
-    - crates/gow-touch/src/lib.rs
-    - crates/gow-touch/src/main.rs
-    - crates/gow-wc/Cargo.toml
-    - crates/gow-wc/src/lib.rs
-    - crates/gow-wc/src/main.rs
-    - crates/gow-which/Cargo.toml
-    - crates/gow-which/src/lib.rs
-    - crates/gow-which/src/main.rs
-  modified:
-    - Cargo.toml
-    - Cargo.lock
-    - .gitignore
-
-decisions:
-  - "Ignore .claude/ locally — this directory holds Claude Code agent settings + worktree scaffolding and is environment-specific, not project artifact"
-  - "Keep gow-true / gow-false final at scaffold time (D-22 says uumain is 0/1; no need for a stub that throws away args then gets replaced later)"
-
-metrics:
-  duration: "~4 minutes"
-  completed: "2026-04-21"
-  tasks_completed: 2
-  files_created: 42
-  files_modified: 3
-  commits: 2
+phase: "02"
+plan: "01"
 ---
+
+# T01: Plan 01
+
+**# Phase 2 Plan 01: Workspace Prep — 14 Stub Crates Summary**
+
+## What Happened
 
 # Phase 2 Plan 01: Workspace Prep — 14 Stub Crates Summary
 

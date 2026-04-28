@@ -1,62 +1,13 @@
 ---
-phase: 02-stateless
-plan: 06
-subsystem: stateless-utilities
-tags: [mkdir, rmdir, file-utilities, msys-path, file-06, file-07, wave-3, gow-133]
-
-# Dependency graph
-requires:
-  - phase: 01-foundation
-    provides: gow_core::path::try_convert_msys_path (MSYS /c/Users → C:\Users conversion)
-  - phase: 01-foundation
-    provides: gow_core::args::parse_gnu (clap wrapper with exit-code-1 on bad flags)
-  - phase: 02-stateless
-    plan: 01
-    provides: gow-mkdir + gow-rmdir stub crates already listed in workspace members
-provides:
-  - crates/gow-mkdir (binary `mkdir.exe` + lib uu_mkdir) — FILE-06
-  - crates/gow-rmdir (binary `rmdir.exe` + lib uu_rmdir) — FILE-07
-  - GOW issue #133 resolution (mkdir -p idempotent on existing nested paths)
-  - Pattern proof: std::fs + multi-operand + MSYS pre-convert extends from read-only utils (basename/dirname) to mutating filesystem ops
-affects: []
-
-# Tech tracking
-tech-stack:
-  added: []
-  patterns:
-    - "std::fs delegation: `create_dir_all` handles POSIX `-p` idempotency natively; no custom loop (D-27, RESEARCH.md Q5)"
-    - "Manual parent-walk loop for rmdir -p: leaf first, then iterate Path::parent() and stop on ErrorKind::DirectoryNotEmpty (D-28)"
-    - "Defense-in-depth `is_not_empty`: primary check via `ErrorKind::DirectoryNotEmpty` (stable in Rust 1.83+); fallback to raw_os_error 145 (Windows) / 39 (Unix)"
-    - "MSYS pre-convert at operand ingestion (reused from Plan 02-05): `let converted = gow_core::path::try_convert_msys_path(op);` first line inside per-operand loop"
-    - "Per-crate `[build-dependencies] embed-manifest = \"1.5\"` (mirrors gow-probe / gow-echo / gow-basename / gow-dirname pattern)"
-
-key-files:
-  created:
-    - crates/gow-mkdir/build.rs
-    - crates/gow-mkdir/tests/integration.rs
-    - crates/gow-rmdir/build.rs
-    - crates/gow-rmdir/tests/integration.rs
-    - .planning/phases/02-stateless/02-06-SUMMARY.md
-  modified:
-    - crates/gow-mkdir/Cargo.toml (added [build-dependencies] embed-manifest, [dev-dependencies] assert_cmd/predicates/tempfile)
-    - crates/gow-mkdir/src/lib.rs (stub replaced with full uumain delegating to create_dir_all / create_dir)
-    - crates/gow-rmdir/Cargo.toml (added [build-dependencies] embed-manifest, [dev-dependencies] assert_cmd/predicates/tempfile)
-    - crates/gow-rmdir/src/lib.rs (stub replaced with full uumain + rmdir_parents + is_not_empty)
-
-decisions:
-  - "mkdir -m MODE is DROPPED in v1 — Windows has no POSIX mode bits and GNU allows the flag to be a no-op on such platforms. Passing `-m` today produces the standard 'unrecognized option' error, which is the conservative GNU-compatible failure mode. Deferred to a later plan that can wire NTFS ACLs if a user actually demands it. Rationale: the PLAN.md Task 1 note explicitly sanctioned either dropping or silently-accepting `-m`; dropping is chosen so the behavior is discoverable via `--help` and unexpected MODE args never silently vanish."
-  - "mkdir -p delegates to std::fs::create_dir_all (no custom loop) — Rust std already implements POSIX idempotency (docs: 'If the path already points to an existing directory, this function returns Ok'). GOW #133 is therefore fixed by delegation alone; no special-case code in uu_mkdir. RESEARCH.md Q5 evaluates and rejects the uutils stack-overflow-prevention rationale (Rust std is loop-based, not recursive)."
-  - "rmdir is_not_empty uses both kind() and raw_os_error() — the kind() check is primary (ErrorKind::DirectoryNotEmpty is stable in Rust 1.85, matches on both Windows and Unix), and the raw_os_error() check (145 / 39) is a defense-in-depth layer in case a future std release remaps the error classification. This matches the RESEARCH.md Q5 guidance verbatim."
-  - "Per-crate `[build-dependencies] embed-manifest = \"1.5\"` duplicated in gow-mkdir and gow-rmdir Cargo.toml rather than hoisted to workspace.dependencies — mirrors the established gow-probe / gow-echo / gow-basename / gow-dirname pattern from Waves 1-2. Hoisting would require touching workspace Cargo.toml which is out of scope for this plan."
-
-metrics:
-  duration: "~6 minutes"
-  completed: "2026-04-21"
-  tasks_completed: 2
-  files_created: 5
-  files_modified: 4
-  commits: 2
+phase: "02"
+plan: "06"
 ---
+
+# T06: Plan 06
+
+**# Phase 02 Plan 06: gow-mkdir + gow-rmdir Summary**
+
+## What Happened
 
 # Phase 02 Plan 06: gow-mkdir + gow-rmdir Summary
 

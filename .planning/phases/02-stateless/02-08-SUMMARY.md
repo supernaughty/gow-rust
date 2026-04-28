@@ -1,53 +1,13 @@
 ---
-phase: 02-stateless
-plan: 08
-subsystem: text
-tags: [wc, bstr, unicode, tdd, wave-3, utf-8, text-counting]
-
-# Dependency graph
-requires:
-  - phase: 01-foundation
-    provides: gow_core::init / args::parse_gnu / path::try_convert_msys_path (inherited unchanged)
-  - plan: 02-01
-    provides: workspace bstr = { workspace = true } dep, gow-wc stub crate scaffold
-provides:
-  - crates/gow-wc compiled-clean with real uumain (9 unit tests + 12 integration tests = 21 passing)
-  - count_bytes(&[u8]) -> Counts public API (lines, words, bytes, chars)
-  - TEXT-03 + ROADMAP success criterion 2 observable (wc -m ≠ wc -c on UTF-8)
-  - Threat T-02-08-02 mitigation verified: invalid UTF-8 → U+FFFD, never panic
-affects: [02-10 (if phase tracking plan runs), Phase 3+ future text utilities may reuse count_bytes]
-
-# Tech tracking
-tech-stack:
-  added:
-    - bstr 1.12.1 (via workspace; byte-safe char iteration for -m / -w)
-  patterns:
-    - "Counts struct + count_bytes(&[u8]) pure function — testable independent of I/O"
-    - "2-pass column width: collect rows into Vec<(String, Counts)>, compute max-digit width, then print (D-30 Claude's Discretion, matches GNU wc layout)"
-    - "bstr::ByteSlice::chars() for -m / -w — yields char (U+FFFD on invalid UTF-8) instead of std::str::from_utf8 panicking"
-    - "Per-operand error loop: file-open or read failure prints 'wc: {path}: {err}', sets exit_code=1, continues to next operand"
-    - "operand '-' routes to io::stdin().lock(); empty-operand list also routes to stdin but without a trailing filename"
-    - "MSYS path pre-convert applied to each file operand via gow_core::path::try_convert_msys_path"
-
-key-files:
-  created:
-    - crates/gow-wc/build.rs
-    - crates/gow-wc/tests/integration.rs
-    - .planning/phases/02-stateless/02-08-SUMMARY.md
-  modified:
-    - crates/gow-wc/Cargo.toml
-    - crates/gow-wc/src/lib.rs
-    - Cargo.lock
-
-decisions:
-  - "Column width = 2-pass max-digit-width (CONTEXT.md Claude's Discretion). Implementation collects rows first, computes `max(all requested counts incl. total).to_string().len()`, then uses `format!(\"{:>width$}\")`."
-  - "count_bytes returns all four counts unconditionally; flag selection happens in uumain's print_row (simpler than per-flag counting branches; perf cost negligible vs I/O)."
-  - "in_word state machine over bstr chars for -w word boundary — matches GNU wc by operating on Unicode scalar values with char::is_whitespace."
-
-metrics:
-  duration: 6m20s          # plan start 00:51:37Z → end 00:57:57Z
-  completed: 2026-04-21
+phase: "02"
+plan: "08"
 ---
+
+# T08: Plan 08
+
+**# Phase 2 Plan 08: gow-wc Summary**
+
+## What Happened
 
 # Phase 2 Plan 08: gow-wc Summary
 

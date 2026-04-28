@@ -1,72 +1,13 @@
 ---
-phase: 02-stateless
-plan: 02
-subsystem: stateless-utilities
-tags: [yes, true, false, broken-pipe, throughput, embed-manifest, assert_cmd, tdd, uumain]
-
-# Dependency graph
-requires:
-  - phase: 01-foundation
-    provides: gow-core::init() (UTF-8 console init) consumed by uu_yes::uumain
-  - phase: 02-stateless
-    plan: 01
-    provides: workspace members (gow-true, gow-false, gow-yes), pinned dev/bin deps (assert_cmd, predicates, embed-manifest ready for per-crate activation)
-provides:
-  - Final gow-true binary (exit 0, Windows manifest embedded)
-  - Final gow-false binary (exit 1, Windows manifest embedded)
-  - Final gow-yes binary (16 KiB prefill buffer + write_all loop + BrokenPipe-safe exit 0; UTF-8 argv round-trip)
-  - Canonical build.rs template usage on 3 bin crates (same embed-manifest body as gow-probe)
-  - Reusable prepare_buffer<'a>(input, buffer) -> &'a [u8] helper pattern (pub(crate)) for throughput-loop utilities
-  - Integration-test pattern for infinite-loop CLI: std::process::Command + Stdio::piped() + read_exact + child.kill() (avoids assert_cmd::Command::timeout hang on non-terminating processes)
-affects: [02-03, 02-04, 02-05, 02-06, 02-07, 02-08, 02-09, 02-10, 02-11]
-
-# Tech tracking
-tech-stack:
-  added:
-    - embed-manifest 1.5 activated as [build-dependencies] on gow-true, gow-false, gow-yes (workspace already had it; now consumed by these 3)
-    - assert_cmd + predicates activated as [dev-dependencies] on all 3 crates (inherited via workspace = true)
-  patterns:
-    - "build.rs template is copy-verbatim from gow-probe — only line 1 doc comment identifies the crate; zero other edits"
-    - "Trivial utilities (D-22: true/false) intentionally omit gow_core::init() — no I/O, no error path, just return 0/1"
-    - "Throughput utilities (yes) use: heap-allocated prefill buffer → prepare_buffer helper → locked stdout → write_all loop → match on ErrorKind::BrokenPipe for silent exit 0"
-    - "OsString argv joined via to_string_lossy (not UTF-8 strict) so non-UTF-8 argv never panics"
-    - "Infinite-loop integration tests: skip assert_cmd::Command::timeout() (doesn't kill); use std::process::Command + Stdio::piped() + Read::read_exact(&mut [0u8; N]) + child.kill()"
-
-key-files:
-  created:
-    - crates/gow-true/build.rs
-    - crates/gow-true/tests/integration.rs
-    - crates/gow-false/build.rs
-    - crates/gow-false/tests/integration.rs
-    - crates/gow-yes/build.rs
-    - crates/gow-yes/tests/integration.rs
-    - .planning/phases/02-stateless/02-02-SUMMARY.md
-  modified:
-    - crates/gow-true/Cargo.toml (added [build-dependencies] embed-manifest; [dev-dependencies] assert_cmd + predicates)
-    - crates/gow-false/Cargo.toml (same as above)
-    - crates/gow-yes/Cargo.toml (same as above; existing clap/anyhow/thiserror retained for future --help support)
-    - crates/gow-yes/src/lib.rs (stub → real uumain with prepare_buffer + write_all loop + BrokenPipe exit 0 + 4 unit tests)
-    - Cargo.lock (lockfile reflects new build/dev deps on 3 crates)
-
-key-decisions:
-  - "Integration tests for yes use std::process::Command + Stdio::piped() + bounded read_exact + child.kill(), NOT assert_cmd::Command::timeout() — the latter does not actually kill the process on timeout (it relies on wait_timeout_process) and would hang the test runner against an infinite-loop program."
-  - "BUF_SIZE = 16 KiB (heap-allocated via Vec<u8>), not 64 KiB — the RESEARCH.md Q4 table shows 16 KiB already hits ~2 GB/s which is already higher than any realistic stdin-consumer downstream; 64 KiB is saved as a tuning knob for later benchmark-driven change."
-  - "prepare_buffer kept pub(crate), not pub — it's an internal helper, not a public API; unit tests live in the same lib crate via super::prepare_buffer."
-  - "gow-true and gow-false keep NO gow_core::init() call (D-22 / PATTERNS.md S1 exception) — they do zero I/O and any init work would be wasted cycles on invocations that account for a large fraction of shell scripts."
-  - "gow-yes test `test_three_arg_space_joined` reads only 12 bytes to handle the case where the first loop-iteration's write may be partially scheduled; 'a b c\\n' is 6 bytes so 12 bytes deterministically contains at least one full line and part of the next."
-
-patterns-established:
-  - "Phase 2 per-crate build.rs: verbatim copy of gow-probe/build.rs; only line 1 doc comment names the crate"
-  - "Per-crate Cargo.toml expansion when filling a stub: add [build-dependencies] embed-manifest = \"1.5\" + [dev-dependencies] assert_cmd + predicates (both workspace = true)"
-  - "Integration test for infinite-loop CLIs: capture_prefix(args, n_bytes) helper returns Vec<u8>, drops stdout, kills child, waits — safe and deterministic"
-  - "TDD cycle for utilities with existing stubs: RED = add failing integration tests (stub emits 'not yet implemented' + exit 1, so read_exact yields UnexpectedEof); GREEN = replace stub body; REFACTOR optional"
-
-requirements-completed: [UTIL-07, UTIL-08, UTIL-09]
-
-# Metrics
-duration: ~7min
-completed: 2026-04-21
+phase: "02"
+plan: "02"
 ---
+
+# T02: Plan 02
+
+**# Phase 2 Plan 02: true + false + yes Summary**
+
+## What Happened
 
 # Phase 2 Plan 02: true + false + yes Summary
 

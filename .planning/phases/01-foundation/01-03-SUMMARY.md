@@ -1,58 +1,13 @@
 ---
-phase: 01-foundation
-plan: 03
-subsystem: core-data
-tags: [thiserror, path-conversion, msys, gow-244, symlink, junction, windows, tdd]
-
-# Dependency graph
-requires:
-  - phase: 01-foundation
-    plan: 01
-    provides: gow-core crate skeleton with error/path/fs stubs and workspace deps (thiserror, path-slash, windows-sys, tempfile)
-provides:
-  - GowError enum (Io, Custom, PermissionDenied, NotFound) with exit_code() and io_err() helper
-  - try_convert_msys_path() solving GOW #244: /c/Users/foo -> C:\Users\foo, but /c and -c left unchanged
-  - to_windows_path() wrapper around path-slash PathBufExt::from_slash
-  - normalize_file_args() positional-only MSYS conversion (skips flag values)
-  - LinkType enum and link_type() detection (SymlinkFile, SymlinkDir, Junction, HardLink)
-  - normalize_junction_target() strips \??\ NT device prefix
-affects: [01-04, 02-stateless, 03-filesystem, 04-text-processing, 05-search-navigation]
-
-# Tech tracking
-tech-stack:
-  added: []  # All deps already pinned in Plan 01
-  patterns:
-    - "Conservative MSYS conversion: require /<letter>/<non-empty-rest> — bare /c is ambiguous, leave unchanged (GOW #244 fix)"
-    - "Positional-only path normalization: skip the argument following any short flag (-c value), convert only non-flag non-skip args"
-    - "Windows-specific junction detection via FILE_ATTRIBUTE_REPARSE_POINT (0x400) behind #[cfg(target_os = \"windows\")]"
-    - "symlink_metadata() for link detection (does not follow), metadata() only to distinguish SymlinkFile vs SymlinkDir"
-    - "TDD RED/GREEN commit cadence: test(...) then feat(...) for every task"
-
-key-files:
-  created: []
-  modified:
-    - crates/gow-core/src/error.rs
-    - crates/gow-core/src/path.rs
-    - crates/gow-core/src/fs.rs
-
-key-decisions:
-  - "GowError kept to 4 variants (Io, Custom, PermissionDenied, NotFound) per plan spec; exit_code() uniformly returns 1 per GNU convention."
-  - "MSYS detection requires at least 4 bytes ('/' + letter + '/' + one char) — /c/X is the minimum convertible form; /c is never converted."
-  - "normalize_file_args uses a conservative heuristic: any short flag (len == 2, starts with -) consumes the next arg as its value. Long flags with = are self-contained; long flags without = do not consume the next arg (they might be booleans). This is deliberately simple — plans using complex arg shapes should post-process via try_convert_msys_path on clap-parsed paths instead."
-  - "link_type distinguishes SymlinkFile/SymlinkDir by following the link with metadata() and checking is_dir; broken symlinks default to SymlinkFile. HardLink variant reserved — stable Rust does not expose nlink portably."
-  - "Junction detection gated on #[cfg(target_os = \"windows\")] so the code compiles on Unix; non-Windows callers simply never see LinkType::Junction."
-
-patterns-established:
-  - "Pattern: RED/GREEN commit split — test(...) commit intentionally fails to compile/pass, then feat(...) commit makes it pass. Both land in history for traceable TDD."
-  - "Pattern: conservative fallback in path conversion — anything the rules cannot classify is returned unchanged rather than guessed at."
-  - "Pattern: platform-gated reparse-point inspection — the junction check lives inside a cfg block so gow-core stays buildable (and testable) on Unix CI."
-
-requirements-completed: [FOUND-05, FOUND-06, FOUND-07]
-
-# Metrics
-duration: 5min
-completed: 2026-04-20
+phase: "01"
+plan: "03"
 ---
+
+# T03: Plan 03
+
+**# Phase 1 Plan 03: Core Error, Path, and FS Modules Summary**
+
+## What Happened
 
 # Phase 1 Plan 03: Core Error, Path, and FS Modules Summary
 

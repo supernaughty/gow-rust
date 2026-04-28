@@ -1,75 +1,13 @@
 ---
-phase: 01-foundation
-plan: 01
-subsystem: infra
-tags: [cargo, workspace, rust-2024, windows-msvc, embed-manifest, crt-static]
-
-# Dependency graph
-requires:
-  - phase: none
-    provides: clean slate — no prior phases
-provides:
-  - Cargo workspace root with resolver = 3, edition 2024, [workspace.dependencies] for all Phase 1 shared crates
-  - .cargo/config.toml pinning x86_64-pc-windows-msvc target with +crt-static (eliminates VCRUNTIME140.dll dependency)
-  - gow-core crate skeleton with six module stubs (args, color, encoding, error, fs, path) and pub fn init()
-  - gow-core/build.rs as the canonical manifest-embedding template for all utility bin crates (Phase 2+)
-  - Verified toolchain: rustc 1.95.0 (MSVC), cargo 1.95.0, all pinned dep versions resolve against the live crates.io registry
-affects: [01-02, 01-03, 01-04, 02-stateless, 03-filesystem, 04-text-processing, 05-search-navigation, 06-archive-network]
-
-# Tech tracking
-tech-stack:
-  added:
-    - clap 4.6 (derive)
-    - thiserror 2
-    - anyhow 1
-    - termcolor 1.4
-    - windows-sys 0.61 (Win32_System_Console, Win32_Foundation, Win32_Storage_FileSystem)
-    - encoding_rs 0.8
-    - path-slash 0.2
-    - assert_cmd 2
-    - predicates 3
-    - tempfile 3
-    - embed-manifest 1.5 (build-dep)
-  patterns:
-    - "Cargo workspace: one shared Cargo.lock, resolver 3, edition 2024, [workspace.dependencies] to pin versions"
-    - "gow-core as the sole owner of Win32 calls; utility crates never import windows-sys directly"
-    - "build.rs template for Windows app manifest (activeCodePage=UTF-8, longPathAware=Enabled) — copied into each bin crate from Phase 2"
-    - "Static CRT (+crt-static) globally via .cargo/config.toml so binaries run on machines without the VC++ Redistributable"
-
-key-files:
-  created:
-    - Cargo.toml
-    - .cargo/config.toml
-    - .gitignore
-    - Cargo.lock
-    - crates/gow-core/Cargo.toml
-    - crates/gow-core/build.rs
-    - crates/gow-core/src/lib.rs
-    - crates/gow-core/src/args.rs
-    - crates/gow-core/src/color.rs
-    - crates/gow-core/src/encoding.rs
-    - crates/gow-core/src/error.rs
-    - crates/gow-core/src/fs.rs
-    - crates/gow-core/src/path.rs
-  modified: []
-
-key-decisions:
-  - "gow-core remains lib-only in Phase 1; bin target(s) arrive with Plan 01-04 (gow-probe). build.rs gates embed_manifest() on detected bin targets so the same script works unchanged when copied into Phase 2+ utility crates."
-  - "Use embed_manifest::manifest::Setting::Enabled for long_path_aware (plan/research text referenced a non-existent LongPathAware::Yes enum — corrected against the embed-manifest 1.5.0 API)."
-  - "assert_cmd has no `cargo` feature flag in 2.x (functionality is unconditional); declared plainly as assert_cmd = \"2\"."
-  - "Cargo.lock committed — this workspace produces binaries (per FOUND-01 and D-14), so pinning the lockfile in-repo is the Rust idiom."
-
-patterns-established:
-  - "Pattern: bin-target-aware build.rs — a shared manifest-embedding script that is safe to keep in lib-only crates and correct when copy-pasted into bin crates"
-  - "Pattern: workspace dependency inheritance — each member crate uses `{ workspace = true }` so Phase 2+ utilities inherit versions centrally"
-  - "Pattern: module stub + smoke test — Plan 01 establishes the module graph; Plans 02/03 fill in implementations without needing to reshape lib.rs"
-
-requirements-completed: [FOUND-01, FOUND-02, WIN-01, WIN-02, WIN-03]
-
-# Metrics
-duration: 6min
-completed: 2026-04-20
+phase: "01"
+plan: "01"
 ---
+
+# T01: Plan 01
+
+**# Phase 1 Plan 01: Cargo Workspace and gow-core Skeleton Summary**
+
+## What Happened
 
 # Phase 1 Plan 01: Cargo Workspace and gow-core Skeleton Summary
 

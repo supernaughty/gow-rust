@@ -1,60 +1,13 @@
 ---
-phase: 02-stateless
-plan: 11
-subsystem: utility-windows-native
-tags: [which, path, pathext, env, resolver, windows, gow-276, clap, assert_cmd, tempfile]
-
-# Dependency graph
-requires:
-  - phase: 01-foundation
-    provides: "gow_core::init (UTF-8 console, VT mode), gow_core::args::parse_gnu (GNU-style exit-1 wrapper)"
-  - phase: 02-stateless / 02-01
-    provides: "gow-which stub crate registered in workspace, bin/lib split (uu_which)"
-provides:
-  - "gow-which hybrid PATHEXT resolver (WHICH-01, GOW #276 fixed)"
-  - "`which` binary with --all / -a flag"
-  - "load_pathext() / parse_pathext_string() reusable helpers (future find / where utilities can consume)"
-  - "GOW_PATHEXT env-var test override pattern (D-18d) reusable across any future PATH-aware utility"
-affects:
-  - "Phase 3 (filesystem utilities) — reuse hybrid-resolver pattern if `find -type x` or `type` are added"
-  - "Phase 6 (MSI installer) — `which.exe` is one of the shipped binaries; PATH registration proves end-to-end"
-
-# Tech tracking
-tech-stack:
-  added: ["embed-manifest (build-dep, Windows UTF-8 manifest)", "assert_cmd", "predicates", "tempfile (dev-deps only — no new runtime dep, resolver is stdlib-only per Q6)"]
-  patterns:
-    - "Hybrid PATHEXT strategy: literal-first then PATHEXT expansion, per PATH directory (D-18)"
-    - "GOW_<UTILITY>_<KNOB> env override pattern for deterministic integration testing (D-18d) — avoids racy #[test] env manipulation"
-    - "Pure-parser + env-loader split (`parse_pathext_string` is unit-testable, `load_pathext` is integration-tested via subprocess isolation)"
-
-key-files:
-  created:
-    - "crates/gow-which/src/pathext.rs — PATHEXT resolver (GOW_PATHEXT > PATHEXT > .COM;.EXE;.BAT;.CMD fallback)"
-    - "crates/gow-which/build.rs — Windows manifest embed (UTF-8 active code page, long-path aware)"
-    - "crates/gow-which/tests/integration.rs — 13 subprocess tests using GOW_PATHEXT isolation"
-  modified:
-    - "crates/gow-which/src/lib.rs — uumain + hybrid find() loop"
-    - "crates/gow-which/Cargo.toml — add build-dep (embed-manifest) and dev-deps (assert_cmd, predicates, tempfile)"
-    - "Cargo.lock — regenerated"
-
-key-decisions:
-  - "Hand-rolled resolver instead of the `which` crate (D-18 demands GOW_PATHEXT override for test determinism; black-box `which` crate does not expose PATHEXT plumbing)."
-  - "Literal match wins over PATHEXT expansion when both exist in the same PATH directory (D-18 — preserves GNU script compatibility; mirrors how cmd.exe itself resolves)."
-  - "Do NOT canonicalize the found path (D-18e — symlink resolution forbidden). Output echoes the PATHEXT casing we constructed (e.g. `foo.EXE`), not the on-disk casing (`foo.exe`). Tests fold case accordingly."
-  - "Default PATHEXT fallback uses the classic .COM;.EXE;.BAT;.CMD (D-18a) — matches Windows 2000-era baseline, not modern .CPL/.MSC extended set."
-  - "-a returns BOTH the literal match AND every PATHEXT expansion across every PATH dir — maximum discoverability; covered by `test_a_includes_literal_and_pathext` and `test_a_returns_all_matches_across_dirs`."
-
-patterns-established:
-  - "Env-var override for test determinism: set `GOW_PATHEXT` (and `.env(\"PATH\", tempdir)`) per assert_cmd invocation; avoids cross-test env races."
-  - "Pure parser vs. env loader: keep parsing in a plain function (`parse_pathext_string`) so #[cfg(test)] unit tests can run without touching process env; expose a thin loader (`load_pathext`) that reads env and delegates."
-  - "Every gow binary crate has its own build.rs that embeds the Windows manifest (RESEARCH.md Pitfall 4 — must be per-binary, not in gow-core)."
-
-requirements-completed: [WHICH-01]
-
-# Metrics
-duration: 6min
-completed: 2026-04-21
+phase: "02"
+plan: "11"
 ---
+
+# T11: Plan 11
+
+**# Phase 02 Plan 11: gow-which Summary**
+
+## What Happened
 
 # Phase 02 Plan 11: gow-which Summary
 

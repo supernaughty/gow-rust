@@ -1,61 +1,13 @@
 ---
-phase: 02-stateless
-plan: 07
-subsystem: stateless-utilities
-tags: [tee, split-writer, fanout, windows-sys, SetConsoleCtrlHandler, MSYS-path, UTIL-04]
-
-# Dependency graph
-requires:
-  - phase: 01-foundation
-    provides: gow_core::init (UTF-8 + VT), gow_core::args::parse_gnu (GNU option permutation + exit 1 on bad flag), gow_core::path::try_convert_msys_path (MSYS /c/foo -> C:\foo per D-26)
-  - phase: 02-stateless
-    plan: 01
-    provides: gow-tee stub crate (Cargo.toml + src/lib.rs + src/main.rs), workspace dependencies (windows-sys 0.61 already pinned with Win32_System_Console feature, assert_cmd/predicates/tempfile pinned)
-provides:
-  - crates/gow-tee (fully realized): tee.exe with -a/--append, -i/--ignore-interrupts, split-writer fanout (stdout + N files), MSYS pre-convert on each operand, BrokenPipe-silent on stdout, GNU-format stderr errors
-  - crates/gow-tee/src/signals.rs (pub fn ignore_interrupts -> io::Result): first-in-ecosystem Windows implementation of tee -i via SetConsoleCtrlHandler(None, TRUE) — uutils/coreutils has no Windows port of this (RESEARCH.md Q10)
-  - Canonical pattern for platform-gated signal helpers: cfg(windows) uses windows-sys raw unsafe call; cfg(unix) uses extern "C" signal() shim — reusable by future utilities that need SIGINT handling
-  - Best-effort signal-ignore contract: the caller must treat ignore_interrupts() failure as non-fatal; silent pass-through is safer than surfacing spurious errors in detached/non-console contexts
-affects: [02-08, 02-09, 02-10, 02-11]
-
-# Tech tracking
-tech-stack:
-  added:
-    - windows-sys 0.61 activated as [target.'cfg(windows)'.dependencies] for gow-tee (workspace already had it with Win32_System_Console feature; now consumed by this crate)
-    - embed-manifest 1.5 activated as [build-dependencies] on gow-tee (matches gow-probe / Wave 2 crates)
-    - assert_cmd, predicates, tempfile activated as [dev-dependencies] on gow-tee (all inherited via workspace = true)
-  patterns:
-    - "Platform-gated signal shim: separate #[cfg(windows)] and #[cfg(unix)] fn definitions with identical signatures, letting the caller write a single platform-agnostic call site"
-    - "Split-writer fanout via Vec<Box<dyn Write>>: push stdout first, then each opened file; retain_mut drops sinks whose write fails mid-stream; BrokenPipe on stdout is silently dropped (GNU parity), other write errors emit 'tee: write error: {e}'"
-    - "Open-error isolation: a file that fails to open is logged + counted, but remaining sinks continue; file_errors counter decides final exit code (1 if any open failed, 0 otherwise)"
-    - "MSYS pre-convert per operand: each file argument passes through gow_core::path::try_convert_msys_path BEFORE Path::new + OpenOptions, ensuring '/c/tmp/log.txt' opens 'C:\\tmp\\log.txt' (D-26)"
-    - "clap operands arg: ArgAction::Append + trailing_var_arg(true) matches Wave 2 gow-dirname/gow-basename pattern (no num_args spec needed — Append with trailing_var_arg collects 0..N positionals)"
-
-key-files:
-  created:
-    - crates/gow-tee/build.rs
-    - crates/gow-tee/src/signals.rs
-    - crates/gow-tee/tests/integration.rs
-    - .planning/phases/02-stateless/02-07-SUMMARY.md
-  modified:
-    - crates/gow-tee/Cargo.toml (added [target.'cfg(windows)'.dependencies] windows-sys, [build-dependencies] embed-manifest, [dev-dependencies] assert_cmd/predicates/tempfile; updated package description)
-    - crates/gow-tee/src/lib.rs (stub -> real uumain with signals mod decl, split-writer fanout, -a/-i/operands, MSYS pre-convert, BrokenPipe-silent stdout)
-
-decisions:
-  - "Keep Box<dyn Write> sink erasure instead of bespoke enum Sink { Stdout(StdoutLock<'static>), File(File) } — plan template suggested switching if perf matters; tee is I/O-bound so the per-write lock overhead is negligible against syscall latency, and Box<dyn Write> keeps the fanout loop readable"
-  - "Per-chunk flush after successful write_all to each sink — GNU tee default is block-buffered, but D-25 calls out 'tail -f foo | tee log' real-time use case; per-chunk flush (not per-line) is a middle ground: honors natural stdin chunk boundaries without forcing us to parse newlines, and flush failure just drops the sink from the next iteration"
-  - "Broken-pipe on stdout is silent (ExitCode 0 if it was the only failure) — matches GNU tee and 'yes | head' composability. Non-BrokenPipe write errors on any sink still emit 'tee: write error: {e}' and drop that sink"
-  - "Did NOT add outputs.is_empty() early-exit as a correctness requirement — when only stdout was present and it BrokenPipe'd, the fanout loop naturally stops on next iteration; explicit check added defensively so stdin pump doesn't keep reading when no one is listening"
-  - "Signal-ignore failure is silent (best-effort) — if SetConsoleCtrlHandler fails because the process is detached from a console, emitting a warning to stderr would surprise the user and potentially break pipelines expecting clean stderr; silent pass-through matches 'best-effort' contract documented in signals.rs"
-
-metrics:
-  duration: "~15 minutes (including environment debugging — see Deviations)"
-  completed: "2026-04-21"
-  tasks_completed: 2
-  files_created: 3
-  files_modified: 2
-  commits: 2
+phase: "02"
+plan: "07"
 ---
+
+# T07: Plan 07
+
+**# Phase 2 Plan 07: gow-tee Summary**
+
+## What Happened
 
 # Phase 2 Plan 07: gow-tee Summary
 
