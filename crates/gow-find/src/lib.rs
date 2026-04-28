@@ -471,7 +471,7 @@ fn exec_for_entry(cmd_parts: &[String], path: &Path) -> Result<i32> {
 /// 0x1A as EOF, corrupting the null-byte stream. Uses `_setmode` (cdecl CRT
 /// function, NOT a Win32 API — must use extern "C", not extern "system").
 /// Per RESEARCH.md Pattern 3 and T-05-find-05 mitigation.
-#[cfg(target_os = "windows")]
+#[cfg(windows)]
 fn set_stdout_binary_mode() {
     unsafe extern "C" {
         fn _setmode(fd: i32, flags: i32) -> i32;
@@ -482,7 +482,7 @@ fn set_stdout_binary_mode() {
     }
 }
 
-#[cfg(not(target_os = "windows"))]
+#[cfg(not(windows))]
 fn set_stdout_binary_mode() {
     // No-op on Unix/Linux — stdout is already binary-clean
 }

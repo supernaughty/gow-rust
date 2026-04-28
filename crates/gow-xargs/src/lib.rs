@@ -137,7 +137,7 @@ fn run(cli: Cli) -> Result<i32> {
 ///
 /// `_setmode(0, _O_BINARY)` disables all translation so NUL bytes and CRLF survive unchanged.
 /// This is extern "C" (cdecl), NOT extern "system" — _setmode is a CRT function, not Win32.
-#[cfg(target_os = "windows")]
+#[cfg(windows)]
 fn set_stdin_binary_mode() {
     unsafe extern "C" {
         fn _setmode(fd: i32, flags: i32) -> i32;
@@ -147,7 +147,7 @@ fn set_stdin_binary_mode() {
         _setmode(0, _O_BINARY);
     }
 }
-#[cfg(not(target_os = "windows"))]
+#[cfg(not(windows))]
 fn set_stdin_binary_mode() {}
 
 /// Tokenize stdin by newline (default) or NUL byte (-0 mode).
