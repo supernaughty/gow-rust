@@ -4,7 +4,7 @@ use std::io::{self, Read, Write};
 use std::path::Path;
 
 use anyhow::{Context, Result, bail};
-use bzip2::read::BzDecoder;
+use bzip2::read::MultiBzDecoder;
 use bzip2::write::BzEncoder;
 use bzip2::Compression as BzCompression;
 use clap::{ArgAction, CommandFactory, FromArgMatches, Parser};
@@ -266,9 +266,9 @@ fn run_extract(cli: &Cli, codec: Codec) -> Result<()> {
             if let Some(ref archive_path) = cli.file {
                 let f = File::open(archive_path)
                     .with_context(|| format!("tar: {archive_path}: cannot open"))?;
-                unpack_archive(Archive::new(BzDecoder::new(f)), dest, cli)?;
+                unpack_archive(Archive::new(MultiBzDecoder::new(f)), dest, cli)?;
             } else {
-                unpack_archive(Archive::new(BzDecoder::new(io::stdin())), dest, cli)?;
+                unpack_archive(Archive::new(MultiBzDecoder::new(io::stdin())), dest, cli)?;
             }
         }
         Codec::Plain => {
@@ -335,9 +335,9 @@ fn run_list(cli: &Cli, codec: Codec) -> Result<()> {
             if let Some(ref archive_path) = cli.file {
                 let f = File::open(archive_path)
                     .with_context(|| format!("tar: {archive_path}: cannot open"))?;
-                list_archive(Archive::new(BzDecoder::new(f)))?;
+                list_archive(Archive::new(MultiBzDecoder::new(f)))?;
             } else {
-                list_archive(Archive::new(BzDecoder::new(io::stdin())))?;
+                list_archive(Archive::new(MultiBzDecoder::new(io::stdin())))?;
             }
         }
         Codec::Plain => {
@@ -367,7 +367,13 @@ pub fn uumain<I: IntoIterator<Item = OsString>>(args: I) -> i32 {
     gow_core::init();
 
     let matches = gow_core::args::parse_gnu(Cli::command(), args);
-    let cli = Cli::from_arg_matches(&matches).unwrap();
+    let cli = match Cli::from_arg_matches(&matches) {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("tar: {e}");
+            return 2;
+        }
+    };
 
     let mode = match detect_mode(&cli) {
         Ok(m) => m,
