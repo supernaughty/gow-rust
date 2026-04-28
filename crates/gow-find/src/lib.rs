@@ -177,10 +177,10 @@ fn run(mut cli: Cli) -> Result<i32> {
     let mut any_exec_failed = false;
 
     for root in &cli.paths {
-        // Verify path exists
-        if !root.exists() {
-            let err = std::io::Error::last_os_error();
-            eprintln!("find: {}: {}", root.display(), err);
+        // Verify path exists using fs::metadata to get a reliable typed error
+        // (root.exists() + last_os_error() reads a stale OS error slot — WR-02).
+        if let Err(e) = std::fs::metadata(root) {
+            eprintln!("find: {}: {}", root.display(), e);
             continue;
         }
 
