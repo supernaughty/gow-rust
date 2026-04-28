@@ -48,39 +48,41 @@ Write-Host "[1/3] vim portable (win64)" -ForegroundColor Cyan
 $VimVersion = "9.2.0407"
 $VimZip     = Join-Path $TmpDir "gvim_${VimVersion}_x64.zip"
 $VimUrl     = "https://github.com/vim/vim-win32-installer/releases/download/v${VimVersion}/gvim_${VimVersion}_x64.zip"
-$VimExe     = Join-Path $BinDir "vim.exe"
+# vim.exe lives inside vim-runtime\vim92\ where its DLLs (vim64.dll etc.) are co-located
+$VimRealExe = Join-Path $BinDir "vim-runtime\vim92\vim.exe"
 
-if (-not (Test-Path $VimExe) -or $Force) {
+if (-not (Test-Path $VimRealExe) -or $Force) {
     Download-File $VimUrl $VimZip
 
-    Write-Host "  Extracting vim.exe..."
+    Write-Host "  Extracting vim..."
     $ExtractDir = Join-Path $TmpDir "vim_extract"
     $null = New-Item -ItemType Directory -Path $ExtractDir -Force
     Expand-Archive -Path $VimZip -DestinationPath $ExtractDir -Force
 
-    # vim zip layout: vim\vim92\vim.exe (console), gvim.exe (GUI)
+    # vim zip layout: vim\vim92\vim.exe (console), with vim64.dll and DLLs in the same dir
     $VimSrc = Get-ChildItem -Path $ExtractDir -Recurse -Filter "vim.exe" |
         Where-Object { $_.Name -eq "vim.exe" -and $_.DirectoryName -notmatch "\\bundle\\" } |
         Select-Object -First 1
     if (-not $VimSrc) { throw "vim.exe not found in zip" }
 
-    # Copy the entire vim subdirectory (vim needs its runtime files)
+    # Copy the entire vim92 directory — vim.exe, vim64.dll, and all runtime files stay together
     $VimSubdir = Join-Path $BinDir "vim-runtime"
     $null = New-Item -ItemType Directory -Path $VimSubdir -Force
     Copy-Item -Path (Split-Path $VimSrc.FullName -Parent) -Destination $VimSubdir -Recurse -Force
 
-    # Copy vim.exe to extras\bin\vim.exe
-    Copy-Item -Path $VimSrc.FullName -Destination $VimExe -Force
+    # Remove stale root-level vim.exe if present from a previous run
+    $StaleExe = Join-Path $BinDir "vim.exe"
+    if (Test-Path $StaleExe) { Remove-Item $StaleExe -Force }
 
-    # Write vim.bat that sets VIMRUNTIME and calls the real vim.exe
+    # vim.bat: call the real vim.exe from vim-runtime\vim92\ with correct VIMRUNTIME
     $VimBat = Join-Path $BinDir "vim.bat"
     @"
 @echo off
-set "VIMRUNTIME=%~dp0vim-runtime"
-"%~dp0vim.exe" %*
+set "VIMRUNTIME=%~dp0vim-runtime\vim92"
+"%~dp0vim-runtime\vim92\vim.exe" %*
 "@ | Set-Content -Path $VimBat -Encoding ASCII
 } else {
-    Write-Host "  Already present: vim.exe"
+    Write-Host "  Already present: vim-runtime\vim92\vim.exe"
 }
 Tool-Done "vim $VimVersion"
 
