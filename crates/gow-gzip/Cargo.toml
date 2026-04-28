@@ -11,6 +11,14 @@ description = "GNU gzip/gunzip/zcat — Windows port."
 name = "gzip"
 path = "src/main.rs"
 
+[[bin]]
+name = "gunzip"
+path = "src/gunzip.rs"
+
+[[bin]]
+name = "zcat"
+path = "src/zcat.rs"
+
 [lib]
 name = "uu_gzip"
 path = "src/lib.rs"
