@@ -117,6 +117,9 @@ fn detect_codec(cli: &Cli) -> Codec {
 
 /// Append CLI paths into a builder and flush it.
 /// The `finish` closure handles codec-specific finalisation (e.g. GzEncoder::finish).
+///
+/// When `-C <dir>` is specified, paths are resolved relative to that base directory
+/// (matching GNU tar behavior: `-C` changes the directory for subsequent file args).
 fn append_paths<W: Write, F: FnOnce(W) -> Result<()>>(
     mut builder: Builder<W>,
     cli: &Cli,
@@ -126,26 +129,53 @@ fn append_paths<W: Write, F: FnOnce(W) -> Result<()>>(
     // The tar crate defaults to true (dereference). We MUST override this.
     builder.follow_symlinks(false);
 
+    // Determine the base directory for resolving relative path arguments.
+    // GNU tar: -C <dir> changes the directory before archiving subsequent paths.
+    let base_dir: Option<std::path::PathBuf> = cli.directory.as_ref().map(|d| {
+        let converted = gow_core::path::try_convert_msys_path(d);
+        std::path::PathBuf::from(converted)
+    });
+
     for path_str in &cli.paths {
         let converted = gow_core::path::try_convert_msys_path(path_str);
-        let p = Path::new(&converted);
 
-        if p.is_dir() {
-            let name = p.file_name().unwrap_or_else(|| p.as_os_str());
-            if let Err(e) = builder.append_dir_all(name, p) {
+        // Resolve the path: if -C given, join with base; otherwise use as-is.
+        let full_path: std::path::PathBuf = if let Some(ref base) = base_dir {
+            let candidate = Path::new(&converted);
+            if candidate.is_absolute() {
+                candidate.to_path_buf()
+            } else {
+                base.join(candidate)
+            }
+        } else {
+            std::path::PathBuf::from(&converted)
+        };
+
+        if full_path.is_dir() {
+            // The archive entry name is the path_str as given (e.g. "src"),
+            // not the full path. This matches GNU tar's behavior where you run:
+            //   tar -c -C /some/dir src
+            // and the archive contains "src/..." not "/some/dir/src/..."
+            let name = Path::new(&converted)
+                .file_name()
+                .unwrap_or_else(|| Path::new(&converted).as_os_str());
+            if let Err(e) = builder.append_dir_all(name, &full_path) {
                 eprintln!("tar: {converted}: {e}");
             } else if cli.verbose {
                 eprintln!("{}/", converted);
             }
         } else {
-            match File::open(p) {
+            match File::open(&full_path) {
                 Ok(mut f) => {
                     let meta = f
                         .metadata()
                         .with_context(|| format!("tar: {converted}: stat"))?;
                     let mut header = Header::new_gnu();
                     header.set_metadata(&meta);
-                    let name = p.file_name().unwrap_or_else(|| p.as_os_str());
+                    // Archive entry name = the path as given (not full_path)
+                    let name = Path::new(&converted)
+                        .file_name()
+                        .unwrap_or_else(|| Path::new(&converted).as_os_str());
                     if let Err(e) = header.set_path(name) {
                         eprintln!("tar: {converted}: {e}");
                         continue;
