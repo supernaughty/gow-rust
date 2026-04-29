@@ -64,6 +64,11 @@
   - [x] 08-03-PLAN.md — gow-gzip fixes: reject no-.gz suffix (WR-05), stdin dead code simplification (IN-01) (FIX-05)
   - [x] 08-04-PLAN.md — gow-curl fixes: suppress headers in silent mode (WR-06), remove partial file on error (WR-07) (FIX-06, FIX-07)
 - [ ] **Phase 09: external-bundling** — External Binary Bundling
+  - **Plans:** 2 plans
+
+  Plans:
+  - [ ] 09-01-PLAN.md — Commit batch alias shims to git source control (BND-03)
+  - [ ] 09-02-PLAN.md — WiX optional Extras feature: dual-harvest staging + ExtrasFeature in main.wxs (BND-01, BND-02, BND-04)
 - [ ] **Phase 10: new-utilities-wave1** — New Rust Utilities Wave 1
 - [ ] **Phase 11: new-utilities-wave2** — New Rust Utilities Wave 2
 
@@ -138,7 +143,11 @@ Plans:
   2. After installing the MSI, `vim`, `wget`, and `nano` are available on PATH without any manual steps
   3. Legacy names `egrep`, `fgrep`, `bunzip2`, `gawk`, `gfind`, `gsort` invoke the correct Rust binaries via batch file shims
   4. The installer presents an optional "Extras" feature that a user can deselect to skip vim/nano/wget installation
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Commit batch alias shims to git source control (BND-03)
+- [ ] 09-02-PLAN.md — WiX optional Extras feature: dual-harvest staging + ExtrasFeature in main.wxs (BND-01, BND-02, BND-04)
 
 ### Phase 10: new-utilities-wave1
 **Goal**: Ten simple GNU utilities — seq, sleep, tac, nl, od, fold, expand, unexpand, du, df, and the hash suite (md5sum, sha1sum, sha256sum) — are implemented as independent Rust binaries and included in the installer.
@@ -180,6 +189,6 @@ Plans:
 | 06. archive-compression-and-network | 6/6 | Complete | 2026-04-28 |
 | 07. release-and-ci | 3/3 | Complete | 2026-04-29 |
 | 08. code-review-fixes | 4/4 | Complete | 2026-04-29 |
-| 09. external-bundling | 0/? | Not started | - |
+| 09. external-bundling | 0/2 | Not started | - |
 | 10. new-utilities-wave1 | 0/? | Not started | - |
 | 11. new-utilities-wave2 | 0/? | Not started | - |
