@@ -225,8 +225,9 @@ fn parse_colon(args: &[String], pos: &mut usize, depth: usize) -> Result<String,
                 // Has capturing group — return the group match (or empty string if unmatched)
                 return Ok(caps.get(1).map(|m| m.as_str().to_string()).unwrap_or_default());
             }
-            // No capturing group — return match length
-            return Ok(caps.get(0).map(|m| m.as_str().len()).unwrap_or(0).to_string());
+            // No capturing group — return match length in characters (not bytes),
+            // consistent with GNU expr and with the `length` keyword below.
+            return Ok(caps.get(0).map(|m| m.as_str().chars().count()).unwrap_or(0).to_string());
         }
         return Ok("0".to_string());
     }
@@ -291,7 +292,7 @@ fn parse_atom(args: &[String], pos: &mut usize, depth: usize) -> Result<String, 
             let pattern = parse_atom(args, pos, depth + 1)?;
             let anchored = format!("^(?:{})", pattern);
             let re = Regex::new(&anchored).map_err(|e| format!("invalid regexp: {e}"))?;
-            let result = if let Some(m) = re.find(&s) { m.len() } else { 0 };
+            let result = if let Some(m) = re.find(&s) { m.as_str().chars().count() } else { 0 };
             return Ok(result.to_string());
         }
         _ => {}
