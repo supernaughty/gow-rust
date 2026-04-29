@@ -83,7 +83,7 @@ fn compress_stream<R: Read, W: Write>(mut input: R, output: W) -> Result<()> {
 
 /// Decompress bytes from `input` into `output` using XzDecoder.
 fn decompress_stream<R: Read, W: Write>(input: R, mut output: W) -> Result<()> {
-    let mut decoder = XzDecoder::new(input);
+    let mut decoder = XzDecoder::new_multi_decoder(input);
     io::copy(&mut decoder, &mut output).context("decompress: io::copy failed")?;
     Ok(())
 }
