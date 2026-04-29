@@ -82,6 +82,17 @@
   - [x] 10-05-PLAN.md — Implement du (walkdir.follow_links(false)) and df (Win32 GetDiskFreeSpaceExW) (U-08, U-09)
   - [x] 10-06-PLAN.md — Implement md5sum/sha1sum/sha256sum with -c check mode + build.bat polish + workspace test gate (U-10)
 - [ ] **Phase 11: new-utilities-wave2** — New Rust Utilities Wave 2
+  - **Goal:** Ten additional GNU utilities — whoami, uname, paste, join, split, printf, expr, test, fmt, and unlink — are implemented as independent Rust binaries and included in the installer.
+  - **Requirements:** U2-01, U2-02, U2-03, U2-04, U2-05, U2-06, U2-07, U2-08, U2-09, U2-10
+  - **Plans:** 6 plans
+
+  Plans:
+  - [ ] 11-01-PLAN.md — Scaffold 10 new crates, windows-sys feature additions, [.bat shim (U2-01..U2-10)
+  - [ ] 11-02-PLAN.md — Implement unlink, fmt, paste (U2-10, U2-09, U2-03)
+  - [ ] 11-03-PLAN.md — Implement join, split (U2-04, U2-05)
+  - [ ] 11-04-PLAN.md — Implement printf, expr with inverted exit code semantics (U2-06, U2-07)
+  - [ ] 11-05-PLAN.md — Implement test + [ bracket mode via --_bracket_ sentinel (U2-08)
+  - [ ] 11-06-PLAN.md — Implement whoami, uname (RtlGetVersion) + build.bat polish + workspace test gate (U2-01, U2-02)
 
 ## Phase Details
 
@@ -186,7 +197,16 @@ Plans:
   5. `test -f existing_file` exits 0 and `test -f missing_file` exits 1; `[` alias behaves identically
   6. `fmt`, `unlink` execute without errors on valid inputs and pass `cargo test --workspace`
   7. All 11 binaries are included in the MSI and available on PATH after installation
-**Plans**: TBD
+**Plans**: 6 plans (11-01 scaffold, 11-02 unlink/fmt/paste, 11-03 join/split, 11-04 printf/expr, 11-05 test, 11-06 whoami/uname)
+**UI hint**: no
+
+Plans:
+- [ ] 11-01-PLAN.md — Scaffold 10 crates + windows-sys features + [.bat shim (U2-01..U2-10)
+- [ ] 11-02-PLAN.md — Implement unlink, fmt, paste (U2-10, U2-09, U2-03)
+- [ ] 11-03-PLAN.md — Implement join, split (U2-04, U2-05)
+- [ ] 11-04-PLAN.md — Implement printf, expr (U2-06, U2-07)
+- [ ] 11-05-PLAN.md — Implement test + [ bracket semantics (U2-08)
+- [ ] 11-06-PLAN.md — Implement whoami, uname + build.bat + workspace gate (U2-01, U2-02)
 
 ## Progress
 
@@ -202,4 +222,4 @@ Plans:
 | 08. code-review-fixes | 4/4 | Complete | 2026-04-29 |
 | 09. external-bundling | 2/2 | Complete | 2026-04-29 |
 | 10. new-utilities-wave1 | 6/6 | Complete | 2026-04-29 |
-| 11. new-utilities-wave2 | 0/? | Not started | - |
+| 11. new-utilities-wave2 | 0/6 | Not started | - |
