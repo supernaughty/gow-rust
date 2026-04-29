@@ -1,0 +1,1 @@
+@echo off & "%~dp0test.exe" --_bracket_ %*

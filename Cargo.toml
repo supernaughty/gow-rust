@@ -60,6 +60,17 @@ members = [
     "crates/gow-du",
     "crates/gow-df",
     "crates/gow-hashsum",
+    # Phase 11 — new utilities wave 2 (U2-01 through U2-10)
+    "crates/gow-whoami",
+    "crates/gow-uname",
+    "crates/gow-paste",
+    "crates/gow-join",
+    "crates/gow-split",
+    "crates/gow-printf",
+    "crates/gow-expr",
+    "crates/gow-test",
+    "crates/gow-fmt",
+    "crates/gow-unlink",
 ]
 resolver = "3"
 
@@ -86,6 +97,9 @@ windows-sys = { version = "0.61", features = [
     "Win32_System_Console",
     "Win32_Foundation",
     "Win32_Storage_FileSystem",
+    "Win32_System_WindowsProgramming",    # Phase 11: GetUserNameW (whoami) + GetComputerNameW (uname)
+    "Win32_System_SystemInformation",     # Phase 11: OSVERSIONINFOW/GetNativeSystemInfo (uname)
+    "Wdk_System_SystemServices",          # Phase 11: RtlGetVersion (uname)
 ] }
 
 # Encoding
