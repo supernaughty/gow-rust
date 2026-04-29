@@ -837,6 +837,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-expr"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "regex",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-false"
 version = "0.1.0"
 dependencies = [
@@ -862,6 +877,21 @@ dependencies = [
  "thiserror",
  "walkdir",
  "windows-sys 0.61.2",
+]
+
+[[package]]
+name = "gow-fmt"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "bstr",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
 ]
 
 [[package]]
@@ -934,6 +964,21 @@ dependencies = [
 
 [[package]]
 name = "gow-head"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "bstr",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-join"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -1059,6 +1104,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-paste"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "bstr",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-patch"
 version = "0.1.0"
 dependencies = [
@@ -1067,6 +1127,20 @@ dependencies = [
  "bstr",
  "clap",
  "diffy",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-printf"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
  "embed-manifest",
  "gow-core",
  "predicates",
@@ -1191,6 +1265,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-split"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "bstr",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-tac"
 version = "0.1.0"
 dependencies = [
@@ -1256,6 +1345,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-test"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-touch"
 version = "0.1.0"
 dependencies = [
@@ -1296,6 +1399,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-uname"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+ "windows-sys 0.61.2",
+]
+
+[[package]]
 name = "gow-uniq"
 version = "0.1.0"
 dependencies = [
@@ -1320,6 +1438,20 @@ dependencies = [
  "filetime",
  "gow-core",
  "gow-dos2unix",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-unlink"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
  "predicates",
  "tempfile",
  "thiserror",
@@ -1352,6 +1484,21 @@ dependencies = [
  "predicates",
  "tempfile",
  "thiserror",
+]
+
+[[package]]
+name = "gow-whoami"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]

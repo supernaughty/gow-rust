@@ -1,0 +1,31 @@
+[package]
+name = "gow-expr"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "GNU expr — Windows port."
+
+[[bin]]
+name = "expr"
+path = "src/main.rs"
+
+[lib]
+name = "uu_expr"
+path = "src/lib.rs"
+
+[dependencies]
+gow-core = { path = "../gow-core" }
+clap = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+regex = { workspace = true }
+
+[build-dependencies]
+embed-manifest = "1.5"
+
+[dev-dependencies]
+assert_cmd = { workspace = true }
+predicates = { workspace = true }
+tempfile = { workspace = true }
