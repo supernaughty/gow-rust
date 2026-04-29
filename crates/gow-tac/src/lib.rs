@@ -58,7 +58,10 @@ fn run(cli: &Cli) -> i32 {
     if cli.files.is_empty() {
         // Read all of stdin
         let mut buf = Vec::new();
-        let _ = io::stdin().read_to_end(&mut buf);
+        if let Err(e) = io::stdin().read_to_end(&mut buf) {
+            eprintln!("tac: stdin: {e}");
+            exit_code = 1;
+        }
         reverse_and_write(&buf, &mut out);
     } else {
         for file_path in &cli.files {
