@@ -119,6 +119,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c4512299f36f043ab09a583e57bceb5a5aab7a73db1805848e8fef3c9e8c78b3"
 
 [[package]]
+name = "block-buffer"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cdd35008169921d80bc60d3d0ab416eecb028c4cd653352907921d95084790be"
+dependencies = [
+ "hybrid-array",
+]
+
+[[package]]
 name = "bstr"
 version = "1.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -215,6 +224,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1d07550c9036bf2ae0c684c4297d503f838287c83c53686d05370d0e139ae570"
 
 [[package]]
+name = "const-oid"
+version = "0.10.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a6ef517f0926dd24a1582492c791b6a4818a4d94e789a334894aa15b0d12f55c"
+
+[[package]]
 name = "convert_case"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -238,6 +253,15 @@ name = "core-foundation-sys"
 version = "0.8.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
+
+[[package]]
+name = "cpufeatures"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8b2a41393f66f16b0823bb79094d54ac5fbd34ab292ddafb9a0456ac9f87d201"
+dependencies = [
+ "libc",
+]
 
 [[package]]
 name = "crc32fast"
@@ -276,6 +300,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "crypto-common"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77727bb15fa921304124b128af125e7e3b968275d1b108b379190264f4423710"
+dependencies = [
+ "hybrid-array",
+]
+
+[[package]]
 name = "derive_more"
 version = "2.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -310,6 +343,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b545b8c50194bdd008283985ab0b31dba153cfd5b3066a92770634fbc0d7d291"
 dependencies = [
  "nu-ansi-term",
+]
+
+[[package]]
+name = "digest"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4850db49bf08e663084f7fb5c87d202ef91a3907271aff24a94eb97ff039153c"
+dependencies = [
+ "block-buffer",
+ "const-oid",
+ "crypto-common",
 ]
 
 [[package]]
@@ -674,6 +718,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-df"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+ "windows-sys 0.61.2",
+]
+
+[[package]]
 name = "gow-diff"
 version = "0.1.0"
 dependencies = [
@@ -721,6 +780,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-du"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+ "walkdir",
+]
+
+[[package]]
 name = "gow-echo"
 version = "0.1.0"
 dependencies = [
@@ -739,6 +813,21 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-expand-unexpand"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "bstr",
  "clap",
  "embed-manifest",
  "gow-core",
@@ -776,6 +865,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-fold"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "bstr",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-grep"
 version = "0.1.0"
 dependencies = [
@@ -805,6 +909,25 @@ dependencies = [
  "flate2",
  "gow-core",
  "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-hashsum"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "digest",
+ "embed-manifest",
+ "gow-core",
+ "hex",
+ "md-5",
+ "predicates",
+ "sha1",
+ "sha2",
  "tempfile",
  "thiserror",
 ]
@@ -907,6 +1030,35 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-nl"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "bstr",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-od"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-patch"
 version = "0.1.0"
 dependencies = [
@@ -995,6 +1147,34 @@ dependencies = [
 ]
 
 [[package]]
+name = "gow-seq"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-sleep"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "clap",
+ "embed-manifest",
+ "gow-core",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
 name = "gow-sort"
 version = "0.1.0"
 dependencies = [
@@ -1005,6 +1185,21 @@ dependencies = [
  "embed-manifest",
  "gow-core",
  "itertools",
+ "predicates",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
+name = "gow-tac"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "bstr",
+ "clap",
+ "embed-manifest",
+ "gow-core",
  "predicates",
  "tempfile",
  "thiserror",
@@ -1225,6 +1420,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
+name = "hex"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
+
+[[package]]
 name = "http"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1262,6 +1463,15 @@ name = "httparse"
 version = "1.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6dbf3de79e51f3d586ab4cb9d5c3e2c14aa28ed23d180cf89b4df0454a69cc87"
+
+[[package]]
+name = "hybrid-array"
+version = "0.4.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "08d46837a0ed51fe95bd3b05de33cd64a1ee88fc797477ca48446872504507c5"
+dependencies = [
+ "typenum",
+]
 
 [[package]]
 name = "hyper"
@@ -1674,6 +1884,16 @@ name = "log"
 version = "0.4.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
+
+[[package]]
+name = "md-5"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "69b6441f590336821bb897fb28fc622898ccceb1d6cea3fde5ea86b090c4de98"
+dependencies = [
+ "cfg-if",
+ "digest",
+]
 
 [[package]]
 name = "memchr"
@@ -2201,6 +2421,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "sha1"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aacc4cc499359472b4abe1bf11d0b12e688af9a805fa5e3016f9a386dc2d0214"
+dependencies = [
+ "cfg-if",
+ "cpufeatures",
+ "digest",
+]
+
+[[package]]
+name = "sha2"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "446ba717509524cb3f22f17ecc096f10f4822d76ab5c0b9822c5f9c284e825f4"
+dependencies = [
+ "cfg-if",
+ "cpufeatures",
+ "digest",
+]
+
+[[package]]
 name = "shlex"
 version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2486,6 +2728,12 @@ name = "try-lock"
 version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e421abadd41a4225275504ea4d6566923418b7f05506fbc9c0fe86ba7396114b"
+
+[[package]]
+name = "typenum"
+version = "1.20.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "40ce102ab67701b8526c123c1bab5cbe42d7040ccfd0f64af1a385808d2f43de"
 
 [[package]]
 name = "unicode-ident"
