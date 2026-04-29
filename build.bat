@@ -142,17 +142,17 @@ dir /b %_EXTRAS_STAGE% 2>nul | findstr /v "^vim-runtime$"
 
 echo [4/5] Harvesting with heat.exe (core + extras)...
 heat.exe dir %_CORE_STAGE% -cg CoreComponents -dr APPLICATIONFOLDER -scom -sreg -sfrag -srd -var var.CoreSourceDir -out wix\CoreHarvest-%_ARCH%.wxs
-if errorlevel 1 ( echo [FAILED] heat.exe (core) - is WiX v3 installed? Run setup.bat first. & exit /b 1 )
+if errorlevel 1 ( echo [FAILED] heat.exe core harvest - is WiX v3 installed? Run setup.bat first. & exit /b 1 )
 powershell -NoProfile -ExecutionPolicy Bypass -File wix\fix-guids.ps1 -WxsFile wix\CoreHarvest-%_ARCH%.wxs
-if errorlevel 1 ( echo [FAILED] fix-guids.ps1 (core) & exit /b 1 )
+if errorlevel 1 ( echo [FAILED] fix-guids.ps1 core & exit /b 1 )
 
 heat.exe dir %_EXTRAS_STAGE% -cg ExtrasComponents -dr APPLICATIONFOLDER -scom -sreg -sfrag -srd -var var.ExtrasSourceDir -out wix\ExtrasHarvest-%_ARCH%.wxs
-if errorlevel 1 ( echo [FAILED] heat.exe (extras) & exit /b 1 )
+if errorlevel 1 ( echo [FAILED] heat.exe extras harvest & exit /b 1 )
 powershell -NoProfile -ExecutionPolicy Bypass -File wix\fix-guids.ps1 -WxsFile wix\ExtrasHarvest-%_ARCH%.wxs
-if errorlevel 1 ( echo [FAILED] fix-guids.ps1 (extras) & exit /b 1 )
+if errorlevel 1 ( echo [FAILED] fix-guids.ps1 extras & exit /b 1 )
 
 echo [5/5] Compiling and linking MSI...
-candle.exe wix\main.wxs wix\CoreHarvest-%_ARCH%.wxs wix\ExtrasHarvest-%_ARCH%.wxs -arch %_WA% -dCoreSourceDir=%_CORE_STAGE% -dExtrasSourceDir=%_EXTRAS_STAGE% -dVersion=!VERSION! -dPlatform=%_WA%
+candle.exe wix\main.wxs wix\CoreHarvest-%_ARCH%.wxs wix\ExtrasHarvest-%_ARCH%.wxs -arch !_WA! -dCoreSourceDir=%_CORE_STAGE% -dExtrasSourceDir=%_EXTRAS_STAGE% -dVersion=!VERSION! -dPlatform=!_WA!
 if errorlevel 1 ( echo [FAILED] candle.exe & exit /b 1 )
 
 light.exe -b %_CORE_STAGE% -b %_EXTRAS_STAGE% main.wixobj CoreHarvest-%_ARCH%.wixobj ExtrasHarvest-%_ARCH%.wixobj -o !_OUT! -ext WixUIExtension
