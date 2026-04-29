@@ -87,7 +87,7 @@
   - **Plans:** 6 plans
 
   Plans:
-  - [ ] 11-01-PLAN.md — Scaffold 10 new crates, windows-sys feature additions, [.bat shim (U2-01..U2-10)
+  - [x] 11-01-PLAN.md — Scaffold 10 new crates, windows-sys feature additions, [.bat shim (U2-01..U2-10)
   - [ ] 11-02-PLAN.md — Implement unlink, fmt, paste (U2-10, U2-09, U2-03)
   - [ ] 11-03-PLAN.md — Implement join, split (U2-04, U2-05)
   - [ ] 11-04-PLAN.md — Implement printf, expr with inverted exit code semantics (U2-06, U2-07)

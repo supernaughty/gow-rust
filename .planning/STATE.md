@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v0.2.0
 milestone_name: "v0.2.0 — Distribution & Completeness"
 status: executing
-stopped_at: Phase 10 complete — all 6 plans executed, UAT passed, ready to plan Phase 11
-last_updated: "2026-04-29T13:40:00.000Z"
-last_activity: 2026-04-29 -- Phase 10 complete (UAT 4/4 passed)
+stopped_at: Phase 11 plan 01 complete — 10 crates scaffolded, workspace build green
+last_updated: "2026-04-29T20:59:00.000Z"
+last_activity: 2026-04-29 -- Phase 11 plan 01 complete (10 crates scaffolded)
 progress:
-  total_phases: 6
+  total_phases: 7
   completed_phases: 6
-  total_plans: 31
-  completed_plans: 31
-  percent: 86
+  total_plans: 37
+  completed_plans: 32
+  percent: 87
 ---
 
 # Project State
@@ -20,14 +20,14 @@ progress:
 
 See: .planning/PROJECT.md (updated 2026-04-29)
 
-**Current focus:** Phase 11 — new-utilities-wave2
+**Current focus:** Phase 11 — new-utilities-wave2 (Plan 01 complete, executing plan 02)
 
 ## Current Position
 
-Phase: 11 (new-utilities-wave2) — READY TO PLAN
-Plan: Not started
-Status: Ready to plan Phase 11
-Last activity: 2026-04-29 -- Phase 10 complete (UAT 4/4 passed)
+Phase: 11 (new-utilities-wave2) — EXECUTING
+Plan: 11-02 (next: whoami + uname implementation)
+Status: Plan 01 complete — 10 crates scaffolded, workspace green
+Last activity: 2026-04-29 -- Phase 11 plan 01 complete (10 crates scaffolded)
 
 Progress: [█████_____] 86% (M002 — 6/7 phases complete)
 
@@ -57,6 +57,8 @@ Migrated from GSD-2. Review PROJECT.md for key decisions.
 - softprops/action-gh-release@v2 chosen over v3 — v3 requires Node 24, not available on windows-latest
 - ilammy/msvc-dev-cmd@v1 placed after rust-toolchain and before rust-cache for liblzma-sys 32-bit C compilation
 - download-extras.ps1 added to both CI build jobs — runners have no extras/bin/ pre-populated
+- 11-01: gow-test binary named 'test'; [.bat shim dispatches to test.exe with --_bracket_ sentinel for bracket alias
+- 11-01: No per-crate features= on windows-sys — workspace inheritance handles Win32_System_WindowsProgramming/SystemInformation/Wdk_System_SystemServices
 
 ### Known Issues (from code review 05-REVIEW.md)
 
@@ -85,8 +87,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-29T13:40:00.000Z
-Stopped at: Phase 10 complete — UAT 4/4 passed, ready to plan Phase 11
+Last session: 2026-04-29T20:59:00.000Z
+Stopped at: Completed 11-01-PLAN.md — 10 Phase 11 crates scaffolded
 Resume file: None
 
-**Next Phase:** 11 (new-utilities-wave2) — whoami, uname, paste, join, split, printf, expr, test, fmt, unlink
+**Next Plan:** 11-02 — whoami + uname implementation
