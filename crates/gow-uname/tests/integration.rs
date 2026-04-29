@@ -1,6 +1,5 @@
 use assert_cmd::Command;
 use predicates::str::contains;
-use predicates::prelude::*;
 
 #[test]
 fn uname_s_prints_windows_nt() {
