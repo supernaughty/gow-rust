@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v0.2.0
 milestone_name: "- [x] **Phase 07: release-and-ci** — Release & CI/CD *"
 status: completed
-stopped_at: Completed 11-06-PLAN.md — whoami + uname implemented, workspace test gate green
-last_updated: "2026-04-29T21:25:03.885Z"
-last_activity: 2026-04-29 -- Phase 11 plan 01 complete (10 crates scaffolded)
+stopped_at: Completed Phase 11 — all 10 Phase 11 binaries implemented, workspace test gate green
+last_updated: "2026-04-30T00:00:00.000Z"
+last_activity: 2026-04-30 -- Phase 11 complete (whoami/uname/paste/join/split/printf/expr/test/fmt/unlink)
 progress:
-  total_phases: 7
-  completed_phases: 7
-  total_plans: 31
-  completed_plans: 31
+  total_phases: 8
+  completed_phases: 8
+  total_plans: 37
+  completed_plans: 37
   percent: 100
 ---
 
@@ -20,14 +20,14 @@ progress:
 
 See: .planning/PROJECT.md (updated 2026-04-29)
 
-**Current focus:** Phase 11 — new-utilities-wave2 (Plan 01 complete, executing plan 02)
+**Current focus:** Phase 11 — new-utilities-wave2 COMPLETE
 
 ## Current Position
 
-Phase: 11 (new-utilities-wave2) — EXECUTING
-Plan: 11-02 (next: whoami + uname implementation)
-Status: Plan 01 complete — 10 crates scaffolded, workspace green
-Last activity: 2026-04-29 -- Phase 11 plan 01 complete (10 crates scaffolded)
+Phase: 11 (new-utilities-wave2) — COMPLETE
+Plan: All 6 plans complete (11-01 through 11-06)
+Status: Phase complete — all 10 Phase 11 binaries implemented and workspace green
+Last activity: 2026-04-30 -- Phase 11 complete (whoami/uname/paste/join/split/printf/expr/test/fmt/unlink)
 
 Progress: [██████████] 100%
 

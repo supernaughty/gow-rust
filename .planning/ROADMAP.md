@@ -81,18 +81,18 @@
   - [x] 10-04-PLAN.md — Implement od with -t o[1|2|4]/x[1|2|4]/d[1|2|4]/u[1|2|4]/c, -A o/x/d/n, -N (U-05)
   - [x] 10-05-PLAN.md — Implement du (walkdir.follow_links(false)) and df (Win32 GetDiskFreeSpaceExW) (U-08, U-09)
   - [x] 10-06-PLAN.md — Implement md5sum/sha1sum/sha256sum with -c check mode + build.bat polish + workspace test gate (U-10)
-- [ ] **Phase 11: new-utilities-wave2** — New Rust Utilities Wave 2
+- [x] **Phase 11: new-utilities-wave2** — New Rust Utilities Wave 2 *(Complete: 2026-04-30)*
   - **Goal:** Ten additional GNU utilities — whoami, uname, paste, join, split, printf, expr, test, fmt, and unlink — are implemented as independent Rust binaries and included in the installer.
   - **Requirements:** U2-01, U2-02, U2-03, U2-04, U2-05, U2-06, U2-07, U2-08, U2-09, U2-10
   - **Plans:** 6 plans
 
   Plans:
   - [x] 11-01-PLAN.md — Scaffold 10 new crates, windows-sys feature additions, [.bat shim (U2-01..U2-10)
-  - [ ] 11-02-PLAN.md — Implement unlink, fmt, paste (U2-10, U2-09, U2-03)
-  - [ ] 11-03-PLAN.md — Implement join, split (U2-04, U2-05)
-  - [ ] 11-04-PLAN.md — Implement printf, expr with inverted exit code semantics (U2-06, U2-07)
-  - [ ] 11-05-PLAN.md — Implement test + [ bracket mode via --_bracket_ sentinel (U2-08)
-  - [ ] 11-06-PLAN.md — Implement whoami, uname (RtlGetVersion) + build.bat polish + workspace test gate (U2-01, U2-02)
+  - [x] 11-02-PLAN.md — Implement unlink, fmt, paste (U2-10, U2-09, U2-03)
+  - [x] 11-03-PLAN.md — Implement join, split (U2-04, U2-05)
+  - [x] 11-04-PLAN.md — Implement printf, expr with inverted exit code semantics (U2-06, U2-07)
+  - [x] 11-05-PLAN.md — Implement test + [ bracket mode via --_bracket_ sentinel (U2-08)
+  - [x] 11-06-PLAN.md — Implement whoami, uname (RtlGetVersion) + build.bat polish + workspace test gate (U2-01, U2-02)
 
 ## Phase Details
 
