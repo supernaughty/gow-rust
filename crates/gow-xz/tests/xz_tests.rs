@@ -185,3 +185,58 @@ fn decompress_missing_xz_extension_fails() {
         .code(1)
         .stderr(predicate::str::contains("xz"));
 }
+
+// ── WR-04: concatenated xz stream decompression ──────────────────────────────
+
+/// Proves new_multi_decoder is required: XzDecoder::new() would only decode
+/// the first stream and silently ignore all subsequent streams.
+///
+/// Constructs two concatenated xz streams inline (no binary fixture files per D-02),
+/// writes them to a temp .xz file, then verifies xz -d -c outputs data from both streams.
+#[test]
+fn concatenated_xz_streams_decompress_fully() {
+    use liblzma::write::XzEncoder;
+    use std::io::Write;
+
+    let dir = tempdir().unwrap();
+
+    // Build two concatenated xz streams in memory
+    let mut buf = Vec::new();
+
+    // Stream 1
+    {
+        let mut enc = XzEncoder::new(&mut buf, 6);
+        enc.write_all(b"xz stream one\n").unwrap();
+        enc.finish().unwrap();
+    }
+
+    // Stream 2
+    {
+        let mut enc = XzEncoder::new(&mut buf, 6);
+        enc.write_all(b"xz stream two\n").unwrap();
+        enc.finish().unwrap();
+    }
+
+    // Write concatenated streams to a .xz file
+    let xz_path = dir.path().join("multi.xz");
+    fs::write(&xz_path, &buf).unwrap();
+
+    // Decompress to stdout (-c flag) — new_multi_decoder should decode both streams
+    let output = xz_cmd()
+        .args(["-d", "-c", xz_path.to_str().unwrap()])
+        .assert()
+        .success()
+        .get_output()
+        .stdout
+        .clone();
+
+    let decoded = String::from_utf8(output).unwrap();
+    assert!(
+        decoded.contains("xz stream one"),
+        "stream 1 data missing from output; got: {decoded:?}"
+    );
+    assert!(
+        decoded.contains("xz stream two"),
+        "stream 2 data missing from output — XzDecoder::new() would cause this; got: {decoded:?}"
+    );
+}

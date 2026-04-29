@@ -4,7 +4,7 @@ use std::io::{self, Read, Write};
 use std::path::Path;
 
 use anyhow::{Context, Result, bail};
-use bzip2::read::BzDecoder;
+use bzip2::read::MultiBzDecoder;
 use bzip2::write::BzEncoder;
 use bzip2::Compression as BzCompression;
 use clap::{ArgAction, CommandFactory, FromArgMatches, Parser};
@@ -266,9 +266,9 @@ fn run_extract(cli: &Cli, codec: Codec) -> Result<()> {
             if let Some(ref archive_path) = cli.file {
                 let f = File::open(archive_path)
                     .with_context(|| format!("tar: {archive_path}: cannot open"))?;
-                unpack_archive(Archive::new(BzDecoder::new(f)), dest, cli)?;
+                unpack_archive(Archive::new(MultiBzDecoder::new(f)), dest, cli)?;
             } else {
-                unpack_archive(Archive::new(BzDecoder::new(io::stdin())), dest, cli)?;
+                unpack_archive(Archive::new(MultiBzDecoder::new(io::stdin())), dest, cli)?;
             }
         }
         Codec::Plain => {
@@ -285,12 +285,10 @@ fn run_extract(cli: &Cli, codec: Codec) -> Result<()> {
 }
 
 fn unpack_archive<R: Read>(mut archive: Archive<R>, dest: &str, cli: &Cli) -> Result<()> {
-    // Use per-entry unpack_in() so we can handle symlink errors gracefully.
-    // unpack_in() has the same path-traversal guard as unpack() — it skips
-    // entries with ".." components (T-06-05-01 mitigation).
-    //
-    // T-06-05-02: On Windows, symlink extraction requires SeCreateSymbolicLinkPrivilege.
-    // We log a warning and continue so the rest of the archive is still extracted.
+    let mut had_error = false;
+    // set_ignore_zeros allows reading past end-of-archive zero blocks, which is
+    // required for concatenated archives (e.g. two tar.bz2 files joined together).
+    archive.set_ignore_zeros(true);
     for entry in archive.entries()? {
         let mut entry = entry?;
         let path = entry.path()?.into_owned();
@@ -310,10 +308,15 @@ fn unpack_archive<R: Read>(mut archive: Archive<R>, dest: &str, cli: &Cli) -> Re
                      (symlink extraction may require elevated privileges on Windows)",
                     path.display()
                 );
+                // Symlink failures are warnings, not fatal errors; keep had_error false (per D-06).
             } else {
                 eprintln!("tar: {}: {e}", path.display());
+                had_error = true;
             }
         }
+    }
+    if had_error {
+        anyhow::bail!("one or more files could not be extracted");
     }
     Ok(())
 }
@@ -335,9 +338,9 @@ fn run_list(cli: &Cli, codec: Codec) -> Result<()> {
             if let Some(ref archive_path) = cli.file {
                 let f = File::open(archive_path)
                     .with_context(|| format!("tar: {archive_path}: cannot open"))?;
-                list_archive(Archive::new(BzDecoder::new(f)))?;
+                list_archive(Archive::new(MultiBzDecoder::new(f)))?;
             } else {
-                list_archive(Archive::new(BzDecoder::new(io::stdin())))?;
+                list_archive(Archive::new(MultiBzDecoder::new(io::stdin())))?;
             }
         }
         Codec::Plain => {
@@ -367,7 +370,13 @@ pub fn uumain<I: IntoIterator<Item = OsString>>(args: I) -> i32 {
     gow_core::init();
 
     let matches = gow_core::args::parse_gnu(Cli::command(), args);
-    let cli = Cli::from_arg_matches(&matches).unwrap();
+    let cli = match Cli::from_arg_matches(&matches) {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("tar: {e}");
+            return 2;
+        }
+    };
 
     let mode = match detect_mode(&cli) {
         Ok(m) => m,

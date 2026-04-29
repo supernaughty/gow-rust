@@ -55,15 +55,20 @@
   - [x] 07-01-PLAN.md — v0.1.0 GitHub Release with x64/x86 MSI assets + CONTRIBUTING.md ARM64 docs (REL-01, REL-02, REL-03)
   - [x] 07-02-PLAN.md — CI workflow: cargo test --workspace on push/PR (CI-01)
   - [x] 07-03-PLAN.md — Release workflow: tag-triggered x64+x86 MSI build + upload (CI-02, CI-03)
-- [ ] **Phase 08: code-review-fixes** — Code Review Fixes & Installer Polish
-  **Plans:** 4 plans
+- [x] **Phase 08: code-review-fixes** — Code Review Fixes & Installer Polish *(Complete: 2026-04-29)*
+  - **Goal:** Fix 7 code review warnings (WR-01 thru WR-07) and 1 improvement (IN-01) across gow-tar, gow-xz, gow-gzip, gow-curl.
+  - **Requirements:** FIX-01, FIX-02, FIX-03, FIX-04, FIX-05, FIX-06, FIX-07
+  - **Plans:** 4 plans
+  - [x] 08-01-PLAN.md — gow-tar fixes: MultiBzDecoder (WR-01), graceful CLI error (WR-02), had_error propagation (WR-03) (FIX-01, FIX-02, FIX-03)
+  - [x] 08-02-PLAN.md — gow-xz fix: XzDecoder::new_multi_decoder for concatenated .xz streams (FIX-04)
+  - [x] 08-03-PLAN.md — gow-gzip fixes: reject no-.gz suffix (WR-05), stdin dead code simplification (IN-01) (FIX-05)
+  - [x] 08-04-PLAN.md — gow-curl fixes: suppress headers in silent mode (WR-06), remove partial file on error (WR-07) (FIX-06, FIX-07)
+- [x] **Phase 09: external-bundling** — External Binary Bundling *(Complete: 2026-04-29)*
+  - **Plans:** 2 plans
 
   Plans:
-  - [ ] 08-01-PLAN.md — gow-tar fixes: MultiBzDecoder (WR-01), graceful CLI error (WR-02), had_error propagation (WR-03) (FIX-01, FIX-02, FIX-03)
-  - [ ] 08-02-PLAN.md — gow-xz fix: XzDecoder::new_multi_decoder for concatenated .xz streams (FIX-04)
-  - [ ] 08-03-PLAN.md — gow-gzip fixes: reject no-.gz suffix (WR-05), stdin dead code simplification (IN-01) (FIX-05)
-  - [ ] 08-04-PLAN.md — gow-curl fixes: suppress headers in silent mode (WR-06), remove partial file on error (WR-07) (FIX-06, FIX-07)
-- [ ] **Phase 09: external-bundling** — External Binary Bundling
+  - [x] 09-01-PLAN.md — Commit batch alias shims to git source control (BND-03)
+  - [x] 09-02-PLAN.md — WiX optional Extras feature: dual-harvest staging + ExtrasFeature in main.wxs (BND-01, BND-02, BND-04)
 - [ ] **Phase 10: new-utilities-wave1** — New Rust Utilities Wave 1
 - [ ] **Phase 11: new-utilities-wave2** — New Rust Utilities Wave 2
 
@@ -138,7 +143,11 @@ Plans:
   2. After installing the MSI, `vim`, `wget`, and `nano` are available on PATH without any manual steps
   3. Legacy names `egrep`, `fgrep`, `bunzip2`, `gawk`, `gfind`, `gsort` invoke the correct Rust binaries via batch file shims
   4. The installer presents an optional "Extras" feature that a user can deselect to skip vim/nano/wget installation
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [x] 09-01-PLAN.md — Commit batch alias shims to git source control (BND-03)
+- [x] 09-02-PLAN.md — WiX optional Extras feature: dual-harvest staging + ExtrasFeature in main.wxs (BND-01, BND-02, BND-04)
 
 ### Phase 10: new-utilities-wave1
 **Goal**: Ten simple GNU utilities — seq, sleep, tac, nl, od, fold, expand, unexpand, du, df, and the hash suite (md5sum, sha1sum, sha256sum) — are implemented as independent Rust binaries and included in the installer.
@@ -178,8 +187,8 @@ Plans:
 | 04. s04 | 10/10 | Complete | 2026-04-25 |
 | 05. search-and-navigation | 4/4 | Complete | 2026-04-28 |
 | 06. archive-compression-and-network | 6/6 | Complete | 2026-04-28 |
-| 07. release-and-ci | 0/3 | Not started | - |
-| 08. code-review-fixes | 0/? | Not started | - |
-| 09. external-bundling | 0/? | Not started | - |
+| 07. release-and-ci | 3/3 | Complete | 2026-04-29 |
+| 08. code-review-fixes | 4/4 | Complete | 2026-04-29 |
+| 09. external-bundling | 2/2 | Complete | 2026-04-29 |
 | 10. new-utilities-wave1 | 0/? | Not started | - |
 | 11. new-utilities-wave2 | 0/? | Not started | - |
