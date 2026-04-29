@@ -1,35 +1,35 @@
 ---
 gsd_state_version: 1.0
 milestone: v0.2.0
-milestone_name: "- [x] **Phase 07: release-and-ci** — Release & CI/CD *"
+milestone_name: "v0.2.0 — Distribution & Completeness"
 status: executing
-stopped_at: Completed 07-03-PLAN.md — release.yml created, committed, and pushed
-last_updated: "2026-04-29T06:52:59.585Z"
-last_activity: 2026-04-29 -- Phase --phase execution started
+stopped_at: Phase 10 complete — all 6 plans executed, UAT passed, ready to plan Phase 11
+last_updated: "2026-04-29T13:40:00.000Z"
+last_activity: 2026-04-29 -- Phase 10 complete (UAT 4/4 passed)
 progress:
-  total_phases: 7
-  completed_phases: 4
-  total_plans: 19
-  completed_plans: 17
-  percent: 89
+  total_phases: 6
+  completed_phases: 6
+  total_plans: 31
+  completed_plans: 31
+  percent: 86
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md
+See: .planning/PROJECT.md (updated 2026-04-29)
 
-**Current focus:** Phase --phase — 09
+**Current focus:** Phase 11 — new-utilities-wave2
 
 ## Current Position
 
-Phase: --phase (09) — EXECUTING
-Plan: 1 of --name
-Status: Executing Phase --phase
-Last activity: 2026-04-29 -- Phase --phase execution started
+Phase: 11 (new-utilities-wave2) — READY TO PLAN
+Plan: Not started
+Status: Ready to plan Phase 11
+Last activity: 2026-04-29 -- Phase 10 complete (UAT 4/4 passed)
 
-Progress: [████______] 40% (M002 — 2/5 phases complete)
+Progress: [█████_____] 86% (M002 — 6/7 phases complete)
 
 ## Accumulated Context
 
@@ -85,15 +85,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-28T22:09:11.177Z
-Stopped at: Completed 07-03-PLAN.md — release.yml created, committed, and pushed
+Last session: 2026-04-29T13:40:00.000Z
+Stopped at: Phase 10 complete — UAT 4/4 passed, ready to plan Phase 11
 Resume file: None
 
-**Next Phase:** 07 (release-and-ci) — publish v0.1.0 GitHub Release + CI/CD automation
-
-  - REL-01: git tag v0.1.0 + GitHub Release with x64/x86 MSI assets
-  - REL-02: ARM64 build docs in README/CONTRIBUTING.md
-  - REL-03: exclude gow-probe.exe from installer
-  - CI-01: cargo test --workspace on every push/PR
-  - CI-02: tag-triggered MSI build workflow
-  - CI-03: auto-attach MSIs to GitHub Release
+**Next Phase:** 11 (new-utilities-wave2) — whoami, uname, paste, join, split, printf, expr, test, fmt, unlink

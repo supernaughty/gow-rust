@@ -69,18 +69,18 @@
   Plans:
   - [x] 09-01-PLAN.md — Commit batch alias shims to git source control (BND-03)
   - [x] 09-02-PLAN.md — WiX optional Extras feature: dual-harvest staging + ExtrasFeature in main.wxs (BND-01, BND-02, BND-04)
-- [ ] **Phase 10: new-utilities-wave1** — New Rust Utilities Wave 1
+- [x] **Phase 10: new-utilities-wave1** — New Rust Utilities Wave 1 *(Complete: 2026-04-29)*
   - **Goal:** Ten simple GNU utilities — seq, sleep, tac, nl, od, fold, expand, unexpand, du, df, and the hash suite (md5sum, sha1sum, sha256sum) — are implemented as independent Rust binaries and included in the installer.
   - **Requirements:** U-01, U-02, U-03, U-04, U-05, U-06, U-07, U-08, U-09, U-10
   - **Plans:** 6 plans
 
   Plans:
-  - [ ] 10-01-PLAN.md — Scaffold 10 new crates and add md-5/sha1/sha2/digest/hex workspace deps (U-01..U-10)
-  - [ ] 10-02-PLAN.md — Implement seq (scaled-int precision), sleep, tac, fold (U-01, U-02, U-03, U-06)
-  - [ ] 10-03-PLAN.md — Implement nl with -b t default and expand-unexpand argv[0] dispatch (U-04, U-07)
-  - [ ] 10-04-PLAN.md — Implement od with -t o[1|2|4]/x[1|2|4]/d[1|2|4]/u[1|2|4]/c, -A o/x/d/n, -N (U-05)
-  - [ ] 10-05-PLAN.md — Implement du (walkdir.follow_links(false)) and df (Win32 GetDiskFreeSpaceExW) (U-08, U-09)
-  - [ ] 10-06-PLAN.md — Implement md5sum/sha1sum/sha256sum with -c check mode + build.bat polish + workspace test gate (U-10)
+  - [x] 10-01-PLAN.md — Scaffold 10 new crates and add md-5/sha1/sha2/digest/hex workspace deps (U-01..U-10)
+  - [x] 10-02-PLAN.md — Implement seq (scaled-int precision), sleep, tac, fold (U-01, U-02, U-03, U-06)
+  - [x] 10-03-PLAN.md — Implement nl with -b t default and expand-unexpand argv[0] dispatch (U-04, U-07)
+  - [x] 10-04-PLAN.md — Implement od with -t o[1|2|4]/x[1|2|4]/d[1|2|4]/u[1|2|4]/c, -A o/x/d/n, -N (U-05)
+  - [x] 10-05-PLAN.md — Implement du (walkdir.follow_links(false)) and df (Win32 GetDiskFreeSpaceExW) (U-08, U-09)
+  - [x] 10-06-PLAN.md — Implement md5sum/sha1sum/sha256sum with -c check mode + build.bat polish + workspace test gate (U-10)
 - [ ] **Phase 11: new-utilities-wave2** — New Rust Utilities Wave 2
 
 ## Phase Details
@@ -201,5 +201,5 @@ Plans:
 | 07. release-and-ci | 3/3 | Complete | 2026-04-29 |
 | 08. code-review-fixes | 4/4 | Complete | 2026-04-29 |
 | 09. external-bundling | 2/2 | Complete | 2026-04-29 |
-| 10. new-utilities-wave1 | 0/? | Not started | - |
+| 10. new-utilities-wave1 | 6/6 | Complete | 2026-04-29 |
 | 11. new-utilities-wave2 | 0/? | Not started | - |
