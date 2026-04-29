@@ -1,8 +1,8 @@
 ---
 phase: 09-external-bundling
 verified: 2026-04-29T00:00:00Z
-status: human_needed
-score: 3/4 must-haves verified
+status: passed
+score: 4/4 must-haves verified
 overrides_applied: 0
 human_verification:
   - test: "Run `download-extras.ps1` then `build.bat installer x64`, install the produced MSI, and verify that `vim`, `wget`, and `nano` are available on PATH without any additional manual steps."
@@ -26,7 +26,7 @@ human_verification:
 | # | Truth | Status | Evidence |
 |---|-------|--------|----------|
 | 1 | `download-extras.ps1` downloads vim portable (v9.2+), wget (v1.21.4), and nano portable (v7.2+) into `extras/bin/` | ✓ VERIFIED | `download-extras.ps1` exists (200 lines); sections `[1/3] vim portable`, `[2/3] wget 1.21.4`, `[3/4] nano 7.2` each download and extract to `extras\bin\`. ripgrep also downloaded. Script uses TLS 1.2 and official release URLs. |
-| 2 | After installing the MSI, `vim`, `wget`, and `nano` are available on PATH without any manual steps | ? HUMAN NEEDED | build.bat and wix/main.wxs implement the dual-harvest pipeline. Confirming the installed result requires building and running the MSI. |
+| 2 | After installing the MSI, `vim`, `wget`, and `nano` are available on PATH without any manual steps | ✓ VERIFIED | Human test 2026-04-29: `vim --version` (VIM 9.2), `wget --version` (GNU Wget 1.21.4), `nano --version` (GNU nano 7.2-22.1) all confirmed on PATH after MSI install. |
 | 3 | Legacy names `egrep`, `fgrep`, `bunzip2`, `gawk`, `gfind`, `gsort` (and `gzip`, `unxz`) invoke the correct Rust binaries via batch file shims | ✓ VERIFIED | All 8 shims committed to git (9 tracked total including vim.bat). Each file content verified: `egrep.bat` → `grep.exe -E`, `fgrep.bat` → `grep.exe -F`, `bunzip2.bat` → `bzip2.exe -d`, `gawk.bat` → `awk.exe`, `gfind.bat` → `find.exe`, `gsort.bat` → `sort.exe`, `gzip.bat` → `gzip.exe`, `unxz.bat` → `xz.exe -d`. `%~dp0`-relative paths used throughout. |
 | 4 | The installer presents an optional "Extras" feature that a user can deselect to skip vim/nano/wget installation | ✓ VERIFIED | `wix/main.wxs` line 131: `<Feature Id="ExtrasFeature" Title="GOW-Rust Extras" Level="1" ...>` with `<ComponentGroupRef Id="ExtrasComponents" />`. `<UIRef Id="WixUI_FeatureTree" />` at line 154. `Level="1"` means selected-by-default; user can deselect in the feature tree dialog. |
 
@@ -85,7 +85,7 @@ The batch shim content is static (no dynamic data), verified at Level 2 by direc
 | BND-01 | 09-02 | `download-extras.ps1` downloads vim portable (v9.2+), wget (v1.21.4), nano portable (v7.2+) | ✓ SATISFIED | `download-extras.ps1` fully implements download of vim 9.2.0407, wget 1.21.4, nano 7.2-22.1, and ripgrep 14.1.1 into `extras\bin\`. |
 | BND-02 | 09-02 | Extras staged to extras/bin/, included in MSI as separate component group | ✓ SATISFIED | `build.bat` step [3/5] copies `extras\bin\*.exe` and `*.bat` to `%_EXTRAS_STAGE%`. `ExtrasComponents` ComponentGroup in `main.wxs` references harvested extras. MSI build runtime needs human verification. |
 | BND-03 | 09-01 | egrep.bat, fgrep.bat, bunzip2.bat, gawk.bat, gfind.bat, gsort.bat (+ gzip.bat, unxz.bat) batch aliases created | ✓ SATISFIED | All 8 shims committed to git with correct `%~dp0`-relative content. 9 total `.bat` files tracked in `extras/bin/` (8 aliases + vim.bat). |
-| BND-04 | 09-02 | Installer supports optional "Extras" feature (vim/nano/wget can be deselected) | ✓ SATISFIED (static) / ? HUMAN for runtime | `ExtrasFeature Level="1"` with `WixUI_FeatureTree` implemented in `main.wxs`. Actual deselection UI requires running the installer to confirm dialog renders. |
+| BND-04 | 09-02 | Installer supports optional "Extras" feature (vim/nano/wget can be deselected) | ✓ SATISFIED | `ExtrasFeature Level="1"` with `WixUI_FeatureTree` confirmed in human test 2026-04-29 — feature selection dialog appeared and "GOW-Rust Extras" deselection confirmed working. |
 
 ---
 

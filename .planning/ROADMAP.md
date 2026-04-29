@@ -63,7 +63,7 @@
   - [x] 08-02-PLAN.md — gow-xz fix: XzDecoder::new_multi_decoder for concatenated .xz streams (FIX-04)
   - [x] 08-03-PLAN.md — gow-gzip fixes: reject no-.gz suffix (WR-05), stdin dead code simplification (IN-01) (FIX-05)
   - [x] 08-04-PLAN.md — gow-curl fixes: suppress headers in silent mode (WR-06), remove partial file on error (WR-07) (FIX-06, FIX-07)
-- [ ] **Phase 09: external-bundling** — External Binary Bundling
+- [x] **Phase 09: external-bundling** — External Binary Bundling *(Complete: 2026-04-29)*
   - **Plans:** 2 plans
 
   Plans:
@@ -189,6 +189,6 @@ Plans:
 | 06. archive-compression-and-network | 6/6 | Complete | 2026-04-28 |
 | 07. release-and-ci | 3/3 | Complete | 2026-04-29 |
 | 08. code-review-fixes | 4/4 | Complete | 2026-04-29 |
-| 09. external-bundling | 0/2 | Not started | - |
+| 09. external-bundling | 2/2 | Complete | 2026-04-29 |
 | 10. new-utilities-wave1 | 0/? | Not started | - |
 | 11. new-utilities-wave2 | 0/? | Not started | - |
