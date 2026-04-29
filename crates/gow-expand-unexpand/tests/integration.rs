@@ -84,12 +84,15 @@ fn unexpand_default_only_leading() {
 
 #[test]
 fn unexpand_all_blanks() {
-    // -a converts all space groups; 8 spaces between a and b at col 1 -> tab
+    // -a converts all space groups.
+    // "a        b" has 8 spaces starting at col 1. Next tabstop (col 8) needs 7
+    // spaces to reach. Tab emitted (col 8), 1 residual space remains.
+    // GNU unexpand -a: "a        b" -> "a\t b" (column-aware tab stop arithmetic).
     Command::cargo_bin("unexpand").unwrap()
         .arg("-a")
         .write_stdin("a        b\n")
         .assert().success()
-        .stdout("a\tb\n");
+        .stdout("a\t b\n");
 }
 
 #[test]
