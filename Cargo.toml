@@ -49,6 +49,17 @@ members = [
     "crates/gow-xz",
     "crates/gow-tar",
     "crates/gow-curl",
+    # Phase 10 — new utilities wave 1 (U-01 through U-10)
+    "crates/gow-seq",
+    "crates/gow-sleep",
+    "crates/gow-tac",
+    "crates/gow-nl",
+    "crates/gow-od",
+    "crates/gow-fold",
+    "crates/gow-expand-unexpand",
+    "crates/gow-du",
+    "crates/gow-df",
+    "crates/gow-hashsum",
 ]
 resolver = "3"
 
@@ -115,6 +126,13 @@ liblzma = { version = "0.4", features = ["static"] }  # xz/lzma (MSVC-safe fork 
 tar = "0.4"                          # tar archive create/extract — gow-tar
 reqwest = { version = "0.13", features = ["blocking", "native-tls"], default-features = false }
                                      # HTTP client (Windows SChannel TLS) — gow-curl only
+
+# Phase 10 additions (U-10 hash utilities)
+md-5 = "0.11"                        # MD5 hash function — gow-hashsum only
+sha1 = "0.11"                        # SHA-1 hash function — gow-hashsum only
+sha2 = "0.11"                        # SHA-256 — gow-hashsum only
+digest = "0.11"                      # Hash trait — gow-hashsum only
+hex = "0.4"                          # Digest hex encoding — gow-hashsum only
 
 [profile.release]
 strip = true
