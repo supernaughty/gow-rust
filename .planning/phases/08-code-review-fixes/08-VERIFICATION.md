@@ -1,7 +1,7 @@
 ---
 phase: 08-code-review-fixes
 verified: 2026-04-29T00:00:00Z
-status: human_needed
+status: verified
 score: 7/7 must-haves verified
 overrides_applied: 0
 human_verification:
@@ -29,7 +29,7 @@ human_verification:
 | 4 | xz -d correctly decompresses concatenated .xz files — all streams are decoded, not just the first | VERIFIED | `XzDecoder::new_multi_decoder(input)` at lib.rs line 86; old `XzDecoder::new(input)` is absent; `concatenated_xz_streams_decompress_fully` test present (xz_tests.rs line 197) |
 | 5 | gzip -d file (where file lacks .gz suffix) prints 'gzip: \<file\>: unknown suffix -- ignored' and exits 1; no .out file is created | VERIFIED | `eprintln!("gzip: {converted}: unknown suffix -- ignored")` at lib.rs line 157; `exit_code = 1; continue;` follows immediately; `.out` string absent from lib.rs; tests `no_gz_suffix_rejected` (line 263) and `no_gz_suffix_does_not_create_out_file` (line 280) both present |
 | 6 | gzip stdin decompress error path is simplified — dead branch removed, actual decoder error message is emitted | VERIFIED | Stdin block (lines 79–98) uses symmetric `match mode { Mode::Compress => { if let Err }, Mode::Decompress => { if let Err } }` pattern; `not in gzip format` string is absent; `result` dead binding is absent; `stdin_decompress_invalid_data_exits_1` test present (line 308) |
-| 7 | curl -I -s suppresses all output including headers; no lines are printed to stdout in silent mode | VERIFIED (code) / HUMAN NEEDED (runtime) | Header `for` loop at lib.rs line 95 is nested inside `if !cli.silent { }` block (lines 93–98); `!cli.silent` guard confirmed by grep; test `silent_head_suppresses_all_output` present (curl_tests.rs line 104) but marked `#[ignore = "requires network access"]` |
+| 7 | curl -I -s suppresses all output including headers; no lines are printed to stdout in silent mode | VERIFIED | Header `for` loop at lib.rs line 95 is nested inside `if !cli.silent { }` block (lines 93–98); runtime confirmed 2026-04-29: `silent_head_suppresses_all_output` passed (1 passed, 0 failed, 1.96s) |
 | 8 | curl -o out_file removes the partial output file when an I/O error occurs mid-download; no truncated file is left on disk | VERIFIED | `if let Err(e) = io::copy(&mut response, &mut file)` at lib.rs line 109; `let _ = fs::remove_file(output_path);` at line 110; `use std::fs::{self, File};` at line 10; bare `io::copy(...)?` absent in output_path branch; offline tests `output_file_not_created_on_invalid_path` (line 135) and `output_flag_accepted` (line 159) present |
 
 **Score:** 7/7 truths verified (runtime confirmation of WR-06 requires network — see Human Verification section)
@@ -89,7 +89,7 @@ Not applicable — these are utility functions and CLI tools, not components tha
 | FIX-03 | 08-01 | Non-zero exit on per-entry error | SATISFIED | had_error → bail! → exit 1 chain verified |
 | FIX-04 | 08-02 | XzDecoder multi-stream | SATISFIED | new_multi_decoder at line 86; XzDecoder::new() absent |
 | FIX-05 | 08-03 | gzip suffix rejection | SATISFIED | "unknown suffix -- ignored" at line 157; .out fallback absent |
-| FIX-06 | 08-04 | curl silent header suppression | SATISFIED (code); HUMAN NEEDED (runtime) | Header loop inside !cli.silent; runtime requires network test |
+| FIX-06 | 08-04 | curl silent header suppression | SATISFIED | Header loop inside !cli.silent; runtime confirmed 2026-04-29 (1 passed, 0 failed) |
 | FIX-07 | 08-04 | curl partial file cleanup | SATISFIED | remove_file at line 110; io::copy error path wired correctly |
 
 ### Anti-Patterns Found

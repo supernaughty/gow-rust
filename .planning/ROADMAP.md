@@ -178,8 +178,8 @@ Plans:
 | 04. s04 | 10/10 | Complete | 2026-04-25 |
 | 05. search-and-navigation | 4/4 | Complete | 2026-04-28 |
 | 06. archive-compression-and-network | 6/6 | Complete | 2026-04-28 |
-| 07. release-and-ci | 0/3 | Not started | - |
-| 08. code-review-fixes | 0/? | Not started | - |
+| 07. release-and-ci | 3/3 | Complete | 2026-04-29 |
+| 08. code-review-fixes | 4/4 | Complete | 2026-04-29 |
 | 09. external-bundling | 0/? | Not started | - |
 | 10. new-utilities-wave1 | 0/? | Not started | - |
 | 11. new-utilities-wave2 | 0/? | Not started | - |
