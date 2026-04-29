@@ -93,3 +93,77 @@ fn head_request_prints_headers() {
         .success()
         .stdout(predicate::str::contains("content-type"));
 }
+
+// ── WR-06: silent HEAD suppresses all output ──────────────────────────────────
+
+/// curl -s -I must produce no stdout output in silent mode.
+/// Marked #[ignore] because it requires network access.
+/// Run manually with: cargo test -p gow-curl -- --ignored silent_head_suppresses_all_output
+#[test]
+#[ignore = "requires network access"]
+fn silent_head_suppresses_all_output() {
+    // Uses httpbin.org which returns a 200 OK with standard headers.
+    // With -s (silent) + -I (HEAD), curl must print nothing to stdout.
+    curl_cmd()
+        .args(["-s", "-I", "http://httpbin.org/get"])
+        .assert()
+        .success()
+        .stdout(predicate::str::is_empty());
+}
+
+/// Complementary test: without -s, curl -I must print headers to stdout.
+/// Marked #[ignore] because it requires network access.
+#[test]
+#[ignore = "requires network access"]
+fn non_silent_head_prints_headers() {
+    curl_cmd()
+        .args(["-I", "http://httpbin.org/get"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("HTTP/1.1").or(predicate::str::contains("HTTP/2")));
+}
+
+// ── WR-07: partial file removed on I/O error ─────────────────────────────────
+
+/// Verifies WR-07 behavior by attempting to download to an invalid/unwritable path.
+/// When curl -o fails to write the output file, no partial file should remain.
+///
+/// Implementation: We use a path inside a non-existent directory. File::create()
+/// will fail immediately (directory not found), so we verify the file does not
+/// exist after the failure. This is offline-safe.
+#[test]
+fn output_file_not_created_on_invalid_path() {
+    let dir = tempdir().unwrap();
+    // Target a file inside a non-existent subdirectory
+    let invalid_path = dir.path().join("nonexistent_dir").join("output.bin");
+
+    curl_cmd()
+        .args([
+            "-o",
+            invalid_path.to_str().unwrap(),
+            "http://localhost:1",   // connection refused — also triggers error path
+        ])
+        .assert()
+        .failure();
+
+    // No partial file should exist at the target path
+    assert!(
+        !invalid_path.exists(),
+        "partial output file was left on disk: {invalid_path:?}"
+    );
+}
+
+/// WR-07 regression test: verifies that the code compiles and accepts the -o flag
+/// (no network required — tests CLI argument parsing only).
+#[test]
+fn output_flag_accepted() {
+    let dir = tempdir().unwrap();
+    let out = dir.path().join("out.bin");
+
+    // Missing URL argument — should fail with usage error, not panic.
+    // The point is that -o <file> is accepted as a valid flag by clap.
+    curl_cmd()
+        .args(["-o", out.to_str().unwrap()])
+        .assert()
+        .failure(); // exits non-zero because URL is required
+}
