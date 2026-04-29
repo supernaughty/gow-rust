@@ -91,12 +91,14 @@ fn open_input(path: &str) -> Result<Box<dyn BufRead>, String> {
 }
 
 /// Read the next non-empty line from a BufReader (strips trailing `\r\n` or `\n`).
-fn read_line(reader: &mut Box<dyn BufRead>) -> Option<String> {
+/// Returns `Ok(None)` on EOF, `Err(e)` on I/O error (rather than silently treating
+/// it as EOF, which would produce wrong output with exit code 0).
+fn read_line(reader: &mut Box<dyn BufRead>) -> Result<Option<String>, io::Error> {
     let mut line = String::new();
     loop {
         line.clear();
         match reader.read_line(&mut line) {
-            Ok(0) => return None, // EOF
+            Ok(0) => return Ok(None), // EOF
             Ok(_) => {
                 // Strip trailing newline(s)
                 if line.ends_with('\n') {
@@ -105,9 +107,9 @@ fn read_line(reader: &mut Box<dyn BufRead>) -> Option<String> {
                         line.pop();
                     }
                 }
-                return Some(line);
+                return Ok(Some(line));
             }
-            Err(_) => return None,
+            Err(e) => return Err(e),
         }
     }
 }
@@ -164,9 +166,22 @@ fn run(cli: &Cli) -> i32 {
     let stdout = io::stdout();
     let mut out = stdout.lock();
 
+    // Helper macro: unwrap read_line result, emit error and return 1 on I/O failure.
+    macro_rules! next_line {
+        ($reader:expr, $file_num:expr) => {
+            match read_line($reader) {
+                Ok(v) => v,
+                Err(e) => {
+                    eprintln!("join: read error on file {}: {e}", $file_num);
+                    return 1;
+                }
+            }
+        };
+    }
+
     // Initial reads
-    let mut line1: Option<String> = read_line(&mut reader1);
-    let mut line2: Option<String> = read_line(&mut reader2);
+    let mut line1: Option<String> = next_line!(&mut reader1, 1);
+    let mut line2: Option<String> = next_line!(&mut reader2, 2);
 
     // Sort-order tracking
     let mut prev_key1: Option<String> = None;
@@ -183,7 +198,7 @@ fn run(cli: &Cli) -> i32 {
                     let f1_other = other_fields(l1, cli.field1, sep);
                     print_joined(&mut out, &key1, &f1_other, "", sep);
                 }
-                line1 = read_line(&mut reader1);
+                line1 = next_line!(&mut reader1, 1);
                 // Continue draining
                 while let Some(ref l1) = line1.clone() {
                     let key1 = get_field(l1, cli.field1, sep).to_string();
@@ -191,7 +206,7 @@ fn run(cli: &Cli) -> i32 {
                         let f1_other = other_fields(l1, cli.field1, sep);
                         print_joined(&mut out, &key1, &f1_other, "", sep);
                     }
-                    line1 = read_line(&mut reader1);
+                    line1 = next_line!(&mut reader1, 1);
                 }
                 break;
             }
@@ -203,14 +218,14 @@ fn run(cli: &Cli) -> i32 {
                     let f2_other = other_fields(l2, cli.field2, sep);
                     print_joined(&mut out, &key2, "", &f2_other, sep);
                 }
-                line2 = read_line(&mut reader2);
+                line2 = next_line!(&mut reader2, 2);
                 while let Some(ref l2) = line2.clone() {
                     let key2 = get_field(l2, cli.field2, sep).to_string();
                     if should_print {
                         let f2_other = other_fields(l2, cli.field2, sep);
                         print_joined(&mut out, &key2, "", &f2_other, sep);
                     }
-                    line2 = read_line(&mut reader2);
+                    line2 = next_line!(&mut reader2, 2);
                 }
                 break;
             }
@@ -240,8 +255,8 @@ fn run(cli: &Cli) -> i32 {
                         }
                         prev_key1 = Some(key1);
                         prev_key2 = Some(key2);
-                        line1 = read_line(&mut reader1);
-                        line2 = read_line(&mut reader2);
+                        line1 = next_line!(&mut reader1, 1);
+                        line2 = next_line!(&mut reader2, 2);
                     }
                     std::cmp::Ordering::Less => {
                         // key1 < key2: line1 is unmatched
@@ -250,7 +265,7 @@ fn run(cli: &Cli) -> i32 {
                             print_joined(&mut out, &key1, &f1_other, "", sep);
                         }
                         prev_key1 = Some(key1);
-                        line1 = read_line(&mut reader1);
+                        line1 = next_line!(&mut reader1, 1);
                     }
                     std::cmp::Ordering::Greater => {
                         // key1 > key2: line2 is unmatched
@@ -259,7 +274,7 @@ fn run(cli: &Cli) -> i32 {
                             print_joined(&mut out, &key2, "", &f2_other, sep);
                         }
                         prev_key2 = Some(key2);
-                        line2 = read_line(&mut reader2);
+                        line2 = next_line!(&mut reader2, 2);
                     }
                 }
             }
