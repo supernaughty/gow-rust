@@ -55,14 +55,14 @@
   - [x] 07-01-PLAN.md — v0.1.0 GitHub Release with x64/x86 MSI assets + CONTRIBUTING.md ARM64 docs (REL-01, REL-02, REL-03)
   - [x] 07-02-PLAN.md — CI workflow: cargo test --workspace on push/PR (CI-01)
   - [x] 07-03-PLAN.md — Release workflow: tag-triggered x64+x86 MSI build + upload (CI-02, CI-03)
-- [ ] **Phase 08: code-review-fixes** — Code Review Fixes & Installer Polish
-  **Plans:** 4 plans
-
-  Plans:
-  - [ ] 08-01-PLAN.md — gow-tar fixes: MultiBzDecoder (WR-01), graceful CLI error (WR-02), had_error propagation (WR-03) (FIX-01, FIX-02, FIX-03)
-  - [ ] 08-02-PLAN.md — gow-xz fix: XzDecoder::new_multi_decoder for concatenated .xz streams (FIX-04)
-  - [ ] 08-03-PLAN.md — gow-gzip fixes: reject no-.gz suffix (WR-05), stdin dead code simplification (IN-01) (FIX-05)
-  - [ ] 08-04-PLAN.md — gow-curl fixes: suppress headers in silent mode (WR-06), remove partial file on error (WR-07) (FIX-06, FIX-07)
+- [x] **Phase 08: code-review-fixes** — Code Review Fixes & Installer Polish *(Complete: 2026-04-29)*
+  - **Goal:** Fix 7 code review warnings (WR-01 thru WR-07) and 1 improvement (IN-01) across gow-tar, gow-xz, gow-gzip, gow-curl.
+  - **Requirements:** FIX-01, FIX-02, FIX-03, FIX-04, FIX-05, FIX-06, FIX-07
+  - **Plans:** 4 plans
+  - [x] 08-01-PLAN.md — gow-tar fixes: MultiBzDecoder (WR-01), graceful CLI error (WR-02), had_error propagation (WR-03) (FIX-01, FIX-02, FIX-03)
+  - [x] 08-02-PLAN.md — gow-xz fix: XzDecoder::new_multi_decoder for concatenated .xz streams (FIX-04)
+  - [x] 08-03-PLAN.md — gow-gzip fixes: reject no-.gz suffix (WR-05), stdin dead code simplification (IN-01) (FIX-05)
+  - [x] 08-04-PLAN.md — gow-curl fixes: suppress headers in silent mode (WR-06), remove partial file on error (WR-07) (FIX-06, FIX-07)
 - [ ] **Phase 09: external-bundling** — External Binary Bundling
 - [ ] **Phase 10: new-utilities-wave1** — New Rust Utilities Wave 1
 - [ ] **Phase 11: new-utilities-wave2** — New Rust Utilities Wave 2

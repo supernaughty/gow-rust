@@ -5,13 +5,13 @@ milestone_name: M002
 status: in_progress
 stopped_at: ""
 last_updated: "2026-04-29T00:00:00Z"
-last_activity: "2026-04-29 — Phase 07 complete: v0.1.0 released, CI/CD workflows live"
+last_activity: "2026-04-29 — Phase 08 complete: 7 code review fixes across gow-tar, gow-xz, gow-gzip, gow-curl"
 progress:
   total_phases: 5
-  completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
-  percent: 20
+  completed_phases: 2
+  total_plans: 4
+  completed_plans: 4
+  percent: 40
 ---
 
 # Project State
@@ -20,16 +20,16 @@ progress:
 
 See: .planning/PROJECT.md
 
-**Current focus:** Phase 08 — Code Review Fixes & Installer Polish (7 bug fixes across gow-tar, gow-xz, gow-gzip, gow-curl)
+**Current focus:** Phase 09 — External Binary Bundling
 
 ## Current Position
 
-Phase: 08 — PLANNED (Ready to execute)
-Plan: 4 plans created, 0/4 complete
-Status: Phase 08 planned. Ready to execute.
-Last activity: 2026-04-29 — Phase 08 planned: 4 plans (08-01 thru 08-04), all Wave 1
+Phase: 08 — COMPLETE (2026-04-29)
+Plan: 4/4 complete
+Status: Phase 08 complete. All code review fixes applied across gow-tar, gow-xz, gow-gzip, gow-curl.
+Last activity: 2026-04-29 — Phase 08 complete: 4 plans (08-01 thru 08-04), all Wave 1 executed
 
-Progress: [██________] 20% (M002 — 1/5 phases complete)
+Progress: [████______] 40% (M002 — 2/5 phases complete)
 
 ## Accumulated Context
 
