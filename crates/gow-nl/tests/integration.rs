@@ -1,7 +1,6 @@
 use assert_cmd::Command;
-use std::fs;
-use tempfile::NamedTempFile;
 use std::io::Write;
+use tempfile::NamedTempFile;
 
 #[test]
 fn nl_default_numbers_nonempty_lines() {
