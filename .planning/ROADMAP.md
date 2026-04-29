@@ -67,7 +67,7 @@
   - **Plans:** 2 plans
 
   Plans:
-  - [ ] 09-01-PLAN.md — Commit batch alias shims to git source control (BND-03)
+  - [x] 09-01-PLAN.md — Commit batch alias shims to git source control (BND-03)
   - [ ] 09-02-PLAN.md — WiX optional Extras feature: dual-harvest staging + ExtrasFeature in main.wxs (BND-01, BND-02, BND-04)
 - [ ] **Phase 10: new-utilities-wave1** — New Rust Utilities Wave 1
 - [ ] **Phase 11: new-utilities-wave2** — New Rust Utilities Wave 2
@@ -146,7 +146,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 09-01-PLAN.md — Commit batch alias shims to git source control (BND-03)
+- [x] 09-01-PLAN.md — Commit batch alias shims to git source control (BND-03)
 - [ ] 09-02-PLAN.md — WiX optional Extras feature: dual-harvest staging + ExtrasFeature in main.wxs (BND-01, BND-02, BND-04)
 
 ### Phase 10: new-utilities-wave1
