@@ -53,7 +53,8 @@ fn parse_bytes(s: &str) -> Option<usize> {
     } else {
         (s, 1)
     };
-    num_str.parse::<usize>().ok().map(|n| n * mult)
+    let n = num_str.parse::<usize>().ok()?;
+    n.checked_mul(mult) // returns None on overflow → caller emits "invalid number of bytes"
 }
 
 /// Advance to the next alphabetic suffix in place.
