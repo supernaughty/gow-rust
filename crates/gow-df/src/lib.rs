@@ -32,10 +32,14 @@ struct Cli {
 /// Enumerate all logical drive roots via GetLogicalDriveStringsW.
 /// Returns strings like ["C:\\", "D:\\", ...]
 fn get_drives() -> Vec<String> {
-    let mut buf = [0u16; 256];
+    let mut buf = [0u16; 512];
     // SAFETY: buf and len are valid; returns total character count written, or 0 on error
     let len = unsafe { GetLogicalDriveStringsW(buf.len() as u32, buf.as_mut_ptr()) };
     if len == 0 {
+        return Vec::new();
+    }
+    if len as usize > buf.len() {
+        // Buffer too small (>128 drives); skip rather than index out-of-bounds
         return Vec::new();
     }
     let mut drives = Vec::new();
