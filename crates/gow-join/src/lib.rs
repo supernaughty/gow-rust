@@ -140,6 +140,16 @@ fn run(cli: &Cli) -> i32 {
         return 2;
     }
 
+    // Validate -a and -v file numbers: only 1 or 2 are valid.
+    // GNU join rejects other values with a usage error.
+    for &flag_val in cli.print_unpaired.iter().chain(cli.only_unpaired.iter()) {
+        if flag_val != 1 && flag_val != 2 {
+            let flag_name = if cli.print_unpaired == Some(flag_val) { "a" } else { "v" };
+            eprintln!("join: invalid file number in -{flag_name}: {flag_val}");
+            return 2;
+        }
+    }
+
     let path1 = &cli.files[0];
     let path2 = &cli.files[1];
 
