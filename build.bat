@@ -117,34 +117,45 @@ echo  Building: gow-rust-v!VERSION!-installer-%_ARCH%.msi
 echo  Target: %_RT%
 echo ===================================================
 
-echo [1/4] cargo build --release --target %_RT% %PKG%
+echo [1/5] cargo build --release --target %_RT% %PKG%
 cargo build --release --target %_RT% %PKG%
 if errorlevel 1 ( echo [FAILED] cargo build & exit /b 1 )
 
 set _STAGE=target\wix-stage\%_ARCH%
-echo [2/4] Staging binaries to %_STAGE%
-powershell -NoProfile -Command "Remove-Item -Path '%_STAGE%' -Recurse -Force -ErrorAction SilentlyContinue; $null=New-Item '%_STAGE%' -ItemType Directory -Force; Get-ChildItem 'target\%_RT%\release\*.exe' | Where-Object { $_.Name -ne 'gow-probe.exe' } | Copy-Item -Destination '%_STAGE%'"
-:: Stage extras (vim, wget, nano, batch aliases) if present
+set _CORE_STAGE=target\wix-stage\%_ARCH%\core
+set _EXTRAS_STAGE=target\wix-stage\%_ARCH%\extras
+
+echo [2/5] Staging Rust binaries to %_CORE_STAGE%
+powershell -NoProfile -Command "Remove-Item -Path '%_STAGE%' -Recurse -Force -ErrorAction SilentlyContinue; $null=New-Item '%_CORE_STAGE%' -ItemType Directory -Force; $null=New-Item '%_EXTRAS_STAGE%' -ItemType Directory -Force; Get-ChildItem 'target\%_RT%\release\*.exe' | Where-Object { $_.Name -ne 'gow-probe.exe' } | Copy-Item -Destination '%_CORE_STAGE%'"
+
+echo [3/5] Staging extras (vim, wget, nano, batch aliases) to %_EXTRAS_STAGE%
 if exist extras\bin (
-    powershell -NoProfile -Command "Get-ChildItem 'extras\bin\*' -Include '*.exe','*.bat' | Copy-Item -Destination '%_STAGE%'"
+    powershell -NoProfile -Command "Get-ChildItem 'extras\bin\*' -Include '*.exe','*.bat' | Copy-Item -Destination '%_EXTRAS_STAGE%'"
     if exist extras\bin\vim-runtime (
-        powershell -NoProfile -Command "Copy-Item -Path 'extras\bin\vim-runtime' -Destination '%_STAGE%\vim-runtime' -Recurse -Force"
+        powershell -NoProfile -Command "Copy-Item -Path 'extras\bin\vim-runtime' -Destination '%_EXTRAS_STAGE%\vim-runtime' -Recurse -Force"
     )
 )
-echo   Staged:
-dir /b %_STAGE% 2>nul | findstr /v "^vim-runtime$"
+echo   Core staged:
+dir /b %_CORE_STAGE% 2>nul
+echo   Extras staged:
+dir /b %_EXTRAS_STAGE% 2>nul | findstr /v "^vim-runtime$"
 
-echo [3/4] Harvesting with heat.exe...
-heat.exe dir %_STAGE% -cg BinComponents -dr APPLICATIONFOLDER -scom -sreg -sfrag -srd -var var.SourceDir -out wix\BinHarvest-%_ARCH%.wxs
-if errorlevel 1 ( echo [FAILED] heat.exe - is WiX v3 installed? Run setup.bat first. & exit /b 1 )
-powershell -NoProfile -ExecutionPolicy Bypass -File wix\fix-guids.ps1 -WxsFile wix\BinHarvest-%_ARCH%.wxs
-if errorlevel 1 ( echo [FAILED] fix-guids.ps1 & exit /b 1 )
+echo [4/5] Harvesting with heat.exe (core + extras)...
+heat.exe dir %_CORE_STAGE% -cg CoreComponents -dr APPLICATIONFOLDER -scom -sreg -sfrag -srd -var var.CoreSourceDir -out wix\CoreHarvest-%_ARCH%.wxs
+if errorlevel 1 ( echo [FAILED] heat.exe (core) - is WiX v3 installed? Run setup.bat first. & exit /b 1 )
+powershell -NoProfile -ExecutionPolicy Bypass -File wix\fix-guids.ps1 -WxsFile wix\CoreHarvest-%_ARCH%.wxs
+if errorlevel 1 ( echo [FAILED] fix-guids.ps1 (core) & exit /b 1 )
 
-echo [4/4] Compiling and linking MSI...
-candle.exe wix\main.wxs wix\BinHarvest-%_ARCH%.wxs -arch %_WA% -dSourceDir=%_STAGE% -dVersion=!VERSION! -dPlatform=%_WA%
+heat.exe dir %_EXTRAS_STAGE% -cg ExtrasComponents -dr APPLICATIONFOLDER -scom -sreg -sfrag -srd -var var.ExtrasSourceDir -out wix\ExtrasHarvest-%_ARCH%.wxs
+if errorlevel 1 ( echo [FAILED] heat.exe (extras) & exit /b 1 )
+powershell -NoProfile -ExecutionPolicy Bypass -File wix\fix-guids.ps1 -WxsFile wix\ExtrasHarvest-%_ARCH%.wxs
+if errorlevel 1 ( echo [FAILED] fix-guids.ps1 (extras) & exit /b 1 )
+
+echo [5/5] Compiling and linking MSI...
+candle.exe wix\main.wxs wix\CoreHarvest-%_ARCH%.wxs wix\ExtrasHarvest-%_ARCH%.wxs -arch %_WA% -dCoreSourceDir=%_CORE_STAGE% -dExtrasSourceDir=%_EXTRAS_STAGE% -dVersion=!VERSION! -dPlatform=%_WA%
 if errorlevel 1 ( echo [FAILED] candle.exe & exit /b 1 )
 
-light.exe -b %_STAGE% main.wixobj BinHarvest-%_ARCH%.wixobj -o !_OUT! -ext WixUIExtension
+light.exe -b %_CORE_STAGE% -b %_EXTRAS_STAGE% main.wixobj CoreHarvest-%_ARCH%.wixobj ExtrasHarvest-%_ARCH%.wixobj -o !_OUT! -ext WixUIExtension
 if errorlevel 1 ( echo [FAILED] light.exe & exit /b 1 )
 
 echo.
@@ -157,6 +168,8 @@ set _RT=
 set _WA=
 set _ARCH=
 set _STAGE=
+set _CORE_STAGE=
+set _EXTRAS_STAGE=
 set _OUT=
 goto :eof
 
