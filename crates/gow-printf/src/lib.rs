@@ -232,7 +232,7 @@ fn format_spec(
             } else {
                 arg.to_string()
             };
-            if width > s.len() {
+            if width > s.chars().count() {
                 if left_align {
                     format!("{s:<width$}", s = s, width = width)
                 } else {
@@ -286,10 +286,11 @@ fn format_spec(
 /// Pad a string to `width` characters.
 /// If `zero_pad` is true and the string starts with '-', place padding after sign.
 fn pad_string(s: &str, width: usize, left_align: bool, pad_char: char, is_negative_zero_pad: bool) -> String {
-    if width == 0 || s.len() >= width {
+    let char_len = s.chars().count();
+    if width == 0 || char_len >= width {
         return s.to_string();
     }
-    let pad_count = width - s.len();
+    let pad_count = width - char_len;
     if left_align {
         let mut result = s.to_string();
         for _ in 0..pad_count {
