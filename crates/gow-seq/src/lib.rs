@@ -109,7 +109,13 @@ fn run(cli: &Cli) -> i32 {
 }
 
 fn seq_output(first: f64, inc: f64, last: f64, precision: u32, sep: &str) -> i32 {
-    let scale: i64 = 10_i64.pow(precision);
+    let scale = match 10_i64.checked_pow(precision) {
+        Some(s) => s,
+        None => {
+            eprintln!("seq: precision overflow");
+            return 1;
+        }
+    };
     let mut cur = (first * scale as f64).round() as i64;
     let inc_scaled = (inc * scale as f64).round() as i64;
     let end = (last * scale as f64).round() as i64;
