@@ -59,6 +59,7 @@ if "!PKG!"=="" (
     echo   seq  sha1sum  sha256sum  sleep  sort  tac  tail  tar
     echo   tee  touch  tr  true  unexpand  uniq  unix2dos  wc
     echo   which  xargs  xz  yes  zcat
+    echo   expr  fmt  join  paste  printf  split  test  uname  unlink  whoami
 )
 goto end
 
