@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
 milestone: v0.2.0
-milestone_name: "v0.2.0 — Distribution & Completeness"
-status: executing
-stopped_at: Phase 11 plan 01 complete — 10 crates scaffolded, workspace build green
-last_updated: "2026-04-29T20:59:00.000Z"
+milestone_name: "- [x] **Phase 07: release-and-ci** — Release & CI/CD *"
+status: completed
+stopped_at: Completed 11-06-PLAN.md — whoami + uname implemented, workspace test gate green
+last_updated: "2026-04-29T21:25:03.885Z"
 last_activity: 2026-04-29 -- Phase 11 plan 01 complete (10 crates scaffolded)
 progress:
   total_phases: 7
-  completed_phases: 6
-  total_plans: 37
-  completed_plans: 32
-  percent: 87
+  completed_phases: 7
+  total_plans: 31
+  completed_plans: 31
+  percent: 100
 ---
 
 # Project State
@@ -29,7 +29,7 @@ Plan: 11-02 (next: whoami + uname implementation)
 Status: Plan 01 complete — 10 crates scaffolded, workspace green
 Last activity: 2026-04-29 -- Phase 11 plan 01 complete (10 crates scaffolded)
 
-Progress: [█████_____] 86% (M002 — 6/7 phases complete)
+Progress: [██████████] 100%
 
 ## Accumulated Context
 
@@ -59,6 +59,8 @@ Migrated from GSD-2. Review PROJECT.md for key decisions.
 - download-extras.ps1 added to both CI build jobs — runners have no extras/bin/ pre-populated
 - 11-01: gow-test binary named 'test'; [.bat shim dispatches to test.exe with --_bracket_ sentinel for bracket alias
 - 11-01: No per-crate features= on windows-sys — workspace inheritance handles Win32_System_WindowsProgramming/SystemInformation/Wdk_System_SystemServices
+- Used Vec<String> for uname parts accumulator to avoid borrow-checker lifetime issues with format! string temporaries
+- GetVersionExW appears only in doc comments in uname; RtlGetVersion used exclusively — verified by smoke test showing 10.0.26200 not 6.2
 
 ### Known Issues (from code review 05-REVIEW.md)
 
@@ -87,8 +89,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-29T20:59:00.000Z
-Stopped at: Completed 11-01-PLAN.md — 10 Phase 11 crates scaffolded
+Last session: 2026-04-29T21:25:03.879Z
+Stopped at: Completed 11-06-PLAN.md — whoami + uname implemented, workspace test gate green
 Resume file: None
 
 **Next Plan:** 11-02 — whoami + uname implementation
