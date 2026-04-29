@@ -8,11 +8,16 @@
       - Supports x64, x86, and ARM64 via $(var.Platform) from candle.exe
 
     Build (example for x64):
-      heat.exe dir target\wix-stage\x64 -cg BinComponents -dr APPLICATIONFOLDER \
-               -scom -sreg -sfrag -srd -var var.SourceDir -out wix\BinHarvest-x64.wxs
-      candle.exe wix\main.wxs wix\BinHarvest-x64.wxs -arch x64 \
-                 -dSourceDir=target\wix-stage\x64 -dVersion=0.1.0 -dPlatform=x64
-      light.exe -b target\wix-stage\x64 main.wixobj BinHarvest-x64.wixobj \
+      heat.exe dir target\wix-stage\x64\core -cg CoreComponents -dr APPLICATIONFOLDER \
+               -scom -sreg -sfrag -srd -var var.CoreSourceDir -out wix\CoreHarvest-x64.wxs
+      heat.exe dir target\wix-stage\x64\extras -cg ExtrasComponents -dr APPLICATIONFOLDER \
+               -scom -sreg -sfrag -srd -var var.ExtrasSourceDir -out wix\ExtrasHarvest-x64.wxs
+      candle.exe wix\main.wxs wix\CoreHarvest-x64.wxs wix\ExtrasHarvest-x64.wxs -arch x64 \
+                 -dCoreSourceDir=target\wix-stage\x64\core \
+                 -dExtrasSourceDir=target\wix-stage\x64\extras \
+                 -dVersion=0.1.0 -dPlatform=x64
+      light.exe -b target\wix-stage\x64\core -b target\wix-stage\x64\extras \
+                main.wixobj CoreHarvest-x64.wixobj ExtrasHarvest-x64.wixobj \
                 -o target\gow-rust-x64.msi -ext WixUIExtension
 -->
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
@@ -82,7 +87,7 @@
            so the PATH entry is short and predictable for scripts. -->
       <Directory Id="APPLICATIONFOLDER" Name="gow-rust">
         <!-- All binaries land directly in APPLICATIONFOLDER via the heat
-             fragment (BinComponents ComponentGroup). -->
+             fragments (CoreComponents and ExtrasComponents ComponentGroups). -->
       </Directory>
     </Directory>
 
@@ -118,9 +123,15 @@
     <!-- ============================================================
          Feature tree
          ============================================================ -->
-    <Feature Id="ProductFeature" Title="GOW-Rust Binaries" Level="1" Description="All GNU utilities">
-      <!-- Harvested binaries from heat.exe -->
-      <ComponentGroupRef Id="BinComponents" />
+    <Feature Id="ProductFeature" Title="GOW-Rust Binaries" Level="1" Description="All GNU utility binaries (grep, sed, awk, find, tar, curl, and more).">
+      <!-- Harvested Rust binaries from heat.exe CoreComponents -->
+      <ComponentGroupRef Id="CoreComponents" />
+    </Feature>
+
+    <Feature Id="ExtrasFeature" Title="GOW-Rust Extras" Level="1"
+             Description="Optional third-party tools: vim 9.2 (editor), wget 1.21.4 (HTTP downloader), nano 7.2 (editor), ripgrep 14.1.1 (fast search), and legacy GOW batch aliases (egrep, fgrep, bunzip2, gawk, gfind, gsort, gzip, unxz).">
+      <!-- Harvested extras from heat.exe ExtrasComponents -->
+      <ComponentGroupRef Id="ExtrasComponents" />
     </Feature>
 
     <Feature Id="PathFeature" Title="Add to PATH" Level="1"
@@ -138,9 +149,9 @@
     <Property Id="ADDTOPATH" Value="1" />
 
     <!-- ============================================================
-         UI: WixUI_Minimal — license acceptance + install dir
+         UI: WixUI_FeatureTree — feature selection dialog with optional Extras
          ============================================================ -->
-    <UIRef Id="WixUI_Minimal" />
+    <UIRef Id="WixUI_FeatureTree" />
 
     <!-- Skip license dialog (no license file required) by pointing to a
          blank RTF. Remove this element if you add a License.rtf. -->
