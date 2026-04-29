@@ -28,7 +28,9 @@ struct Cli {
     #[arg(short = 's', long = "spaces", action = ArgAction::SetTrue)]
     spaces: bool,
 
-    /// Count bytes rather than characters (accepted for compatibility; Phase 10 always counts bytes)
+    /// Count bytes rather than characters. NOTE: character-boundary wrapping is not yet
+    /// implemented — this implementation always wraps on byte boundaries. Pass -b explicitly
+    /// when input may contain multi-byte UTF-8 characters to acknowledge this limitation.
     #[arg(short = 'b', long = "bytes", action = ArgAction::SetTrue)]
     bytes: bool,
 
