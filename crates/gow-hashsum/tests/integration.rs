@@ -66,7 +66,7 @@ fn sha256_abc_vector() {
         .write_stdin("abc")
         .assert()
         .success()
-        .stdout("ba7816bf8f01cfea414140de5dae2223b00361a3396177a9cb410ff61f20015a  -\n");
+        .stdout("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad  -\n");
 }
 
 // ─── File input ────────────────────────────────────────────────────────────
