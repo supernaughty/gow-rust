@@ -58,8 +58,8 @@ fn process<R: BufRead, W: Write>(
         let line = line_result?;
         match body_numbering {
             "n" => {
-                // Number no lines — emit separator then line
-                write!(writer, "{}{}\n", separator, line)?;
+                // GNU nl -b n: no number, no separator — raw line only
+                writeln!(writer, "{}", line)?;
             }
             "t" => {
                 if line.is_empty() {

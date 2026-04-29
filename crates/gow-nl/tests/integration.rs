@@ -44,7 +44,7 @@ fn nl_b_n_numbers_no_lines() {
         .args(["-b", "n"])
         .write_stdin("a\nb\n")
         .assert().success()
-        .stdout("\ta\n\tb\n");
+        .stdout("a\nb\n");
 }
 
 #[test]
