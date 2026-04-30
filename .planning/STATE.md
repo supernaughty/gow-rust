@@ -2,34 +2,34 @@
 gsd_state_version: 1.0
 milestone: v0.2.0
 milestone_name: "- [x] **Phase 07: release-and-ci** — Release & CI/CD *"
-status: executing
-stopped_at: Completed 07-03-PLAN.md — release.yml created, committed, and pushed
-last_updated: "2026-04-29T06:52:59.585Z"
-last_activity: 2026-04-29 -- Phase --phase execution started
+status: completed
+stopped_at: Completed Phase 11 — all 10 Phase 11 binaries implemented, workspace test gate green
+last_updated: "2026-04-30T00:00:00.000Z"
+last_activity: 2026-04-30 -- Phase 11 complete (whoami/uname/paste/join/split/printf/expr/test/fmt/unlink)
 progress:
-  total_phases: 7
-  completed_phases: 4
-  total_plans: 19
-  completed_plans: 17
-  percent: 89
+  total_phases: 8
+  completed_phases: 8
+  total_plans: 37
+  completed_plans: 37
+  percent: 100
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md
+See: .planning/PROJECT.md (updated 2026-04-29)
 
-**Current focus:** Phase --phase — 09
+**Current focus:** Phase 11 — new-utilities-wave2 COMPLETE
 
 ## Current Position
 
-Phase: --phase (09) — EXECUTING
-Plan: 1 of --name
-Status: Executing Phase --phase
-Last activity: 2026-04-29 -- Phase --phase execution started
+Phase: 11 (new-utilities-wave2) — COMPLETE
+Plan: All 6 plans complete (11-01 through 11-06)
+Status: Phase complete — all 10 Phase 11 binaries implemented and workspace green
+Last activity: 2026-04-30 -- Phase 11 complete (whoami/uname/paste/join/split/printf/expr/test/fmt/unlink)
 
-Progress: [████______] 40% (M002 — 2/5 phases complete)
+Progress: [██████████] 100%
 
 ## Accumulated Context
 
@@ -57,6 +57,10 @@ Migrated from GSD-2. Review PROJECT.md for key decisions.
 - softprops/action-gh-release@v2 chosen over v3 — v3 requires Node 24, not available on windows-latest
 - ilammy/msvc-dev-cmd@v1 placed after rust-toolchain and before rust-cache for liblzma-sys 32-bit C compilation
 - download-extras.ps1 added to both CI build jobs — runners have no extras/bin/ pre-populated
+- 11-01: gow-test binary named 'test'; [.bat shim dispatches to test.exe with --_bracket_ sentinel for bracket alias
+- 11-01: No per-crate features= on windows-sys — workspace inheritance handles Win32_System_WindowsProgramming/SystemInformation/Wdk_System_SystemServices
+- Used Vec<String> for uname parts accumulator to avoid borrow-checker lifetime issues with format! string temporaries
+- GetVersionExW appears only in doc comments in uname; RtlGetVersion used exclusively — verified by smoke test showing 10.0.26200 not 6.2
 
 ### Known Issues (from code review 05-REVIEW.md)
 
@@ -85,15 +89,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-28T22:09:11.177Z
-Stopped at: Completed 07-03-PLAN.md — release.yml created, committed, and pushed
+Last session: 2026-04-29T21:25:03.879Z
+Stopped at: Completed 11-06-PLAN.md — whoami + uname implemented, workspace test gate green
 Resume file: None
 
-**Next Phase:** 07 (release-and-ci) — publish v0.1.0 GitHub Release + CI/CD automation
-
-  - REL-01: git tag v0.1.0 + GitHub Release with x64/x86 MSI assets
-  - REL-02: ARM64 build docs in README/CONTRIBUTING.md
-  - REL-03: exclude gow-probe.exe from installer
-  - CI-01: cargo test --workspace on every push/PR
-  - CI-02: tag-triggered MSI build workflow
-  - CI-03: auto-attach MSIs to GitHub Release
+**Next Plan:** 11-02 — whoami + uname implementation

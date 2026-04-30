@@ -69,8 +69,30 @@
   Plans:
   - [x] 09-01-PLAN.md — Commit batch alias shims to git source control (BND-03)
   - [x] 09-02-PLAN.md — WiX optional Extras feature: dual-harvest staging + ExtrasFeature in main.wxs (BND-01, BND-02, BND-04)
-- [ ] **Phase 10: new-utilities-wave1** — New Rust Utilities Wave 1
-- [ ] **Phase 11: new-utilities-wave2** — New Rust Utilities Wave 2
+- [x] **Phase 10: new-utilities-wave1** — New Rust Utilities Wave 1 *(Complete: 2026-04-29)*
+  - **Goal:** Ten simple GNU utilities — seq, sleep, tac, nl, od, fold, expand, unexpand, du, df, and the hash suite (md5sum, sha1sum, sha256sum) — are implemented as independent Rust binaries and included in the installer.
+  - **Requirements:** U-01, U-02, U-03, U-04, U-05, U-06, U-07, U-08, U-09, U-10
+  - **Plans:** 6 plans
+
+  Plans:
+  - [x] 10-01-PLAN.md — Scaffold 10 new crates and add md-5/sha1/sha2/digest/hex workspace deps (U-01..U-10)
+  - [x] 10-02-PLAN.md — Implement seq (scaled-int precision), sleep, tac, fold (U-01, U-02, U-03, U-06)
+  - [x] 10-03-PLAN.md — Implement nl with -b t default and expand-unexpand argv[0] dispatch (U-04, U-07)
+  - [x] 10-04-PLAN.md — Implement od with -t o[1|2|4]/x[1|2|4]/d[1|2|4]/u[1|2|4]/c, -A o/x/d/n, -N (U-05)
+  - [x] 10-05-PLAN.md — Implement du (walkdir.follow_links(false)) and df (Win32 GetDiskFreeSpaceExW) (U-08, U-09)
+  - [x] 10-06-PLAN.md — Implement md5sum/sha1sum/sha256sum with -c check mode + build.bat polish + workspace test gate (U-10)
+- [x] **Phase 11: new-utilities-wave2** — New Rust Utilities Wave 2 *(Complete: 2026-04-30)*
+  - **Goal:** Ten additional GNU utilities — whoami, uname, paste, join, split, printf, expr, test, fmt, and unlink — are implemented as independent Rust binaries and included in the installer.
+  - **Requirements:** U2-01, U2-02, U2-03, U2-04, U2-05, U2-06, U2-07, U2-08, U2-09, U2-10
+  - **Plans:** 6 plans
+
+  Plans:
+  - [x] 11-01-PLAN.md — Scaffold 10 new crates, windows-sys feature additions, [.bat shim (U2-01..U2-10)
+  - [x] 11-02-PLAN.md — Implement unlink, fmt, paste (U2-10, U2-09, U2-03)
+  - [x] 11-03-PLAN.md — Implement join, split (U2-04, U2-05)
+  - [x] 11-04-PLAN.md — Implement printf, expr with inverted exit code semantics (U2-06, U2-07)
+  - [x] 11-05-PLAN.md — Implement test + [ bracket mode via --_bracket_ sentinel (U2-08)
+  - [x] 11-06-PLAN.md — Implement whoami, uname (RtlGetVersion) + build.bat polish + workspace test gate (U2-01, U2-02)
 
 ## Phase Details
 
@@ -160,7 +182,7 @@ Plans:
   4. `du -sh .` and `df -h` report disk usage and free space without errors on Windows volumes
   5. `md5sum -c`, `sha1sum -c`, `sha256sum -c` verify files and exit 0 on match, non-zero on mismatch
   6. All 13 binaries (expand + unexpand counted separately) pass `cargo test --workspace` and appear in the MSI
-**Plans**: TBD
+**Plans**: 6 plans (10-01 scaffold, 10-02 seq/sleep/tac/fold, 10-03 nl/expand-unexpand, 10-04 od, 10-05 du/df, 10-06 hashsum)
 **UI hint**: no
 
 ### Phase 11: new-utilities-wave2
@@ -175,7 +197,16 @@ Plans:
   5. `test -f existing_file` exits 0 and `test -f missing_file` exits 1; `[` alias behaves identically
   6. `fmt`, `unlink` execute without errors on valid inputs and pass `cargo test --workspace`
   7. All 11 binaries are included in the MSI and available on PATH after installation
-**Plans**: TBD
+**Plans**: 6 plans (11-01 scaffold, 11-02 unlink/fmt/paste, 11-03 join/split, 11-04 printf/expr, 11-05 test, 11-06 whoami/uname)
+**UI hint**: no
+
+Plans:
+- [ ] 11-01-PLAN.md — Scaffold 10 crates + windows-sys features + [.bat shim (U2-01..U2-10)
+- [ ] 11-02-PLAN.md — Implement unlink, fmt, paste (U2-10, U2-09, U2-03)
+- [ ] 11-03-PLAN.md — Implement join, split (U2-04, U2-05)
+- [ ] 11-04-PLAN.md — Implement printf, expr (U2-06, U2-07)
+- [ ] 11-05-PLAN.md — Implement test + [ bracket semantics (U2-08)
+- [ ] 11-06-PLAN.md — Implement whoami, uname + build.bat + workspace gate (U2-01, U2-02)
 
 ## Progress
 
@@ -190,5 +221,5 @@ Plans:
 | 07. release-and-ci | 3/3 | Complete | 2026-04-29 |
 | 08. code-review-fixes | 4/4 | Complete | 2026-04-29 |
 | 09. external-bundling | 2/2 | Complete | 2026-04-29 |
-| 10. new-utilities-wave1 | 0/? | Not started | - |
-| 11. new-utilities-wave2 | 0/? | Not started | - |
+| 10. new-utilities-wave1 | 6/6 | Complete | 2026-04-29 |
+| 11. new-utilities-wave2 | 0/6 | Not started | - |

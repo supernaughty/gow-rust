@@ -52,11 +52,14 @@ if not "!RUST_TARGET!"=="" (
 )
 
 if "!PKG!"=="" (
-    echo   awk  basename  cat  chmod  cp  curl  cut  diff  dirname
-    echo   dos2unix  echo  env  false  find  grep  gunzip  gzip
-    echo   head  less  ln  ls  mkdir  mv  patch  pwd  rm  rmdir
-    echo   sed  sort  tail  tar  tee  touch  tr  true  uniq
-    echo   unix2dos  wc  which  xargs  xz  yes  zcat
+    echo   awk  basename  cat  chmod  cp  curl  cut  df  diff
+    echo   dirname  dos2unix  du  echo  env  expand  false  find
+    echo   fold  grep  gunzip  gzip  head  less  ln  ls  md5sum
+    echo   mkdir  mv  nl  od  patch  pwd  rm  rmdir  sed
+    echo   seq  sha1sum  sha256sum  sleep  sort  tac  tail  tar
+    echo   tee  touch  tr  true  unexpand  uniq  unix2dos  wc
+    echo   which  xargs  xz  yes  zcat
+    echo   expr  fmt  join  paste  printf  split  test  uname  unlink  whoami
 )
 goto end
 
